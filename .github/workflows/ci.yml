@@ -10,8 +10,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Composer install
+      working-directory: ./data/www
       run: composer install
     - name: PHPUnit tests
-      run: |
-        cd data/www
-        php bin/phpunit
+      working-directory: ./data/www
+      run: php bin/phpunit
