@@ -6,12 +6,19 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v1
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v1
+      with:
+        php-version: '7.4'
+
     - name: Composer install
       working-directory: ./data/www
       run: composer install
+    
     - name: PHPUnit tests
       working-directory: ./data/www
       run: php bin/phpunit
