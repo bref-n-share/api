@@ -1,0 +1,17 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Composer install
+      run: composer install
+    - name: PHPUnit tests
+      run: |
+        cd data/www
+        php bin/phpunit
