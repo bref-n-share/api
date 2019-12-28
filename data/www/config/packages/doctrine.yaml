@@ -1,13 +1,11 @@
 doctrine:
     dbal:
-        dbname:               brefnshare
-        host:                 db
-        port:                 5432
-        user:                 root
-        password:             root
+        dbname:               '%env(resolve:DATABASE_NAME)%'
+        host:                 '%env(resolve:DATABASE_HOST)%'
+        port:                 '%env(resolve:DATABASE_PORT)%'
+        user:                 '%env(resolve:DATABASE_USER)%'
+        password:             '%env(resolve:DATABASE_PASSWORD)%'
         driver:               pdo_pgsql
-
-        url: '%env(resolve:DATABASE_URL)%'
 
     orm:
         auto_generate_proxy_classes: true
@@ -17,6 +15,6 @@ doctrine:
             App:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
+                dir: '%kernel.project_dir%/src/Infrastructure/Entity'
+                prefix: 'App\Infrastructure\Entity'
                 alias: App

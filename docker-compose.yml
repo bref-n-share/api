@@ -34,4 +34,4 @@ services:
             PGADMIN_DEFAULT_EMAIL: tp@postgres.com
             PGADMIN_DEFAULT_PASSWORD: tp
         ports:
-            - "8081:80"
+            - "8080:80"
