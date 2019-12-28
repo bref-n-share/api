@@ -12,3 +12,8 @@ If you run all steps, you can access to pgadmin on `http://localhost:8081/`
 
 **Configure PgAdmin**
 
+> Host                 : db  
+> Port                 : 5432  
+> Maintenance database : brefnshare  
+> Username             : root  
+> Password             : root  
