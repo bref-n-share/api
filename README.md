@@ -1,7 +1,7 @@
 # API
 
 ## Connect to PgAdmin
-If you run all steps, you can access to pgadmin on `http://localhost:8081/`
+If you run all steps, you can access to pgadmin on `http://localhost:8080/`
 
 **Login**
 
