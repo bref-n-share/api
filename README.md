@@ -1,8 +1,6 @@
 # API
 
-## Connect to the database via PgAdmin4
-
-### Connect to PgAdmin
+## Connect to PgAdmin
 If you run all steps, you can access to pgadmin on `http://localhost:8081/`
 
 **Login**
