@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Entity\Structure;
 
+use App\Infrastructure\Entity\Flash\FlashNews;
 use App\Infrastructure\Entity\User\Donor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,10 +24,16 @@ class Site extends Structure
      */
     private Collection $donors;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Infrastructure\Entity\Flash\FlashNews", mappedBy="site", orphanRemoval=true)
+     */
+    private Collection $flashNews;
+
     public function __construct()
     {
         parent::__construct();
         $this->donors = new ArrayCollection();
+        $this->flashNews = new ArrayCollection();
     }
 
     public function getOrganisation(): ?Organisation
@@ -64,6 +71,37 @@ class Site extends Structure
         if ($this->donors->contains($donor)) {
             $this->donors->removeElement($donor);
             $donor->removeSite($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FlashNews[]
+     */
+    public function getFlashNews(): Collection
+    {
+        return $this->flashNews;
+    }
+
+    public function addFlashNews(FlashNews $flashNews): self
+    {
+        if (!$this->flashNews->contains($flashNews)) {
+            $this->flashNews[] = $flashNews;
+            $flashNews->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFlashNews(FlashNews $flashNews): self
+    {
+        if ($this->flashNews->contains($flashNews)) {
+            $this->flashNews->removeElement($flashNews);
+            // set the owning side to null (unless already changed)
+            if ($flashNews->getSite() === $this) {
+                $flashNews->setSite(null);
+            }
         }
 
         return $this;
