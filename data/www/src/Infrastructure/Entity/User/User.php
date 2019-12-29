@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="user_account")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
- * @ORM\DiscriminatorMap({"member" = "Member"})
+ * @ORM\DiscriminatorMap({"member" = "Member", "donor" = "Donor"})
  */
 abstract class User implements UserInterface
 {
