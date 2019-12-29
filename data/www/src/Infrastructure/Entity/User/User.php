@@ -41,7 +41,7 @@ abstract class User implements UserInterface
     private string $password;
 
     /**
-     * @ORM\Column(name="current_place", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private string $currentPlace;
 
