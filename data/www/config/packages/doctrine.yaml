@@ -24,3 +24,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Infrastructure/Entity/Structure'
                 prefix: 'App\Infrastructure\Entity\Structure'
                 alias: Structure
+            Post:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Infrastructure/Entity/Post'
+                prefix: 'App\Infrastructure\Entity\Post'
+                alias: Post
