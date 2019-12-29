@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Infrastructure\Repository;
+namespace App\Infrastructure\Repository\User;
 
 use App\Domain\User\Repository\MemberRepositoryInterface;
-use App\Infrastructure\Entity\Member;
+use App\Infrastructure\Entity\User\Member;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
