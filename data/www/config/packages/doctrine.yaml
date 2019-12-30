@@ -15,24 +15,24 @@ doctrine:
             User:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Infrastructure/Entity/User'
-                prefix: 'App\Infrastructure\Entity\User'
+                dir: '%kernel.project_dir%/src/Domain/User/Entity'
+                prefix: 'App\Domain\User\Entity'
                 alias: User
             Structure:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Infrastructure/Entity/Structure'
-                prefix: 'App\Infrastructure\Entity\Structure'
+                dir: '%kernel.project_dir%/src/Domain/Structure/Entity'
+                prefix: 'App\Domain\Structure\Entity'
                 alias: Structure
             Post:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Infrastructure/Entity/Post'
-                prefix: 'App\Infrastructure\Entity\Post'
+                dir: '%kernel.project_dir%/src/Domain/Post/Entity'
+                prefix: 'App\Domain\Post\Entity'
                 alias: Post
             Flash:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Infrastructure/Entity/Flash'
-                prefix: 'App\Infrastructure\Entity\Flash'
+                dir: '%kernel.project_dir%/src/Domain/Flash/Entity'
+                prefix: 'App\Domain\Flash\Entity'
                 alias: Flash
