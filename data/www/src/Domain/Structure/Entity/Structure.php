@@ -2,17 +2,22 @@
 
 namespace App\Domain\Structure\Entity;
 
-use App\Infrastructure\Entity\User\Member;
+use App\Domain\User\Entity\Member;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 
 /**
  * @ORM\Entity
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
  * @ORM\DiscriminatorMap({"organisation" = "Organisation", "site" = "Site"})
+ * @DiscriminatorMap(typeProperty="type", mapping={
+ *    "organisation"="App\Domain\Structure\Entity\Organisation",
+ *    "site"="App\Domain\Structure\Entity\Site"
+ * })
  */
 abstract class Structure
 {
