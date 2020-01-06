@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Entity;
+namespace App\Infrastructure\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="user_account")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
- * @ORM\DiscriminatorMap({"member" = "Member"})
+ * @ORM\DiscriminatorMap({"member" = "Member", "donor" = "Donor"})
  */
 abstract class User implements UserInterface
 {
@@ -41,7 +41,7 @@ abstract class User implements UserInterface
     private string $password;
 
     /**
-     * @ORM\Column(name="current_place", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private string $currentPlace;
 
