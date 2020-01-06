@@ -27,3 +27,11 @@ services:
         volumes:
             - ./data/www:/var/www/html:cached
             - ./services/nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+    pgadmin:
+        image: dpage/pgadmin4
+        environment:
+            PGADMIN_DEFAULT_EMAIL: tp@postgres.com
+            PGADMIN_DEFAULT_PASSWORD: tp
+        ports:
+            - "8080:80"
