@@ -43,7 +43,7 @@ abstract class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private string $currentPlace;
+    private string $status;
 
     public function getId(): ?UuidInterface
     {
@@ -123,14 +123,14 @@ abstract class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getCurrentPlace(): ?string
+    public function getStatus(): ?string
     {
-        return $this->currentPlace;
+        return $this->status;
     }
 
-    public function setCurrentPlace(string $currentPlace): self
+    public function setStatus(string $status): self
     {
-        $this->currentPlace = $currentPlace;
+        $this->status = $status;
 
         return $this;
     }

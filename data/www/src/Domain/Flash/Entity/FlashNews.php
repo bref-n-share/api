@@ -49,7 +49,7 @@ class FlashNews
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private string $currentPlace;
+    private string $status;
 
     public function getId(): ?UuidInterface
     {
@@ -116,14 +116,14 @@ class FlashNews
         return $this;
     }
 
-    public function getCurrentPlace(): ?string
+    public function getStatus(): ?string
     {
-        return $this->currentPlace;
+        return $this->status;
     }
 
-    public function setCurrentPlace(string $currentPlace): self
+    public function setStatus(string $status): self
     {
-        $this->currentPlace = $currentPlace;
+        $this->status = $status;
 
         return $this;
     }
