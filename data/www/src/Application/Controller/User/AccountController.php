@@ -2,8 +2,8 @@
 
 namespace App\Application\Controller\User;
 
-use App\Application\Exception\ConflictException;
 use App\Application\Exception\ValidationException;
+use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Structure\Manager\StructureManagerInterface;
 use App\Domain\User\Entity\Member;

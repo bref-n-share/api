@@ -2,7 +2,7 @@
 
 namespace App\Domain\User\Manager;
 
-use App\Application\Exception\ConflictException;
+use App\Domain\Core\Exception\ConflictException;
 use App\Domain\User\Entity\Member;
 use App\Domain\User\Entity\PasswordEncoderInterface;
 use App\Domain\User\Entity\User;
