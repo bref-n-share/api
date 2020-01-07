@@ -5,13 +5,13 @@ namespace App\Application\Controller\User;
 use App\Application\Exception\ValidationException;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
-use App\Domain\Structure\Manager\StructureManager;
 use App\Domain\User\Entity\Donor;
 use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,7 +26,6 @@ class AccountController extends AbstractController
      * @param Request $request
      * @param EntitySerializerInterface $serializer
      * @param ValidatorInterface $validator
-     * @param StructureManager $structureManager
      * @param MemberManager $memberManager
      *
      * @return Response
@@ -35,23 +34,11 @@ class AccountController extends AbstractController
         Request $request,
         EntitySerializerInterface $serializer,
         ValidatorInterface $validator,
-        StructureManager $structureManager,
         MemberManager $memberManager
     ): Response {
         try {
             /** @var Member $member */
             $member = $serializer->deserialize($request->getContent(), Member::class, 'json');
-
-            if (!$member->getStructure()) {
-                $requestBody = json_decode($request->getContent(), 'true');
-
-                if (!isset($requestBody['structure_id'])) {
-                    throw new ConflictException('The option \'structure_id\' must be defined');
-                }
-
-                $member->setStructure($structureManager->retrieve($requestBody['structure_id']));
-            }
-
             $validation = $validator->validate($member);
 
             if ($validation->count() > 0) {
@@ -65,7 +52,12 @@ class AccountController extends AbstractController
             return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
-        return $this->json($entity, Response::HTTP_CREATED);
+        return new JsonResponse(
+            $serializer->serialize($entity, 'json'),
+            Response::HTTP_CREATED,
+            [],
+            true
+        );
     }
 
     /**
@@ -100,6 +92,39 @@ class AccountController extends AbstractController
             return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
-        return $this->json($entity, Response::HTTP_CREATED);
+        return new JsonResponse(
+            $serializer->serialize($entity, 'json'),
+            Response::HTTP_CREATED,
+            [],
+            true
+        );
+    }
+
+    /**
+     * @Route("/user/donor/{id}", name="user_donor_get", methods="GET")
+     **
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param DonorManager $donorManager
+     *
+     * @return Response
+     */
+    public function getOneDonor(
+        EntitySerializerInterface $serializer,
+        string $id,
+        DonorManager $donorManager
+    ): Response {
+        try {
+            $donor = $donorManager->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->json($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return new JsonResponse(
+            $serializer->serialize($donor, 'json'),
+            Response::HTTP_CREATED,
+            [],
+            true
+        );
     }
 }
