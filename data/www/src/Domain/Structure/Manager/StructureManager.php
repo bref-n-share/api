@@ -5,7 +5,7 @@ namespace App\Domain\Structure\Manager;
 use App\Domain\Structure\Entity\Structure;
 use App\Domain\Structure\Repository\StructureRepositoryInterface;
 
-class StructureManager implements StructureManagerInterface
+class StructureManager
 {
     private StructureRepositoryInterface $structureRepository;
 

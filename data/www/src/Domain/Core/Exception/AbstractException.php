@@ -4,7 +4,7 @@ namespace App\Domain\Core\Exception;
 
 use Throwable;
 
-class AbstractException extends \Exception implements ExceptionInterface
+abstract class AbstractException extends \Exception
 {
     public function __construct($message = "", $code = 400, Throwable $previous = null)
     {

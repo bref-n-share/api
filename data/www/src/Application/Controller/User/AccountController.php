@@ -5,7 +5,7 @@ namespace App\Application\Controller\User;
 use App\Application\Exception\ValidationException;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
-use App\Domain\Structure\Manager\StructureManagerInterface;
+use App\Domain\Structure\Manager\StructureManager;
 use App\Domain\User\Entity\Donor;
 use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
@@ -26,7 +26,7 @@ class AccountController extends AbstractController
      * @param Request $request
      * @param EntitySerializerInterface $serializer
      * @param ValidatorInterface $validator
-     * @param StructureManagerInterface $structureManager
+     * @param StructureManager $structureManager
      * @param MemberManager $memberManager
      *
      * @return Response
@@ -37,7 +37,7 @@ class AccountController extends AbstractController
         Request $request,
         EntitySerializerInterface $serializer,
         ValidatorInterface $validator,
-        StructureManagerInterface $structureManager,
+        StructureManager $structureManager,
         MemberManager $memberManager
     ): Response {
         try {
@@ -91,7 +91,6 @@ class AccountController extends AbstractController
         try {
             /** @var Donor $donor */
             $donor = $serializer->deserialize($request->getContent(), Donor::class, 'json');
-
             $validation = $validator->validate($donor);
 
             if ($validation->count() > 0) {
