@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200107113432 extends AbstractMigration
+final class Version20200107151109 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,8 +22,8 @@ final class Version20200107113432 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE structure ADD longitude NUMERIC(11, 8) NOT NULL');
-        $this->addSql('ALTER TABLE structure ADD latitude NUMERIC(10, 8) NOT NULL');
+        $this->addSql('ALTER TABLE site ADD longitude NUMERIC(11, 8) NOT NULL');
+        $this->addSql('ALTER TABLE site ADD latitude NUMERIC(10, 8) NOT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -31,7 +31,7 @@ final class Version20200107113432 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE structure DROP longitude');
-        $this->addSql('ALTER TABLE structure DROP latitude');
+        $this->addSql('ALTER TABLE site DROP longitude');
+        $this->addSql('ALTER TABLE site DROP latitude');
     }
 }
