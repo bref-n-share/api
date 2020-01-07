@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -30,21 +31,50 @@ abstract class Structure
     private UuidInterface $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre nom doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private string $name;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre adresse doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private string $address;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="5",
+     *     max="5",
+     *     minMessage="Veuillez entrer un code postal valide (5 caractères)"
+     * )
+     *
      * @ORM\Column(type="string", length=5)
      */
     private string $postalCode;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre ville doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private string $city;
@@ -60,11 +90,17 @@ abstract class Structure
     private Collection $members;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     *
      * @ORM\Column(type="decimal", precision=11, scale=8)
      */
     private string $longitude;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     *
      * @ORM\Column(type="decimal", precision=10, scale=8)
      */
     private string $latitude;

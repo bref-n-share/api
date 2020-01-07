@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Domain\Post\Repository\CommentRepository")
@@ -23,6 +24,13 @@ class Comment
     private UuidInterface $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="5",
+     *     minMessage="Votre commentaire doit comporter 5 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="text")
      */
     private string $description;

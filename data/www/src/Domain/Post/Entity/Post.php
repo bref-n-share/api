@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -27,11 +28,25 @@ abstract class Post
     private UuidInterface $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre titre doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private string $title;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="5",
+     *     minMessage="Votre description doit comporter 5 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="text")
      */
     private string $description;

@@ -6,6 +6,7 @@ use App\Domain\Structure\Entity\Site;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Domain\Flash\Repository\FlashNewsRepository")
@@ -21,11 +22,25 @@ class FlashNews
     private UuidInterface $id;
 
     /**
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre titre doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private string $title;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="5",
+     *     minMessage="Votre description doit comporter 5 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private string $description;

@@ -5,6 +5,7 @@ namespace App\Domain\User\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -24,6 +25,10 @@ abstract class User implements UserInterface
     private UuidInterface $id;
 
     /**
+     * @Assert\Email
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     *
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private string $email;
@@ -34,7 +39,17 @@ abstract class User implements UserInterface
     private array $roles = [];
 
     /**
+     * 8 characters
+     * 1 lower character
+     * 1 upper character
+     * 1 numeric character
+     * 1 special character
+     *
      * @var string The hashed password
+     *
+     * @Assert\Regex(pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/")
+     * @Assert\NotNull
+     * @Assert\NotBlank
      *
      * @ORM\Column(type="string")
      */
@@ -46,11 +61,25 @@ abstract class User implements UserInterface
     private string $status;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre prénom doit comporter 2 caractères minimum"
+     * )
+
      * @ORM\Column(type="string", length=255)
      */
     private string $firstName;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre nom doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private string $lastName;

@@ -30,8 +30,6 @@ class AccountController extends AbstractController
      * @param MemberManager $memberManager
      *
      * @return Response
-     *
-     * @throws ValidationException
      */
     public function createMember(
         Request $request,
@@ -63,7 +61,7 @@ class AccountController extends AbstractController
             $entity = $memberManager->create($member);
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->json($exception->getMessage(), $exception->getStatusCode());
-        } catch (UniqueConstraintViolationException $exception) {
+        } catch (UniqueConstraintViolationException | ValidationException $exception) {
             return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
@@ -79,8 +77,6 @@ class AccountController extends AbstractController
      * @param DonorManager $donorManager
      *
      * @return Response
-     *
-     * @throws ValidationException
      */
     public function createDonor(
         Request $request,
@@ -99,8 +95,8 @@ class AccountController extends AbstractController
 
             $entity = $donorManager->create($donor);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->json($exception->getMessage(), $exception->getCode());
-        } catch (UniqueConstraintViolationException $exception) {
+            return $this->json($exception->getMessage(), $exception->getStatusCode());
+        } catch (UniqueConstraintViolationException | ValidationException $exception) {
             return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
