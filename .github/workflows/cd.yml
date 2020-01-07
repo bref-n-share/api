@@ -1,0 +1,30 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup gcloud command
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '270.0.0'
+          service_account_email: ${{ secrets.SERVICE_ACCOUNT_EMAIL_GCP }}
+          service_account_key: ${{ secrets.GCLOUD_AUTH }}
+
+      - name: Copying environments files
+        working-directory: ./data/www
+        run: gsutil cp gs://bref-n-share-secrets-json/.env.prod .
+
+      - name: Deploy on App Engine
+        working-directory: ./data/www
+        if: success()
+        run: gcloud app deploy ./app.yaml --project ${{ secrets.GCP_PROJECT_ID }} --quiet
