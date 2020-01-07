@@ -6,5 +6,7 @@ use App\Domain\User\Entity\User;
 
 interface UserManagerInterface
 {
-    public function create(User $userDTO): User;
+    public function create(User $user): User;
+
+    public function encodePassword(User $user, string $password): string;
 }

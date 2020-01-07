@@ -5,8 +5,9 @@ namespace App\Application\Controller\User;
 use App\Application\Exception\ConflictException;
 use App\Application\Exception\ValidationException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
+use App\Domain\Structure\Manager\StructureManagerInterface;
 use App\Domain\User\Entity\Member;
-use App\Domain\User\Manager\MemberManager;
+use App\Domain\User\Manager\UserManagerInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,8 @@ class AccountController extends AbstractController
      * @param Request $request
      * @param EntitySerializerInterface $serializer
      * @param ValidatorInterface $validator
-     * @param MemberManager $memberManager
+     * @param StructureManagerInterface $structureManager
+     * @param UserManagerInterface $userManager
      *
      * @return Response
      *
@@ -33,12 +35,22 @@ class AccountController extends AbstractController
         Request $request,
         EntitySerializerInterface $serializer,
         ValidatorInterface $validator,
-        MemberManager $memberManager
+        StructureManagerInterface $structureManager,
+        UserManagerInterface $userManager
     ): Response {
         try {
             /** @var Member $member */
-            $member = $serializer->deserialize(
-                $request->getContent(), Member::class, 'json');
+            $member = $serializer->deserialize($request->getContent(), Member::class, 'json');
+
+            if (!$member->getStructure()) {
+                $requestBody = json_decode($request->getContent(), 'true');
+
+                if (!isset($requestBody['structure_id'])) {
+                    throw new ConflictException('The option \'structure_id\' must be defined');
+                }
+
+                $member->setStructure($structureManager->retrieve($requestBody['structure_id']));
+            }
 
             $validation = $validator->validate($member);
 
@@ -46,14 +58,13 @@ class AccountController extends AbstractController
                 throw new ValidationException($validation);
             }
 
-            dump($member);die;
-            // $responseDto = $memberManager->create($memberDTO);
+            $entity = $userManager->create($member);
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->json($exception->getMessage(), $exception->getCode());
         } catch (UniqueConstraintViolationException $exception) {
             return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
-        //return $this->json($responseDto, Response::HTTP_CREATED);
+        return $this->json($entity, Response::HTTP_CREATED);
     }
 }
