@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'services_repository.yml' }
+
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -19,7 +22,6 @@ services:
 
     App\Domain\:
         resource: '../src/Domain/*'
-        exclude: '../src/Domain/*/{Repository}'
 
     App\Infrastructure\:
         resource: '../src/Infrastructure/*'
@@ -27,9 +29,6 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Controller\:
+    App\Application\Controller\:
         resource: '../src/Application/Controller'
         tags: ['controller.service_arguments']
-
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
