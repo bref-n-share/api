@@ -59,6 +59,16 @@ abstract class Structure
      */
     private Collection $members;
 
+    /**
+     * @ORM\Column(type="decimal", precision=11, scale=8)
+     */
+    private string $longitude;
+
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=8)
+     */
+    private string $latitude;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
@@ -156,6 +166,30 @@ abstract class Structure
                 $member->setStructure(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(string $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(string $latitude): self
+    {
+        $this->latitude = $latitude;
 
         return $this;
     }

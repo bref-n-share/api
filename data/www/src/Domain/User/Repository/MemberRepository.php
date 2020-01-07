@@ -19,4 +19,12 @@ class MemberRepository extends ServiceEntityRepository implements MemberReposito
     ) {
         parent::__construct($registry, Member::class);
     }
+
+    public function save(Member $member): Member
+    {
+        $this->_em->persist($member);
+        $this->_em->flush();
+
+        return $member;
+    }
 }

@@ -1,5 +1,6 @@
 imports:
     - { resource: 'services_repository.yml' }
+    - { resource: 'services_infrastructure.yml' }
 
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.

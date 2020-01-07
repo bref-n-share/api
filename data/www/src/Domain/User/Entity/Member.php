@@ -20,7 +20,7 @@ class Member extends User
      *      cascade={"persist"}
      * )
      */
-    private Structure $structure;
+    private ?Structure $structure = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Domain\Post\Entity\Comment", mappedBy="member", orphanRemoval=true)

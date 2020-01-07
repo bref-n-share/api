@@ -18,4 +18,12 @@ class DonorRepository extends ServiceEntityRepository implements DonorRepository
     {
         parent::__construct($registry, Donor::class);
     }
+
+    public function save(Donor $donor): Donor
+    {
+        $this->_em->persist($donor);
+        $this->_em->flush();
+
+        return $donor;
+    }
 }
