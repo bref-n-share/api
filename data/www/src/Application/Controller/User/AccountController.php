@@ -191,11 +191,11 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/user/donor/{id}", name="user_donor_delete", methods="DELETE")
+     * @Route("/api/v1/user/donor/{id}", name="user_donor_archive", methods="DELETE")
      *
      * @SWG\Response(
      *     response=204,
-     *     description="Delete a Donor",
+     *     description="Archive a Donor",
      * )
      * @SWG\Parameter(
      *     description="Id of the Donor",
@@ -214,11 +214,11 @@ class AccountController extends RestAPIController
      *
      * @return Response
      */
-    public function deleteDonor(string $id, DonorManager $donorManager): Response
+    public function archiveDonor(string $id, DonorManager $donorManager): Response
     {
         try {
-            $donorManager->delete($id);
-        } catch (NotFoundHttpException $exception) {
+            $donorManager->archive($id);
+        } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
         }
 
@@ -226,11 +226,11 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/user/member/{id}", name="user_member_delete", methods="DELETE")
+     * @Route("/api/v1/user/member/{id}", name="user_member_archive", methods="DELETE")
      *
      * @SWG\Response(
      *     response=204,
-     *     description="Delete a Member",
+     *     description="Archive a Member",
      * )
      * @SWG\Parameter(
      *     description="Id of the Member",
@@ -249,11 +249,11 @@ class AccountController extends RestAPIController
      *
      * @return Response
      */
-    public function deleteMember(string $id, MemberManager $memberManager): Response
+    public function archiveMember(string $id, MemberManager $memberManager): Response
     {
         try {
-            $memberManager->delete($id);
-        } catch (NotFoundHttpException $exception) {
+            $memberManager->archive($id);
+        } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
         }
 
