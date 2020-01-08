@@ -2,7 +2,7 @@
 
 namespace App\Domain\Structure\Repository;
 
-interface OrganisationRepositoryInterface
+interface OrganizationRepositoryInterface
 {
 
 }

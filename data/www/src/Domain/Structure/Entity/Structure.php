@@ -15,9 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
- * @ORM\DiscriminatorMap({"organisation" = "Organisation", "site" = "Site"})
+ * @ORM\DiscriminatorMap({"organization" = "Organization", "site" = "Site"})
  * @DiscriminatorMap(typeProperty="type", mapping={
- *    "organisation"="App\Domain\Structure\Entity\Organisation",
+ *    "organization"="App\Domain\Structure\Entity\Organization",
  *    "site"="App\Domain\Structure\Entity\Site"
  * })
  */
