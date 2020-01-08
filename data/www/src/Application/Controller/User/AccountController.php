@@ -11,6 +11,8 @@ use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -21,6 +23,13 @@ class AccountController extends RestAPIController
 {
     /**
      * @Route("/api/v1/user/member", name="user_member_create", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Create a Member",
+     * )
+     *
+     * @SWG\Tag(name="members")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -59,6 +68,13 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/donor", name="user_donor_create", methods="POST")
      *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Create a Donor",
+     * )
+     *
+     * @SWG\Tag(name="donors")
+     *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
      * @param ValidatorInterface $validator
@@ -96,6 +112,22 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/donor/{id}", name="user_donor_get", methods="GET")
      *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Get a Donor",
+     * )
+     * @SWG\Parameter(
+     *     description="Id of the Donor",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @SWG\Schema(
+     *         type="string",
+     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
+     *     )
+     * )
+     * @SWG\Tag(name="donors")
+     *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
      * @param string $id
@@ -121,6 +153,22 @@ class AccountController extends RestAPIController
 
     /**
      * @Route("/api/v1/user/member/{id}", name="user_member_get", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Get a Member",
+     * )
+     * @SWG\Parameter(
+     *     description="Id of the Member",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @SWG\Schema(
+     *         type="string",
+     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
+     *     )
+     * )
+     * @SWG\Tag(name="members")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
