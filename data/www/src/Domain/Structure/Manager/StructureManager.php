@@ -31,5 +31,4 @@ class StructureManager
     {
         return $this->structureRepository->save($structure);
     }
-
 }

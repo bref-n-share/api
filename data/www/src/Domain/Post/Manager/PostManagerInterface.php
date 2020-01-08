@@ -10,5 +10,7 @@ interface PostManagerInterface
 
     public function retrieve(string $id): Post;
 
+    public function retrieveAll(): array;
+
     public function archive(string $id): void;
 }
