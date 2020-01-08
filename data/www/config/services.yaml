@@ -33,3 +33,11 @@ services:
     App\Application\Controller\:
         resource: '../src/Application/Controller'
         tags: ['controller.service_arguments']
+
+    App\Domain\User\Manager\MemberManager:
+        arguments:
+            $workflowProcessor: '@user.workflow.member'
+
+    App\Domain\User\Manager\DonorManager:
+        arguments:
+            $workflowProcessor: '@user.workflow.donor'

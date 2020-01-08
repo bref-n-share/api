@@ -9,3 +9,13 @@ services:
         public: false
         tags:
             - { name: serializer.normalizer }
+
+    user.workflow.member:
+        class: 'App\Infrastructure\Workflow\User\UserWorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.member_workflow'
+
+    user.workflow.donor:
+        class: 'App\Infrastructure\Workflow\User\UserWorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.donor_workflow'
