@@ -20,6 +20,16 @@ services:
         arguments:
             $stateMachine: '@state_machine.donor_workflow'
 
+    structure.workflow.site:
+        class: 'App\Infrastructure\Workflow\Structure\StructureWorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.site_workflow'
+
+    structure.workflow.organization:
+        class: 'App\Infrastructure\Workflow\Structure\StructureWorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.organization_workflow'
+
     post.workflow.request:
         class: 'App\Infrastructure\Workflow\Post\PostWorkflowProcessor'
         arguments:

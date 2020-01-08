@@ -28,6 +28,14 @@ abstract class AbstractPostManager implements PostManagerInterface
         return $this->repository->retrieve($id);
     }
 
+    /**
+     * @return Post[]
+     */
+    public function retrieveAll(): array
+    {
+        return $this->repository->retrieveAll();
+    }
+
     public function archive(string $id): void
     {
         $entity = $this->retrieve($id);

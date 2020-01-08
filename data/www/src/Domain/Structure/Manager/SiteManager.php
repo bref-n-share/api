@@ -5,7 +5,7 @@ namespace App\Domain\Structure\Manager;
 use App\Domain\Structure\DTO\SiteEdit;
 use App\Domain\Structure\Entity\Site;
 
-class SiteManager extends StructureManager
+class SiteManager extends AbstractStructureManager
 {
     public function getUpdatedEntity(SiteEdit $siteDto, string $id): Site
     {

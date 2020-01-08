@@ -44,4 +44,14 @@ class InformationRepository extends ServiceEntityRepository implements Informati
     {
         return $this->findAll();
     }
+
+    /**
+     * @param string $id
+     *
+     * @return Post[]
+     */
+    public function retrieveAllBySite(string $id): array
+    {
+        return $this->findBy(['site' => Uuid::fromString($id)]);
+    }
 }

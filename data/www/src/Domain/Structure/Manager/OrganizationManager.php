@@ -2,7 +2,6 @@
 
 namespace App\Domain\Structure\Manager;
 
-class OrganizationManager extends StructureManager
+class OrganizationManager extends AbstractStructureManager
 {
-
 }

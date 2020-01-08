@@ -44,4 +44,14 @@ class RequestRepository extends ServiceEntityRepository implements RequestReposi
     {
         return $this->findAll();
     }
+
+    /**
+     * @param string $id
+     *
+     * @return Post[]
+     */
+    public function retrieveAllBySite(string $id): array
+    {
+        return $this->findBy(['site' => Uuid::fromString($id)]);
+    }
 }

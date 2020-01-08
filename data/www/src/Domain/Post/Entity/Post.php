@@ -2,6 +2,7 @@
 
 namespace App\Domain\Post\Entity;
 
+use App\Domain\Structure\Entity\Site;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -9,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,6 +19,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
  * @ORM\DiscriminatorMap({"request" = "Request", "information" = "Information"})
+ * @DiscriminatorMap(typeProperty="type", mapping={
+ *    "request"="App\Domain\Post\Entity\Request",
+ *    "information"="App\Domain\Post\Entity\Information"
+ * })
  */
 abstract class Post
 {
@@ -92,6 +98,16 @@ abstract class Post
      * @Groups({"full"})
      */
     private Collection $comments;
+
+    /**
+     * @Assert\Valid
+     *
+     * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Site", inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"essential", "full"})
+     */
+    private Site $site;
 
     public function __construct()
     {
@@ -204,6 +220,18 @@ abstract class Post
                 $comment->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Site $site): self
+    {
+        $this->site = $site;
 
         return $this;
     }
