@@ -44,7 +44,7 @@ class Site extends Structure
      *
      * @ORM\Column(type="decimal", precision=11, scale=8)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $longitude;
 
@@ -54,7 +54,7 @@ class Site extends Structure
      *
      * @ORM\Column(type="decimal", precision=10, scale=8)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $latitude;
 

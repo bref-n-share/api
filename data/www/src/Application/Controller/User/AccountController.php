@@ -84,13 +84,11 @@ class AccountController extends RestAPIController
      *     required=true,
      *    @Model(type=Donor::class, groups={"creation"})
      * )
-     *
      * @SWG\Response(
      *     response=201,
      *     description="Created Donor",
      *     @Model(type=Donor::class, groups={"full"})
      * )
-     *
      * @SWG\Tag(name="donors")
      *
      * @param Request $request
@@ -130,17 +128,17 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/donor/{id}", name="user_donor_get", methods="GET")
      *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Requested donor",
-     *     @Model(type=Donor::class, groups={"full"})
-     * )
      * @SWG\Parameter(
      *     description="Id of the Donor",
      *     name="id",
      *     in="path",
      *     type="string",
      *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested donor",
+     *     @Model(type=Donor::class, groups={"full"})
      * )
      * @SWG\Tag(name="donors")
      *
@@ -169,17 +167,17 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/member/{id}", name="user_member_get", methods="GET")
      *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Requested Member",
-     *     @Model(type=Member::class, groups={"full"})
-     * )
      * @SWG\Parameter(
      *     description="Id of the Member",
      *     name="id",
      *     in="path",
      *     type="string",
      *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested Member",
+     *     @Model(type=Member::class, groups={"full"})
      * )
      * @SWG\Tag(name="members")
      *
@@ -208,16 +206,16 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/donor/{id}", name="user_donor_archive", methods="DELETE")
      *
-     * @SWG\Response(
-     *     response=204,
-     *     description="No content",
-     * )
      * @SWG\Parameter(
      *     description="Id of the Donor",
      *     name="id",
      *     in="path",
      *     type="string",
      *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=204,
+     *     description="No content",
      * )
      * @SWG\Tag(name="donors")
      *
@@ -240,16 +238,16 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/member/{id}", name="user_member_archive", methods="DELETE")
      *
-     * @SWG\Response(
-     *     response=204,
-     *     description="No content",
-     * )
      * @SWG\Parameter(
      *     description="Id of the Member",
      *     name="id",
      *     in="path",
      *     type="string",
      *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=204,
+     *     description="No content",
      * )
      * @SWG\Tag(name="members")
      *
