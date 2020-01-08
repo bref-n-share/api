@@ -1,0 +1,36 @@
+framework:
+    workflows:
+        member_workflow:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'status'
+            supports:
+                - App\Domain\User\Entity\Member
+            initial_marking: CREATED
+            places:
+                - CREATED
+                - VALIDATED
+                - ARCHIVED
+            transitions:
+                validate:
+                    from: CREATED
+                    to: VALIDATED
+                archive:
+                    from: [CREATED, VALIDATED]
+                    to: ARCHIVED
+        donor_workflow:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'status'
+            supports:
+                - App\Domain\User\Entity\Donor
+            initial_marking: CREATED
+            places:
+                - CREATED
+                - ARCHIVED
+            transitions:
+                archive:
+                    from: CREATED
+                    to: ARCHIVED
