@@ -88,4 +88,35 @@ class PostController extends RestAPIController
             $serializer
         );
     }
+
+    /**
+     * @Route("/api/v1/post/site/{id}", name="post_get_all_by_site", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Get all post by site",
+     * )
+     * @SWG\Tag(name="posts")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param PostRepository $postRepository
+     *
+     * @return Response
+     */
+    public function getAllBySite(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        PostRepository $postRepository
+    ): Response {
+        return $this->apiJsonResponse(
+            $postRepository->retrieveAllBySite($id),
+            Response::HTTP_OK,
+            $this->getLevel($request),
+            $serializer
+        );
+    }
+
 }

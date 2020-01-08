@@ -43,4 +43,9 @@ class PostRepository extends ServiceEntityRepository implements PostRepositoryIn
     {
         return $this->findAll();
     }
+
+    public function retrieveAllBySite(string $id): array
+    {
+        return $this->findBy(['site' => Uuid::fromString($id)]);
+    }
 }
