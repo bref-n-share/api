@@ -34,7 +34,7 @@ abstract class User implements UserInterface
      *
      * @ORM\Column(type="string", length=180, unique=true)
      *
-     * @Groups({"full"})
+     * @Groups({"full", "creation"})
      */
     private string $email;
 
@@ -59,6 +59,8 @@ abstract class User implements UserInterface
      * @Assert\NotBlank
      *
      * @ORM\Column(type="string")
+     *
+     * @Groups({"creation"})
      */
     private string $password;
 
@@ -79,7 +81,7 @@ abstract class User implements UserInterface
 
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation"})
      */
     private string $firstName;
 
@@ -93,7 +95,7 @@ abstract class User implements UserInterface
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation"})
      */
     private string $lastName;
 
@@ -128,6 +130,8 @@ abstract class User implements UserInterface
 
     /**
      * @see UserInterface
+     *
+     * @return string[]
      */
     public function getRoles(): array
     {
