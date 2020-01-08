@@ -11,7 +11,6 @@ use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -149,7 +148,6 @@ class AccountController extends RestAPIController
 
         return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
-
 
     /**
      * @Route("/api/v1/user/member/{id}", name="user_member_get", methods="GET")
