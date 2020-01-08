@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Domain\User\Repository\DonorRepository")
+ * @ORM\Entity
  */
 class Donor extends User
 {

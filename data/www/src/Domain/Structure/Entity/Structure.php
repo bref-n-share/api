@@ -104,6 +104,15 @@ abstract class Structure
      */
     private Collection $members;
 
+    /**
+     * @Assert\Regex(pattern="/^((\+)33|0)[1-9](\d{2}){4}$/")
+     *
+     * @ORM\Column(type="string", length=12, nullable=true)
+     *
+     * @Groups({"essential", "full"})
+     */
+    private ?string $phone = null;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
@@ -201,6 +210,18 @@ abstract class Structure
                 $member->setStructure(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }
