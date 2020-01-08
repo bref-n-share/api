@@ -60,8 +60,8 @@ class StructureController extends RestAPIController
      * @param EntitySerializerInterface $serializer
      * @param ValidatorInterface $validator
      * @param SiteManager $siteManager
-     *
      * @param string $id
+     *
      * @return Response
      */
     public function updateSite(
