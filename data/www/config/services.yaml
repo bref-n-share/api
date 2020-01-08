@@ -50,7 +50,11 @@ services:
         arguments:
             $structureRepository: '@App\Domain\Structure\Repository\SiteRepositoryInterface'
 
-
     App\Domain\Structure\Manager\OrganizationManager:
         arguments:
             $structureRepository: '@App\Domain\Structure\Repository\OrganizationRepositoryInterface'
+
+    App\Domain\Post\Manager\RequestManager:
+            arguments:
+                $repository: '@App\Domain\Post\Repository\RequestRepository'
+                $workflowProcessor: '@post.workflow.request'

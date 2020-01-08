@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Infrastructure\Workflow\User;
+namespace App\Infrastructure\Workflow\Post;
 
-use App\Domain\User\Entity\User;
-use App\Domain\User\Workflow\UserWorkflowProcessorInterface;
+use App\Domain\Post\Entity\Post;
+use App\Domain\Post\Workflow\PostWorkflowProcessorInterface;
 use Symfony\Component\Workflow\Exception\LogicException;
 use Symfony\Component\Workflow\StateMachine;
 
-class UserWorkflowProcessor implements UserWorkflowProcessorInterface
+class PostWorkflowProcessor implements PostWorkflowProcessorInterface
 {
     private StateMachine $stateMachine;
 
@@ -16,12 +16,12 @@ class UserWorkflowProcessor implements UserWorkflowProcessorInterface
         $this->stateMachine = $stateMachine;
     }
 
-    public function can(User $entity, string $action): bool
+    public function can(Post $entity, string $action): bool
     {
         return $this->stateMachine->can($entity, $action);
     }
 
-    public function apply(User $entity, string $action): void
+    public function apply(Post $entity, string $action): void
     {
         $this->stateMachine->apply($entity, $action);
     }

@@ -24,17 +24,15 @@ class Request extends Post
     private int $requestedQuantity;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
-     * @Assert\Type(type="int")
-     *
      * @ORM\Column(type="integer", nullable=true)
      *
      * @Groups({"essential", "full"})
      */
-    private int $currentQuantity;
+    private int $currentQuantity = 0;
 
     /**
+     * @Assert\Valid
+     *
      * @ORM\ManyToOne(targetEntity="App\Domain\Post\Entity\Category")
      * @ORM\JoinColumn(nullable=false)
      *

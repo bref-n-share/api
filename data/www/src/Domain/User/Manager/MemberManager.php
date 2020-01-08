@@ -14,7 +14,6 @@ class MemberManager extends AbstractUserManager
             throw new ConflictException('Must be an instance of ' . Member::class);
         }
 
-        // TODO : Change when the Workflow Component will be set
         $member->setStatus($this->workflowProcessor->getInitialStatus());
         $member->getStructure()->setStatus('DRAFT');
 
