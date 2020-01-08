@@ -4,3 +4,8 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     App\Domain\User\Entity\PasswordEncoderInterface: '@App\Infrastructure\Encoder\PasswordEncoder'
+
+    App\Infrastructure\Serializer\Normalizer\EntityNormalizer:
+        public: false
+        tags:
+            - { name: serializer.normalizer }

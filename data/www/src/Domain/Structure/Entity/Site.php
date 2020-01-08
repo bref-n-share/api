@@ -7,6 +7,8 @@ use App\Domain\User\Entity\Donor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Domain\Structure\Repository\SiteRepository")
@@ -16,18 +18,44 @@ class Site extends Structure
     /**
      * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Organisation", inversedBy="sites")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private Organisation $organisation;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Domain\User\Entity\Donor", mappedBy="sites")
+     *
+     * @Groups({"full"})
      */
     private Collection $donors;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Domain\Flash\Entity\FlashNews", mappedBy="site", orphanRemoval=true)
+     *
+     * @Groups({"full"})
      */
     private Collection $flashNews;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     *
+     * @ORM\Column(type="decimal", precision=11, scale=8)
+     *
+     * @Groups({"essential", "full"})
+     */
+    private string $longitude;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     *
+     * @ORM\Column(type="decimal", precision=10, scale=8)
+     *
+     * @Groups({"essential", "full"})
+     */
+    private string $latitude;
 
     public function __construct()
     {
@@ -103,6 +131,30 @@ class Site extends Structure
                 $flashNews->setSite(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(string $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(string $latitude): self
+    {
+        $this->latitude = $latitude;
 
         return $this;
     }

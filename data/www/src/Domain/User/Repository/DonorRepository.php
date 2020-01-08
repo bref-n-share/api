@@ -5,6 +5,8 @@ namespace App\Domain\User\Repository;
 use App\Domain\User\Entity\Donor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @method Donor|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +27,15 @@ class DonorRepository extends ServiceEntityRepository implements DonorRepository
         $this->_em->flush();
 
         return $donor;
+    }
+
+    public function retrieve(string $id): Donor
+    {
+        $entity = $this->find(Uuid::fromString($id));
+        if (!$entity) {
+            throw new NotFoundHttpException(Donor::class . ' not found with id (' . $id . ')');
+        }
+
+        return $entity;
     }
 }

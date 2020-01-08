@@ -5,6 +5,8 @@ namespace App\Domain\User\Repository;
 use App\Domain\User\Entity\Member;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @method Member|null find($id, $lockMode = null, $lockVersion = null)
@@ -26,5 +28,15 @@ class MemberRepository extends ServiceEntityRepository implements MemberReposito
         $this->_em->flush();
 
         return $member;
+    }
+
+    public function retrieve(string $id): Member
+    {
+        $entity = $this->find(Uuid::fromString($id));
+        if (!$entity) {
+            throw new NotFoundHttpException(Member::class . ' not found with id (' . $id . ')');
+        }
+
+        return $entity;
     }
 }

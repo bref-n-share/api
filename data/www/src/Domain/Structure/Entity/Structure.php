@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -26,48 +28,81 @@ abstract class Structure
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private UuidInterface $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre nom doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private string $name;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre adresse doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $address;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="5",
+     *     max="5",
+     *     minMessage="Veuillez entrer un code postal valide (5 caractères)"
+     * )
+     *
      * @ORM\Column(type="string", length=5)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $postalCode;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre ville doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $city;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $status;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Domain\User\Entity\Member", mappedBy="structure")
+     *
+     * @Groups({"full"})
      */
     private Collection $members;
-
-    /**
-     * @ORM\Column(type="decimal", precision=11, scale=8)
-     */
-    private string $longitude;
-
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=8)
-     */
-    private string $latitude;
 
     public function __construct()
     {
@@ -166,30 +201,6 @@ abstract class Structure
                 $member->setStructure(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getLongitude(): ?string
-    {
-        return $this->longitude;
-    }
-
-    public function setLongitude(string $longitude): self
-    {
-        $this->longitude = $longitude;
-
-        return $this;
-    }
-
-    public function getLatitude(): ?string
-    {
-        return $this->latitude;
-    }
-
-    public function setLatitude(string $latitude): self
-    {
-        $this->latitude = $latitude;
 
         return $this;
     }

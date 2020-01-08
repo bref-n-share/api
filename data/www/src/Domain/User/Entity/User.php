@@ -5,6 +5,8 @@ namespace App\Domain\User\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -20,21 +22,41 @@ abstract class User implements UserInterface
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private UuidInterface $id;
 
     /**
+     * @Assert\Email
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     *
      * @ORM\Column(type="string", length=180, unique=true)
+     *
+     * @Groups({"full"})
      */
     private string $email;
 
     /**
      * @ORM\Column(type="json")
+     *
+     * @Groups({"essential", "full"})
      */
     private array $roles = [];
 
     /**
+     * 8 characters
+     * 1 lower character
+     * 1 upper character
+     * 1 numeric character
+     * 1 special character
+     *
      * @var string The hashed password
+     *
+     * @Assert\Regex(pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/")
+     * @Assert\NotNull
+     * @Assert\NotBlank
      *
      * @ORM\Column(type="string")
      */
@@ -42,16 +64,36 @@ abstract class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $status;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre prénom doit comporter 2 caractères minimum"
+     * )
+
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $firstName;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\NotNull
+     * @Assert\Length(
+     *     min="2",
+     *     minMessage="Votre nom doit comporter 2 caractères minimum"
+     * )
+     *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $lastName;
 
@@ -76,6 +118,8 @@ abstract class User implements UserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     public function getUsername(): string
     {

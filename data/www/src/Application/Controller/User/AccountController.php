@@ -2,58 +2,51 @@
 
 namespace App\Application\Controller\User;
 
+use App\Application\Controller\RestAPIController;
 use App\Application\Exception\ValidationException;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
-use App\Domain\Structure\Manager\StructureManager;
 use App\Domain\User\Entity\Donor;
 use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AccountController extends AbstractController
+class AccountController extends RestAPIController
 {
     /**
-     * @Route("/user/member", name="user_member_create", methods="POST")
+     * @Route("/api/v1/user/member", name="user_member_create", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Create a Member",
+     * )
+     *
+     * @SWG\Tag(name="members")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
      * @param ValidatorInterface $validator
-     * @param StructureManager $structureManager
      * @param MemberManager $memberManager
      *
      * @return Response
-     *
-     * @throws ValidationException
      */
     public function createMember(
         Request $request,
         EntitySerializerInterface $serializer,
         ValidatorInterface $validator,
-        StructureManager $structureManager,
         MemberManager $memberManager
     ): Response {
         try {
             /** @var Member $member */
             $member = $serializer->deserialize($request->getContent(), Member::class, 'json');
-
-            if (!$member->getStructure()) {
-                $requestBody = json_decode($request->getContent(), 'true');
-
-                if (!isset($requestBody['structure_id'])) {
-                    throw new ConflictException('The option \'structure_id\' must be defined');
-                }
-
-                $member->setStructure($structureManager->retrieve($requestBody['structure_id']));
-            }
-
             $validation = $validator->validate($member);
 
             if ($validation->count() > 0) {
@@ -62,16 +55,25 @@ class AccountController extends AbstractController
 
             $entity = $memberManager->create($member);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->json($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
         } catch (UniqueConstraintViolationException $exception) {
-            return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse('L\'adresse email existe déjà', Response::HTTP_CONFLICT);
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
-        return $this->json($entity, Response::HTTP_CREATED);
+        return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
     }
 
     /**
-     * @Route("/user/donor", name="user_donor_create", methods="POST")
+     * @Route("/api/v1/user/donor", name="user_donor_create", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Create a Donor",
+     * )
+     *
+     * @SWG\Tag(name="donors")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -79,8 +81,6 @@ class AccountController extends AbstractController
      * @param DonorManager $donorManager
      *
      * @return Response
-     *
-     * @throws ValidationException
      */
     public function createDonor(
         Request $request,
@@ -99,11 +99,96 @@ class AccountController extends AbstractController
 
             $entity = $donorManager->create($donor);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->json($exception->getMessage(), $exception->getCode());
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
         } catch (UniqueConstraintViolationException $exception) {
-            return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse('L\'adresse email existe déjà', Response::HTTP_CONFLICT);
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
-        return $this->json($entity, Response::HTTP_CREATED);
+        return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/api/v1/user/donor/{id}", name="user_donor_get", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Get a Donor",
+     * )
+     * @SWG\Parameter(
+     *     description="Id of the Donor",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @SWG\Schema(
+     *         type="string",
+     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
+     *     )
+     * )
+     * @SWG\Tag(name="donors")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param DonorManager $donorManager
+     *
+     * @return Response
+     */
+    public function getOneDonor(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        DonorManager $donorManager
+    ): Response {
+        try {
+            $donor = $donorManager->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+
+    /**
+     * @Route("/api/v1/user/member/{id}", name="user_member_get", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Get a Member",
+     * )
+     * @SWG\Parameter(
+     *     description="Id of the Member",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @SWG\Schema(
+     *         type="string",
+     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
+     *     )
+     * )
+     * @SWG\Tag(name="members")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param MemberManager $memberManager
+     *
+     * @return Response
+     */
+    public function getOneMember(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        MemberManager $memberManager
+    ): Response {
+        try {
+            $donor = $memberManager->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 }

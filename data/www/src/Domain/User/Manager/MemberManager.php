@@ -34,4 +34,9 @@ class MemberManager extends AbstractUserManager
 
         return $this->memberRepository->save($member);
     }
+
+    public function retrieve(string $id): User
+    {
+        return $this->memberRepository->retrieve($id);
+    }
 }
