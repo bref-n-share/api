@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,6 +25,8 @@ abstract class Post
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private UuidInterface $id;
 
@@ -36,6 +39,8 @@ abstract class Post
      * )
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private string $title;
 
@@ -48,31 +53,43 @@ abstract class Post
      * )
      *
      * @ORM\Column(type="text")
+     *
+     * @Groups({"essential", "full"})
      */
     private string $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $status;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Groups({"full"})
      */
     private DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Groups({"full"})
      */
     private DateTimeInterface $updatedAt;
 
     /**
      * @ORM\Column(type="simple_array", nullable=true)
+     *
+     * @Groups({"essential", "full"})
      */
     private array $channels = [];
 
     /**
      * @ORM\OneToMany(targetEntity="App\Domain\Post\Entity\Comment", mappedBy="post", orphanRemoval=true)
+     *
+     * @Groups({"full"})
      */
     private Collection $comments;
 

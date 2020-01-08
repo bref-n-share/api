@@ -4,6 +4,7 @@ namespace App\Domain\Post\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -16,6 +17,8 @@ class Category
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private UuidInterface $id;
 
@@ -28,6 +31,8 @@ class Category
      * )
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private string $title;
 

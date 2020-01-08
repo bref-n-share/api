@@ -5,6 +5,7 @@ namespace App\Domain\User\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,6 +22,8 @@ abstract class User implements UserInterface
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private UuidInterface $id;
 
@@ -30,11 +33,15 @@ abstract class User implements UserInterface
      * @Assert\NotBlank
      *
      * @ORM\Column(type="string", length=180, unique=true)
+     *
+     * @Groups({"full"})
      */
     private string $email;
 
     /**
      * @ORM\Column(type="json")
+     *
+     * @Groups({"essential", "full"})
      */
     private array $roles = [];
 
@@ -57,6 +64,8 @@ abstract class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $status;
 
@@ -69,6 +78,8 @@ abstract class User implements UserInterface
      * )
 
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $firstName;
 
@@ -81,6 +92,8 @@ abstract class User implements UserInterface
      * )
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $lastName;
 
@@ -105,6 +118,8 @@ abstract class User implements UserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     public function getUsername(): string
     {

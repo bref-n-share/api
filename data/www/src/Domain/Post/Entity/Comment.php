@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -20,6 +21,8 @@ class Comment
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private UuidInterface $id;
 
@@ -32,28 +35,38 @@ class Comment
      * )
      *
      * @ORM\Column(type="text")
+     *
+     * @Groups({"essential", "full"})
      */
     private string $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Domain\User\Entity\Member", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"essential", "full"})
      */
     private Member $member;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Domain\Post\Entity\Post", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"full"})
      */
     private Post $post;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Groups({"full"})
      */
     private DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Groups({"full"})
      */
     private DateTimeInterface $updatedAt;
 

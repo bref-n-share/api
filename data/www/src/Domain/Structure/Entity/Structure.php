@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -27,6 +28,8 @@ abstract class Structure
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private UuidInterface $id;
 
@@ -39,6 +42,8 @@ abstract class Structure
      * )
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"extra-light", "essential", "full"})
      */
     private string $name;
 
@@ -51,6 +56,8 @@ abstract class Structure
      * )
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $address;
 
@@ -64,6 +71,8 @@ abstract class Structure
      * )
      *
      * @ORM\Column(type="string", length=5)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $postalCode;
 
@@ -76,16 +85,22 @@ abstract class Structure
      * )
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $city;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full"})
      */
     private string $status;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Domain\User\Entity\Member", mappedBy="structure")
+     *
+     * @Groups({"full"})
      */
     private Collection $members;
 
