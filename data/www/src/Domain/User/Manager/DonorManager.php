@@ -39,4 +39,9 @@ class DonorManager extends AbstractUserManager
     {
         return $this->donorRepository->retrieve($id);
     }
+
+    public function delete(string $id): void
+    {
+        $this->donorRepository->delete($id);
+    }
 }

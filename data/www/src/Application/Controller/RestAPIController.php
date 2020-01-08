@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class RestAPIController extends AbstractController
 {
     private const REQUEST_LEVEL_KEY = 'level';
-    private const DEFAULT_LEVEL     = 'full';
+    private const DEFAULT_LEVEL     = 'essential';
     private const LEVEL_DELIMITER   = '_';
 
     /**

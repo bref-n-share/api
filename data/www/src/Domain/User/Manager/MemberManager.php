@@ -39,4 +39,9 @@ class MemberManager extends AbstractUserManager
     {
         return $this->memberRepository->retrieve($id);
     }
+
+    public function delete(string $id): void
+    {
+        $this->memberRepository->delete($id);
+    }
 }

@@ -38,4 +38,15 @@ class DonorRepository extends ServiceEntityRepository implements DonorRepository
 
         return $entity;
     }
+
+    public function delete(string $id): void
+    {
+        $entity = $this->find(Uuid::fromString($id));
+        if (!$entity) {
+            throw new NotFoundHttpException(Donor::class . ' not found with id (' . $id . ')');
+        }
+
+        $this->_em->remove($entity);
+        $this->_em->flush();
+    }
 }

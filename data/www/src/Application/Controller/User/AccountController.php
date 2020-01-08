@@ -191,4 +191,74 @@ class AccountController extends RestAPIController
 
         return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
+
+    /**
+     * @Route("/api/v1/user/donor/{id}", name="user_donor_delete", methods="DELETE")
+     *
+     * @SWG\Response(
+     *     response=204,
+     *     description="Delete a Donor",
+     * )
+     * @SWG\Parameter(
+     *     description="Id of the Donor",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @SWG\Schema(
+     *         type="string",
+     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
+     *     )
+     * )
+     * @SWG\Tag(name="donors")
+     *
+     * @param string $id
+     * @param DonorManager $donorManager
+     *
+     * @return Response
+     */
+    public function deleteDonor(string $id, DonorManager $donorManager): Response
+    {
+        try {
+            $donorManager->delete($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/api/v1/user/member/{id}", name="user_member_delete", methods="DELETE")
+     *
+     * @SWG\Response(
+     *     response=204,
+     *     description="Delete a Member",
+     * )
+     * @SWG\Parameter(
+     *     description="Id of the Member",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @SWG\Schema(
+     *         type="string",
+     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
+     *     )
+     * )
+     * @SWG\Tag(name="members")
+     *
+     * @param string $id
+     * @param MemberManager $memberManager
+     *
+     * @return Response
+     */
+    public function deleteMember(string $id, MemberManager $memberManager): Response
+    {
+        try {
+            $memberManager->delete($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
+    }
 }

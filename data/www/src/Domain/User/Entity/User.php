@@ -25,7 +25,7 @@ abstract class User implements UserInterface
      *
      * @Groups({"extra-light", "essential", "full"})
      */
-    private UuidInterface $id;
+    private ?UuidInterface $id;
 
     /**
      * @Assert\Email

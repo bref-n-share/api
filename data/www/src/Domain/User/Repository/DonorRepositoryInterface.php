@@ -9,4 +9,6 @@ interface DonorRepositoryInterface
     public function save(Donor $donor): Donor;
 
     public function retrieve(string $id): Donor;
+
+    public function delete(string $id): void;
 }
