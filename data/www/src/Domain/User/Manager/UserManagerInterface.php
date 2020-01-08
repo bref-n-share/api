@@ -10,5 +10,7 @@ interface UserManagerInterface
 
     public function retrieve(string $id): User;
 
+    public function delete(string $id): void;
+
     public function encodePassword(User $user, string $password): string;
 }
