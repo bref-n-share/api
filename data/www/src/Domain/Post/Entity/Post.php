@@ -46,7 +46,7 @@ abstract class Post
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"extra-light", "essential", "full"})
+     * @Groups({"extra-light", "essential", "full", "creation"})
      */
     private string $title;
 
@@ -60,7 +60,7 @@ abstract class Post
      *
      * @ORM\Column(type="text")
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation"})
      */
     private string $description;
 
@@ -105,7 +105,7 @@ abstract class Post
      * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Site", inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation"})
      */
     private Site $site;
 

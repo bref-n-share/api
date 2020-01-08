@@ -9,7 +9,7 @@ use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Post\Manager\RequestManager;
 use App\Domain\Post\Entity\Request as RequestPost;
 use App\Domain\Post\Repository\PostRepository;
-use App\Domain\Post\Repository\PostRepositoryInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +22,19 @@ class PostController extends RestAPIController
     /**
      * @Route("/api/v1/post/request", name="post_request_create", methods="POST")
      *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Request fields",
+     *     type="json",
+     *     required=true,
+     *    @Model(type="App\Domain\Post\Entity\Request", groups={"creation"})
+     * )
      * @SWG\Response(
      *     response=201,
-     *     description="Create a Request",
+     *     description="Created Request",
+     *     @Model(type="App\Domain\Post\Entity\Request", groups={"full"})
      * )
-     *
      * @SWG\Tag(name="requests")
      *
      * @param Request $request
@@ -66,7 +74,11 @@ class PostController extends RestAPIController
      *
      * @SWG\Response(
      *     response=200,
-     *     description="Get all post",
+     *     description="All Posts",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Post\Entity\Post", groups={"full"}))
+     *     )
      * )
      * @SWG\Tag(name="posts")
      *
@@ -92,9 +104,20 @@ class PostController extends RestAPIController
     /**
      * @Route("/api/v1/post/site/{id}", name="post_get_all_by_site", methods="GET")
      *
+     * @SWG\Parameter(
+     *     description="Id of the Site",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
      * @SWG\Response(
      *     response=200,
-     *     description="Get all post by site",
+     *     description="All Post related to the Site",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Post\Entity\Post", groups={"full"}))
+     *     )
      * )
      * @SWG\Tag(name="posts")
      *
@@ -118,5 +141,4 @@ class PostController extends RestAPIController
             $serializer
         );
     }
-
 }
