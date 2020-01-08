@@ -9,7 +9,7 @@ use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Structure\DTO\SiteEdit;
 use App\Domain\Structure\Entity\Site;
 use App\Domain\Structure\Manager\SiteManager;
-use App\Domain\Structure\Manager\StructureManager;
+use App\Domain\Structure\Repository\StructureRepository;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,17 +30,17 @@ class StructureController extends RestAPIController
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
-     * @param StructureManager $structureManager
+     * @param StructureRepository $structureRepository
      *
      * @return Response
      */
     public function getAll(
         Request $request,
         EntitySerializerInterface $serializer,
-        StructureManager $structureManager
+        StructureRepository $structureRepository
     ): Response {
         return $this->apiJsonResponse(
-            $structureManager->retrieveAll(),
+            $structureRepository->retrieveAll(),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer
