@@ -118,4 +118,30 @@ class AccountController extends RestAPIController
 
         return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
+
+
+    /**
+     * @Route("/user/member/{id}", name="user_member_get", methods="GET")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param MemberManager $memberManager
+     *
+     * @return Response
+     */
+    public function getOneMember(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        MemberManager $memberManager
+    ): Response {
+        try {
+            $donor = $memberManager->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
 }
