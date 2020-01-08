@@ -26,4 +26,10 @@ class StructureManager
     {
         return $this->structureRepository->retrieveAll();
     }
+
+    public function save(Structure $structure): Structure
+    {
+        return $this->structureRepository->save($structure);
+    }
+
 }

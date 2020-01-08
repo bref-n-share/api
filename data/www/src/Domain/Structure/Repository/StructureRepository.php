@@ -35,4 +35,12 @@ class StructureRepository extends ServiceEntityRepository implements StructureRe
     {
         return $this->findAll();
     }
+
+    public function save(Structure $structure): Structure
+    {
+        $this->_em->persist($structure);
+        $this->_em->flush();
+
+        return $structure;
+    }
 }

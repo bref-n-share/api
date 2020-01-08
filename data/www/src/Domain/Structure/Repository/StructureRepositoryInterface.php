@@ -12,4 +12,6 @@ interface StructureRepositoryInterface
      * @return Structure[]
      */
     public function retrieveAll(): array;
+
+    public function save(Structure $structure): Structure;
 }

@@ -41,3 +41,16 @@ services:
     App\Domain\User\Manager\DonorManager:
         arguments:
             $workflowProcessor: '@user.workflow.donor'
+
+    App\Domain\Structure\Manager\StructureManager:
+        arguments:
+            $structureRepository: '@App\Domain\Structure\Repository\StructureRepository'
+
+    App\Domain\Structure\Manager\SiteManager:
+        arguments:
+            $structureRepository: '@App\Domain\Structure\Repository\SiteRepositoryInterface'
+
+
+    App\Domain\Structure\Manager\OrganizationManager:
+        arguments:
+            $structureRepository: '@App\Domain\Structure\Repository\OrganizationRepositoryInterface'
