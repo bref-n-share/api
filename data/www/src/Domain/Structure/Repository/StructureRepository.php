@@ -30,4 +30,9 @@ class StructureRepository extends ServiceEntityRepository implements StructureRe
 
         return $entity;
     }
+
+    public function retrieveAll(): array
+    {
+        return $this->findAll();
+    }
 }

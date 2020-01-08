@@ -18,4 +18,12 @@ class StructureManager
     {
         return $this->structureRepository->retrieve($id);
     }
+
+    /**
+     * @return Structure[]
+     */
+    public function retrieveAll(): array
+    {
+        return $this->structureRepository->retrieveAll();
+    }
 }
