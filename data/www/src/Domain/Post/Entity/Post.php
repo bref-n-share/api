@@ -2,6 +2,7 @@
 
 namespace App\Domain\Post\Entity;
 
+use App\Domain\Structure\Entity\Site;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -97,6 +98,16 @@ abstract class Post
      * @Groups({"full"})
      */
     private Collection $comments;
+
+    /**
+     * @Assert\Valid
+     *
+     * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Site", inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"essential", "full"})
+     */
+    private Site $site;
 
     public function __construct()
     {
@@ -209,6 +220,18 @@ abstract class Post
                 $comment->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Site $site): self
+    {
+        $this->site = $site;
 
         return $this;
     }
