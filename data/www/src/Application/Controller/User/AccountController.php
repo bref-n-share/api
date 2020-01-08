@@ -24,11 +24,19 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/member", name="user_member_create", methods="POST")
      *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Member fields. Some other fields can be requested for the `Structure` depend on if you want  to create an Organization or a Site",
+     *     type="json",
+     *     required=true,
+     *    @Model(type=Member::class, groups={"creation"})
+     * )
      * @SWG\Response(
      *     response=201,
-     *     description="Create a Member",
+     *     description="Created Member",
+     *     @Model(type=Member::class, groups={"full"})
      * )
-     *
      * @SWG\Tag(name="members")
      *
      * @param Request $request
@@ -163,17 +171,15 @@ class AccountController extends RestAPIController
      *
      * @SWG\Response(
      *     response=200,
-     *     description="Get a Member",
+     *     description="Requested Member",
+     *     @Model(type=Member::class, groups={"full"})
      * )
      * @SWG\Parameter(
      *     description="Id of the Member",
      *     name="id",
      *     in="path",
      *     type="string",
-     *     @SWG\Schema(
-     *         type="string",
-     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
-     *     )
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
      * )
      * @SWG\Tag(name="members")
      *
@@ -236,17 +242,14 @@ class AccountController extends RestAPIController
      *
      * @SWG\Response(
      *     response=204,
-     *     description="Archive a Member",
+     *     description="No content",
      * )
      * @SWG\Parameter(
      *     description="Id of the Member",
      *     name="id",
      *     in="path",
      *     type="string",
-     *     @SWG\Schema(
-     *         type="string",
-     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
-     *     )
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
      * )
      * @SWG\Tag(name="members")
      *
