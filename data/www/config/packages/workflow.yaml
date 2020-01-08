@@ -19,6 +19,7 @@ framework:
                 archive:
                     from: [CREATED, VALIDATED]
                     to: ARCHIVED
+
         donor_workflow:
             type: 'state_machine'
             marking_store:
@@ -26,6 +27,22 @@ framework:
                 property: 'status'
             supports:
                 - App\Domain\User\Entity\Donor
+            initial_marking: CREATED
+            places:
+                - CREATED
+                - ARCHIVED
+            transitions:
+                archive:
+                    from: CREATED
+                    to: ARCHIVED
+
+        request_workflow:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'status'
+            supports:
+                - App\Domain\Post\Entity\Request
             initial_marking: CREATED
             places:
                 - CREATED

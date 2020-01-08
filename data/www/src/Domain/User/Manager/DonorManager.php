@@ -14,7 +14,6 @@ class DonorManager extends AbstractUserManager
             throw new ConflictException('Must be an instance of ' . Donor::class);
         }
 
-        // TODO : Change when the Workflow Component will be set
         $donor->setStatus($this->workflowProcessor->getInitialStatus());
 
         $donor->setPassword($this->encodePassword($donor, $donor->getPassword()));

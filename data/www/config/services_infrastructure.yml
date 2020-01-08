@@ -19,3 +19,8 @@ services:
         class: 'App\Infrastructure\Workflow\User\UserWorkflowProcessor'
         arguments:
             $stateMachine: '@state_machine.donor_workflow'
+
+    post.workflow.request:
+        class: 'App\Infrastructure\Workflow\Post\PostWorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.request_workflow'
