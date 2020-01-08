@@ -2,6 +2,7 @@
 
 namespace App\Application\Controller\User;
 
+use App\Application\Controller\RestAPIController;
 use App\Application\Exception\ValidationException;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
@@ -10,7 +11,6 @@ use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AccountController extends AbstractController
+class AccountController extends RestAPIController
 {
     /**
      * @Route("/user/member", name="user_member_create", methods="POST")
@@ -47,17 +47,14 @@ class AccountController extends AbstractController
 
             $entity = $memberManager->create($member);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->json($exception->getMessage(), $exception->getStatusCode());
-        } catch (UniqueConstraintViolationException | ValidationException $exception) {
-            return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        } catch (UniqueConstraintViolationException $exception) {
+            return $this->apiJsonResponse('L\'adresse email existe déjà', Response::HTTP_CONFLICT);
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
-        return new JsonResponse(
-            $serializer->serialize($entity, 'json'),
-            Response::HTTP_CREATED,
-            [],
-            true
-        );
+        return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
     }
 
     /**
@@ -87,22 +84,20 @@ class AccountController extends AbstractController
 
             $entity = $donorManager->create($donor);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->json($exception->getMessage(), $exception->getStatusCode());
-        } catch (UniqueConstraintViolationException | ValidationException $exception) {
-            return $this->json($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        } catch (UniqueConstraintViolationException $exception) {
+            return $this->apiJsonResponse('L\'adresse email existe déjà', Response::HTTP_CONFLICT);
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
         }
 
-        return new JsonResponse(
-            $serializer->serialize($entity, 'json'),
-            Response::HTTP_CREATED,
-            [],
-            true
-        );
+        return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
     }
 
     /**
      * @Route("/user/donor/{id}", name="user_donor_get", methods="GET")
-     **
+     *
+     * @param Request $request
      * @param EntitySerializerInterface $serializer
      * @param string $id
      * @param DonorManager $donorManager
@@ -110,6 +105,7 @@ class AccountController extends AbstractController
      * @return Response
      */
     public function getOneDonor(
+        Request $request,
         EntitySerializerInterface $serializer,
         string $id,
         DonorManager $donorManager
@@ -117,14 +113,9 @@ class AccountController extends AbstractController
         try {
             $donor = $donorManager->retrieve($id);
         } catch (NotFoundHttpException $exception) {
-            return $this->json($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
         }
 
-        return new JsonResponse(
-            $serializer->serialize($donor, 'json'),
-            Response::HTTP_CREATED,
-            [],
-            true
-        );
+        return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 }
