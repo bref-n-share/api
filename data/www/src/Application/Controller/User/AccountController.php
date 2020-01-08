@@ -11,7 +11,6 @@ use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -21,7 +20,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class AccountController extends RestAPIController
 {
     /**
-     * @Route("/user/member", name="user_member_create", methods="POST")
+     * @Route("/api/v1/user/member", name="user_member_create", methods="POST")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -58,7 +57,7 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/user/donor", name="user_donor_create", methods="POST")
+     * @Route("/api/v1/user/donor", name="user_donor_create", methods="POST")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -95,7 +94,7 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/user/donor/{id}", name="user_donor_get", methods="GET")
+     * @Route("/api/v1/user/donor/{id}", name="user_donor_get", methods="GET")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -121,7 +120,7 @@ class AccountController extends RestAPIController
 
 
     /**
-     * @Route("/user/member/{id}", name="user_member_get", methods="GET")
+     * @Route("/api/v1/user/member/{id}", name="user_member_get", methods="GET")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
