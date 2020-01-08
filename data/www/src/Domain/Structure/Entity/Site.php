@@ -16,12 +16,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Site extends Structure
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Organisation", inversedBy="sites")
+     * @ORM\ManyToOne(targetEntity="Organization", inversedBy="sites")
      * @ORM\JoinColumn(nullable=false)
      *
      * @Groups({"extra-light", "essential", "full"})
      */
-    private Organisation $organisation;
+    private Organization $organization;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Domain\User\Entity\Donor", mappedBy="sites")
@@ -64,14 +64,14 @@ class Site extends Structure
         $this->flashNews = new ArrayCollection();
     }
 
-    public function getOrganisation(): ?Organisation
+    public function getOrganization(): ?Organization
     {
-        return $this->organisation;
+        return $this->organization;
     }
 
-    public function setOrganisation(?Organisation $organisation): self
+    public function setOrganization(?Organization $organization): self
     {
-        $this->organisation = $organisation;
+        $this->organization = $organization;
 
         return $this;
     }

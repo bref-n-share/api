@@ -8,12 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Domain\Structure\Repository\OrganisationRepository")
+ * @ORM\Entity(repositoryClass="App\Domain\Structure\Repository\OrganizationRepository")
  */
-class Organisation extends Structure
+class Organization extends Structure
 {
     /**
-     * @ORM\OneToMany(targetEntity="App\Domain\Structure\Entity\Site", mappedBy="organisation", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Domain\Structure\Entity\Site", mappedBy="organization", orphanRemoval=true)
      *
      * @Groups({"full"})
      */
@@ -38,7 +38,7 @@ class Organisation extends Structure
     {
         if (!$this->sites->contains($site)) {
             $this->sites[] = $site;
-            $site->setOrganisation($this);
+            $site->setOrganization($this);
         }
 
         return $this;
@@ -49,8 +49,8 @@ class Organisation extends Structure
         if ($this->sites->contains($site)) {
             $this->sites->removeElement($site);
             // set the owning side to null (unless already changed)
-            if ($site->getOrganisation() === $this) {
-                $site->setOrganisation(null);
+            if ($site->getOrganization() === $this) {
+                $site->setOrganization(null);
             }
         }
 

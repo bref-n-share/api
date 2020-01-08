@@ -15,9 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
- * @ORM\DiscriminatorMap({"organisation" = "Organisation", "site" = "Site"})
+ * @ORM\DiscriminatorMap({"organization" = "Organization", "site" = "Site"})
  * @DiscriminatorMap(typeProperty="type", mapping={
- *    "organisation"="App\Domain\Structure\Entity\Organisation",
+ *    "organization"="App\Domain\Structure\Entity\Organization",
  *    "site"="App\Domain\Structure\Entity\Site"
  * })
  */
@@ -103,6 +103,15 @@ abstract class Structure
      * @Groups({"full"})
      */
     private Collection $members;
+
+    /**
+     * @Assert\Regex(pattern="/^((\+)33|0)[1-9](\d{2}){4}$/")
+     *
+     * @ORM\Column(type="string", length=12, nullable=true)
+     *
+     * @Groups({"essential", "full"})
+     */
+    private ?string $phone = null;
 
     public function __construct()
     {
@@ -201,6 +210,18 @@ abstract class Structure
                 $member->setStructure(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }

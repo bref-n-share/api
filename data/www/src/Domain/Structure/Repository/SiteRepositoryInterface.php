@@ -2,7 +2,7 @@
 
 namespace App\Domain\Structure\Repository;
 
-interface SiteRepositoryInterface
+interface SiteRepositoryInterface extends StructureRepositoryInterface
 {
 
 }
