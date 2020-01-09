@@ -19,4 +19,9 @@ class PasswordEncoder implements PasswordEncoderInterface
     {
         return $this->userPasswordEncoder->encodePassword($user, $password);
     }
+
+    public function isPasswordValid(User $user, string $password): bool
+    {
+        return $this->userPasswordEncoder->isPasswordValid($user, $password);
+    }
 }

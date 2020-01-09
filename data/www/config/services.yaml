@@ -34,6 +34,10 @@ services:
         resource: '../src/Application/Controller'
         tags: ['controller.service_arguments']
 
+    App\Domain\User\Manager\SecurityManager:
+        arguments:
+            $passwordEncoder: '@App\Domain\User\Entity\PasswordEncoderInterface'
+
     App\Domain\User\Manager\MemberManager:
         arguments:
             $workflowProcessor: '@user.workflow.member'

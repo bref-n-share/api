@@ -3,6 +3,11 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    app.firewall.secured_area.request_matcher:
+        class: 'App\Infrastructure\Security\RequestMatcher'
+        arguments:
+            $patterns: '%secured_area%'
+
     App\Domain\User\Entity\PasswordEncoderInterface: '@App\Infrastructure\Encoder\PasswordEncoder'
 
     App\Infrastructure\Serializer\Normalizer\EntityNormalizer:
