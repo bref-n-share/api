@@ -39,4 +39,14 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
 
         return $user;
     }
+
+    public function retrieveOneBy(array $criteria): User
+    {
+        $user = $this->findOneBy($criteria);
+        if (!$user) {
+            throw new NotFoundHttpException(User::class . ' not found');
+        }
+
+        return $user;
+    }
 }

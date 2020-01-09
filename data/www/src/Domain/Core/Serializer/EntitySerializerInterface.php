@@ -4,7 +4,6 @@ namespace App\Domain\Core\Serializer;
 
 interface EntitySerializerInterface
 {
-
     /**
      * Serializes data in the appropriate format.
      *
