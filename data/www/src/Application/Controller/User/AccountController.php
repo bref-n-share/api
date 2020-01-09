@@ -19,10 +19,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * @Route("/api/v1/user")
+ */
 class AccountController extends RestAPIController
 {
     /**
-     * @Route("/api/v1/user/member", name="user_member_create", methods="POST")
+     * @Route("/member", name="user_member_create", methods="POST")
      *
      * @SWG\Parameter(
      *     name="body",
@@ -74,7 +77,7 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/user/donor", name="user_donor_create", methods="POST")
+     * @Route("/donor", name="user_donor_create", methods="POST")
      *
      * @SWG\Parameter(
      *     name="body",
@@ -126,7 +129,7 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/user/donor/{id}", name="user_donor_get", methods="GET")
+     * @Route("/donor/{id}", name="user_donor_get", methods="GET")
      *
      * @SWG\Parameter(
      *     description="Id of the Donor",
@@ -165,7 +168,7 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/user/member/{id}", name="user_member_get", methods="GET")
+     * @Route("/member/{id}", name="user_member_get", methods="GET")
      *
      * @SWG\Parameter(
      *     description="Id of the Member",
@@ -204,7 +207,7 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/user/donor/{id}", name="user_donor_archive", methods="DELETE")
+     * @Route("/donor/{id}", name="user_donor_archive", methods="DELETE")
      *
      * @SWG\Parameter(
      *     description="Id of the Donor",
@@ -236,7 +239,7 @@ class AccountController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/user/member/{id}", name="user_member_archive", methods="DELETE")
+     * @Route("/member/{id}", name="user_member_archive", methods="DELETE")
      *
      * @SWG\Parameter(
      *     description="Id of the Member",

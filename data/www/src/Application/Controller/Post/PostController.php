@@ -17,10 +17,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * @Route("/api/v1/post")
+ */
 class PostController extends RestAPIController
 {
     /**
-     * @Route("/api/v1/post/request", name="post_request_create", methods="POST")
+     * @Route("/request", name="post_request_create", methods="POST")
      *
      * @SWG\Parameter(
      *     name="body",
@@ -70,7 +73,7 @@ class PostController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/post", name="post_get_all", methods="GET")
+     * @Route(name="post_get_all", methods="GET")
      *
      * @SWG\Response(
      *     response=200,
@@ -102,7 +105,7 @@ class PostController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/post/site/{id}", name="post_get_all_by_site", methods="GET")
+     * @Route("/site/{id}", name="post_get_all_by_site", methods="GET")
      *
      * @SWG\Parameter(
      *     description="Id of the Site",
