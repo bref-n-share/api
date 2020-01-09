@@ -11,6 +11,8 @@ use App\Domain\Structure\Entity\Site;
 use App\Domain\Structure\Entity\Organization;
 use App\Domain\Structure\Manager\OrganizationManager;
 use App\Domain\Structure\Manager\SiteManager;
+use App\Domain\Structure\Repository\OrganizationRepositoryInterface;
+use App\Domain\Structure\Repository\SiteRepositoryInterface;
 use App\Domain\Structure\Repository\StructureRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
@@ -25,6 +27,70 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class StructureController extends RestAPIController
 {
+    /**
+     * @Route("/site", name="structure_site_get_all", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="All Site",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Structure\Entity\Site", groups={"full"}))
+     *     )
+     * )
+     * @SWG\Tag(name="Site")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param SiteRepositoryInterface $repository
+     *
+     * @return Response
+     */
+    public function getAllSite(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        SiteRepositoryInterface $repository
+    ): Response {
+        return $this->apiJsonResponse(
+            $repository->retrieveAll(),
+            Response::HTTP_OK,
+            $this->getLevel($request),
+            $serializer
+        );
+    }
+
+    /**
+     * @Route("/organization", name="structure_organization_get_all", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="All Organization",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Structure\Entity\Organization", groups={"full"}))
+     *     )
+     * )
+     * @SWG\Tag(name="Organization")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param OrganizationRepositoryInterface $repository
+     *
+     * @return Response
+     */
+    public function getAllOrganization(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        OrganizationRepositoryInterface $repository
+    ): Response {
+        return $this->apiJsonResponse(
+            $repository->retrieveAll(),
+            Response::HTTP_OK,
+            $this->getLevel($request),
+            $serializer
+        );
+    }
+
     /**
      * @Route(name="structure_get_all", methods="GET")
      *
