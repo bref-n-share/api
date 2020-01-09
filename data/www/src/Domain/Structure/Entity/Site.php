@@ -39,8 +39,8 @@ class Site extends Structure
     private Collection $flashNews;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="La longitude ne doit pas être vide")
+     * @Assert\NotNull(message="La longitude ne doit pas être vide")
      *
      * @ORM\Column(type="decimal", precision=11, scale=8)
      *
@@ -49,8 +49,8 @@ class Site extends Structure
     private string $longitude;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="La latitude ne doit pas être vide")
+     * @Assert\NotNull(message="La latitude ne doit pas être vide")
      *
      * @ORM\Column(type="decimal", precision=10, scale=8)
      *

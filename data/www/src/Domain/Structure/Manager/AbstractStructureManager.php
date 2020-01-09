@@ -51,7 +51,7 @@ abstract class AbstractStructureManager implements StructureManagerInterface
             return;
         }
 
-        throw new ConflictException('This structure can\'t be archive at this moment');
+        throw new ConflictException('La Structure ne peut pas être archivé');
     }
 
     public function getInitialStatus(): string

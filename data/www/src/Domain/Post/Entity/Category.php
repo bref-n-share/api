@@ -23,8 +23,8 @@ class Category
     private UuidInterface $id;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="Le nom ne doit pas être vide")
+     * @Assert\NotNull(message="Le nom ne doit pas être vide")
      * @Assert\Length(
      *     min="2",
      *     minMessage="Le titre d'une catégorie doit comporter 2 caractères minimum"

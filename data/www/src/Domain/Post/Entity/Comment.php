@@ -27,8 +27,8 @@ class Comment
     private UuidInterface $id;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\NotNull(message="La description ne doit pas être vide")
      * @Assert\Length(
      *     min="5",
      *     minMessage="Votre commentaire doit comporter 5 caractères minimum"

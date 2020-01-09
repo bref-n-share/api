@@ -37,8 +37,8 @@ abstract class Post
     private UuidInterface $id;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="Le titre ne doit pas être vide")
+     * @Assert\NotNull(message="Le titre ne doit pas être vide")
      * @Assert\Length(
      *     min="2",
      *     minMessage="Votre titre doit comporter 2 caractères minimum"
@@ -51,8 +51,8 @@ abstract class Post
     private string $title;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\NotNull(message="La description ne doit pas être vide")
      * @Assert\Length(
      *     min="5",
      *     minMessage="Votre description doit comporter 5 caractères minimum"

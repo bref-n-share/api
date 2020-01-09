@@ -28,10 +28,6 @@ class ValidationException extends \Exception
                 $message .= "\n";
             }
 
-            if ($propertyPath = $violation->getPropertyPath()) {
-                $message .= "$propertyPath: ";
-            }
-
             $message .= $violation->getMessage();
         }
         return $message;
