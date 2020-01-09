@@ -3,9 +3,9 @@
 namespace App\Domain\Structure\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Post\Workflow\WorkflowProcessorInterface;
 use App\Domain\Structure\Entity\Structure;
 use App\Domain\Structure\Repository\StructureRepositoryInterface;
-use App\Domain\Structure\Workflow\StructureWorkflowProcessorInterface;
 
 abstract class AbstractStructureManager implements StructureManagerInterface
 {
@@ -13,10 +13,10 @@ abstract class AbstractStructureManager implements StructureManagerInterface
 
     private StructureRepositoryInterface $repository;
 
-    private StructureWorkflowProcessorInterface $workflowProcessor;
+    private WorkflowProcessorInterface $workflowProcessor;
 
     public function __construct(
-        StructureWorkflowProcessorInterface $workflowProcessor,
+        WorkflowProcessorInterface $workflowProcessor,
         StructureRepositoryInterface $repository
     ) {
         $this->workflowProcessor = $workflowProcessor;

@@ -11,29 +11,34 @@ services:
             - { name: serializer.normalizer }
 
     user.workflow.member:
-        class: 'App\Infrastructure\Workflow\User\UserWorkflowProcessor'
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
         arguments:
             $stateMachine: '@state_machine.member_workflow'
+            $type: 'App\Domain\User\Entity\Member'
 
     user.workflow.donor:
-        class: 'App\Infrastructure\Workflow\User\UserWorkflowProcessor'
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
         arguments:
             $stateMachine: '@state_machine.donor_workflow'
+            $type: 'App\Domain\User\Entity\Donor'
 
     structure.workflow.site:
-        class: 'App\Infrastructure\Workflow\Structure\StructureWorkflowProcessor'
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
         arguments:
             $stateMachine: '@state_machine.site_workflow'
+            $type: 'App\Domain\Structure\Entity\Site'
 
     structure.workflow.organization:
-        class: 'App\Infrastructure\Workflow\Structure\StructureWorkflowProcessor'
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
         arguments:
             $stateMachine: '@state_machine.organization_workflow'
+            $type: 'App\Domain\Structure\Entity\Organization'
 
     post.workflow.request:
-        class: 'App\Infrastructure\Workflow\Post\PostWorkflowProcessor'
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
         arguments:
             $stateMachine: '@state_machine.request_workflow'
+            $type: 'App\Domain\Post\Entity\Request'
 
     nelmio.describer.uuid:
         class: 'App\Infrastructure\Describer\UuidDescriber'

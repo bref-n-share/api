@@ -5,18 +5,18 @@ namespace App\Domain\Post\Manager;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Repository\PostRepositoryInterface;
-use App\Domain\Post\Workflow\PostWorkflowProcessorInterface;
+use App\Domain\Post\Workflow\WorkflowProcessorInterface;
 
 abstract class AbstractPostManager implements PostManagerInterface
 {
     protected const ARCHIVE_ACTION = 'archive';
 
-    protected PostWorkflowProcessorInterface $workflowProcessor;
+    protected WorkflowProcessorInterface $workflowProcessor;
 
     protected PostRepositoryInterface $repository;
 
     public function __construct(
-        PostWorkflowProcessorInterface $workflowProcessor,
+        WorkflowProcessorInterface $workflowProcessor,
         PostRepositoryInterface $repository
     ) {
         $this->workflowProcessor = $workflowProcessor;
