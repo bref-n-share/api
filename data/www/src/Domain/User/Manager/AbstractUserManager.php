@@ -3,6 +3,7 @@
 namespace App\Domain\User\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Structure\Manager\StructureManagerChain;
 use App\Domain\User\Entity\PasswordEncoderInterface;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepositoryInterface;
@@ -18,14 +19,18 @@ abstract class AbstractUserManager implements UserManagerInterface
 
     protected UserRepositoryInterface $userRepository;
 
+    protected StructureManagerChain $structureManagerChain;
+
     public function __construct(
         PasswordEncoderInterface $passwordEncoder,
         UserWorkflowProcessorInterface $workflowProcessor,
-        UserRepositoryInterface $userRepository
+        UserRepositoryInterface $userRepository,
+        StructureManagerChain $structureManagerChain
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->workflowProcessor = $workflowProcessor;
         $this->userRepository = $userRepository;
+        $this->structureManagerChain = $structureManagerChain;
     }
 
     public function encodePassword(User $user, string $password): string

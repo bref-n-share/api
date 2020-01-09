@@ -53,4 +53,9 @@ abstract class AbstractStructureManager implements StructureManagerInterface
 
         throw new ConflictException('This structure can\'t be archive at this moment');
     }
+
+    public function getInitialStatus(): string
+    {
+        return $this->workflowProcessor->getInitialStatus();
+    }
 }
