@@ -20,7 +20,7 @@ class Site extends Structure
      * @ORM\ManyToOne(targetEntity="Organization", inversedBy="sites")
      * @ORM\JoinColumn(nullable=false)
      *
-     * @Groups({"extra-light", "essential", "full"})
+     * @Groups({"extra-light", "essential", "full", "creation"})
      */
     private Organization $organization;
 
@@ -44,7 +44,7 @@ class Site extends Structure
      *
      * @ORM\Column(type="decimal", precision=11, scale=8)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $longitude;
 
@@ -54,7 +54,7 @@ class Site extends Structure
      *
      * @ORM\Column(type="decimal", precision=10, scale=8)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $latitude;
 

@@ -43,7 +43,7 @@ abstract class Structure
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"extra-light", "essential", "full"})
+     * @Groups({"extra-light", "essential", "full", "creation"})
      */
     private string $name;
 
@@ -57,7 +57,7 @@ abstract class Structure
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $address;
 
@@ -72,7 +72,7 @@ abstract class Structure
      *
      * @ORM\Column(type="string", length=5)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $postalCode;
 
@@ -86,7 +86,7 @@ abstract class Structure
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $city;
 
@@ -109,7 +109,7 @@ abstract class Structure
      *
      * @ORM\Column(type="string", length=12, nullable=true)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private ?string $phone = null;
 

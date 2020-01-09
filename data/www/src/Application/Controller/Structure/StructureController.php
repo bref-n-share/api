@@ -10,6 +10,7 @@ use App\Domain\Structure\DTO\SiteEdit;
 use App\Domain\Structure\Entity\Site;
 use App\Domain\Structure\Manager\SiteManager;
 use App\Domain\Structure\Repository\StructureRepository;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,9 +25,13 @@ class StructureController extends RestAPIController
      *
      * @SWG\Response(
      *     response=200,
-     *     description="Get all Structure",
+     *     description="All Structures",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Structure\Entity\Structure", groups={"full"}))
+     *     )
      * )
-     * @SWG\Tag(name="structures")
+     * @SWG\Tag(name="Structure")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -50,11 +55,27 @@ class StructureController extends RestAPIController
     /**
      * @Route("/api/v1/structure/site/{id}", name="structure_site_update", methods="PATCH")
      *
+     * @SWG\Parameter(
+     *     description="Id of the Site",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Site fields",
+     *     type="json",
+     *     required=true,
+     *    @Model(type=Site::class, groups={"updatable"})
+     * )
      * @SWG\Response(
      *     response=200,
-     *     description="Update a site",
+     *     description="Updated Site",
+     *     @Model(type=Site::class, groups={"full"})
      * )
-     * @SWG\Tag(name="sites")
+     * @SWG\Tag(name="Site")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer

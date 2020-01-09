@@ -24,7 +24,7 @@ class Member extends User
      *      cascade={"persist"}
      * )
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation"})
      */
     private ?Structure $structure = null;
 

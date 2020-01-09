@@ -11,6 +11,7 @@ use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,12 +24,20 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/member", name="user_member_create", methods="POST")
      *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Member fields. Some other fields can be requested for the `Structure` depend on if you want  to create an Organization or a Site",
+     *     type="json",
+     *     required=true,
+     *    @Model(type=Member::class, groups={"creation"})
+     * )
      * @SWG\Response(
      *     response=201,
-     *     description="Create a Member",
+     *     description="Created Member",
+     *     @Model(type=Member::class, groups={"full"})
      * )
-     *
-     * @SWG\Tag(name="members")
+     * @SWG\Tag(name="Member")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -67,12 +76,20 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/donor", name="user_donor_create", methods="POST")
      *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Donor fields",
+     *     type="json",
+     *     required=true,
+     *    @Model(type=Donor::class, groups={"creation"})
+     * )
      * @SWG\Response(
      *     response=201,
-     *     description="Create a Donor",
+     *     description="Created Donor",
+     *     @Model(type=Donor::class, groups={"full"})
      * )
-     *
-     * @SWG\Tag(name="donors")
+     * @SWG\Tag(name="Donor")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -111,21 +128,19 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/donor/{id}", name="user_donor_get", methods="GET")
      *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Get a Donor",
-     * )
      * @SWG\Parameter(
      *     description="Id of the Donor",
      *     name="id",
      *     in="path",
      *     type="string",
-     *     @SWG\Schema(
-     *         type="string",
-     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
-     *     )
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
      * )
-     * @SWG\Tag(name="donors")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested donor",
+     *     @Model(type=Donor::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Donor")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -152,21 +167,19 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/member/{id}", name="user_member_get", methods="GET")
      *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Get a Member",
-     * )
      * @SWG\Parameter(
      *     description="Id of the Member",
      *     name="id",
      *     in="path",
      *     type="string",
-     *     @SWG\Schema(
-     *         type="string",
-     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
-     *     )
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
      * )
-     * @SWG\Tag(name="members")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested Member",
+     *     @Model(type=Member::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Member")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -193,21 +206,18 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/donor/{id}", name="user_donor_archive", methods="DELETE")
      *
-     * @SWG\Response(
-     *     response=204,
-     *     description="Archive a Donor",
-     * )
      * @SWG\Parameter(
      *     description="Id of the Donor",
      *     name="id",
      *     in="path",
      *     type="string",
-     *     @SWG\Schema(
-     *         type="string",
-     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
-     *     )
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
      * )
-     * @SWG\Tag(name="donors")
+     * @SWG\Response(
+     *     response=204,
+     *     description="No content",
+     * )
+     * @SWG\Tag(name="Donor")
      *
      * @param string $id
      * @param DonorManager $donorManager
@@ -228,21 +238,18 @@ class AccountController extends RestAPIController
     /**
      * @Route("/api/v1/user/member/{id}", name="user_member_archive", methods="DELETE")
      *
-     * @SWG\Response(
-     *     response=204,
-     *     description="Archive a Member",
-     * )
      * @SWG\Parameter(
      *     description="Id of the Member",
      *     name="id",
      *     in="path",
      *     type="string",
-     *     @SWG\Schema(
-     *         type="string",
-     *         example="b7a6b445-26e1-43d3-8e20-e75f780829bf"
-     *     )
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
      * )
-     * @SWG\Tag(name="members")
+     * @SWG\Response(
+     *     response=204,
+     *     description="No content",
+     * )
+     * @SWG\Tag(name="Member")
      *
      * @param string $id
      * @param MemberManager $memberManager

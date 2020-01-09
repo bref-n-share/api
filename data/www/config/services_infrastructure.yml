@@ -34,3 +34,10 @@ services:
         class: 'App\Infrastructure\Workflow\Post\PostWorkflowProcessor'
         arguments:
             $stateMachine: '@state_machine.request_workflow'
+
+    nelmio.describer.uuid:
+        class: 'App\Infrastructure\Describer\UuidDescriber'
+        arguments:
+            $propertyInfo: '@property_info'
+            $reader: '@annotation_reader'
+        tags: ['nelmio_api_doc.model_describer']

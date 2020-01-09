@@ -19,7 +19,7 @@ class Request extends Post
      *
      * @ORM\Column(type="integer", nullable=true)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation"})
      */
     private int $requestedQuantity;
 
@@ -36,7 +36,7 @@ class Request extends Post
      * @ORM\ManyToOne(targetEntity="App\Domain\Post\Entity\Category")
      * @ORM\JoinColumn(nullable=false)
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation"})
      */
     private Category $category;
 
