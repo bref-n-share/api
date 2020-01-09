@@ -3,11 +3,11 @@
 namespace App\Domain\User\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Post\Workflow\WorkflowProcessorInterface;
 use App\Domain\Structure\Manager\StructureManagerChain;
 use App\Domain\User\Entity\PasswordEncoderInterface;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepositoryInterface;
-use App\Domain\User\Workflow\UserWorkflowProcessorInterface;
 
 abstract class AbstractUserManager implements UserManagerInterface
 {
@@ -15,7 +15,7 @@ abstract class AbstractUserManager implements UserManagerInterface
 
     private PasswordEncoderInterface $passwordEncoder;
 
-    protected UserWorkflowProcessorInterface $workflowProcessor;
+    protected WorkflowProcessorInterface $workflowProcessor;
 
     protected UserRepositoryInterface $userRepository;
 
@@ -23,7 +23,7 @@ abstract class AbstractUserManager implements UserManagerInterface
 
     public function __construct(
         PasswordEncoderInterface $passwordEncoder,
-        UserWorkflowProcessorInterface $workflowProcessor,
+        WorkflowProcessorInterface $workflowProcessor,
         UserRepositoryInterface $userRepository,
         StructureManagerChain $structureManagerChain
     ) {
