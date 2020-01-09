@@ -15,7 +15,9 @@ class MemberManager extends AbstractUserManager
         }
 
         $member->setStatus($this->workflowProcessor->getInitialStatus());
-        $member->getStructure()->setStatus('DRAFT');
+        $member->getStructure()->setStatus(
+            $this->structureManagerChain->getManager($member->getStructure())->getInitialStatus()
+        );
 
         $member->setPassword($this->encodePassword($member, $member->getPassword()));
 

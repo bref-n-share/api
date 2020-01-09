@@ -4,9 +4,15 @@ namespace App\Domain\Structure\Manager;
 
 use App\Domain\Structure\DTO\SiteEdit;
 use App\Domain\Structure\Entity\Site;
+use App\Domain\Structure\Entity\Structure;
 
 class SiteManager extends AbstractStructureManager
 {
+    public function supports(Structure $structure): bool
+    {
+        return $structure instanceof Site;
+    }
+
     public function getUpdatedEntity(SiteEdit $siteDto, string $id): Site
     {
         /** @var Site $entity */

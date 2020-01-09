@@ -46,13 +46,19 @@ services:
         arguments:
             $repository: '@App\Domain\Structure\Repository\SiteRepositoryInterface'
             $workflowProcessor: '@structure.workflow.site'
+        tags: ['structure.manager']
 
     App\Domain\Structure\Manager\OrganizationManager:
         arguments:
             $repository: '@App\Domain\Structure\Repository\OrganizationRepositoryInterface'
             $workflowProcessor: '@structure.workflow.organization'
+        tags: ['structure.manager']
 
     App\Domain\Post\Manager\RequestManager:
             arguments:
                 $repository: '@App\Domain\Post\Repository\RequestRepository'
                 $workflowProcessor: '@post.workflow.request'
+
+    App\Domain\Structure\Manager\StructureManagerChain:
+        arguments:
+            $managers: !tagged structure.manager

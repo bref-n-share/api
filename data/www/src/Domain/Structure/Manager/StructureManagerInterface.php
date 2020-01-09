@@ -11,4 +11,8 @@ interface StructureManagerInterface
     public function retrieveAll(): array;
 
     public function archive(string $id): void;
+
+    public function getInitialStatus(): string;
+
+    public function supports(Structure $structure): bool;
 }
