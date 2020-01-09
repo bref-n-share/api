@@ -34,8 +34,8 @@ abstract class Structure
     private UuidInterface $id;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="Le nom ne doit pas être vide")
+     * @Assert\NotNull(message="Le nom ne doit pas être vide")
      * @Assert\Length(
      *     min="2",
      *     minMessage="Votre nom doit comporter 2 caractères minimum"
@@ -48,8 +48,8 @@ abstract class Structure
     private string $name;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="L'adresse ne doit pas être vide")
+     * @Assert\NotNull(message="L'adresse ne doit pas être vide")
      * @Assert\Length(
      *     min="2",
      *     minMessage="Votre adresse doit comporter 2 caractères minimum"
@@ -62,12 +62,13 @@ abstract class Structure
     private string $address;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="Le code postal ne doit pas être vide")
+     * @Assert\NotNull(message="Le code postal ne doit pas être vide")
      * @Assert\Length(
      *     min="5",
      *     max="5",
-     *     minMessage="Veuillez entrer un code postal valide (5 caractères)"
+     *     minMessage="Veuillez entrer un code postal valide (5 caractères)",
+     *     maxMessage="Veuillez entrer un code postal valide (5 caractères)"
      * )
      *
      * @ORM\Column(type="string", length=5)
@@ -77,8 +78,8 @@ abstract class Structure
     private string $postalCode;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="La ville ne doit pas être vide")
+     * @Assert\NotNull(message="La ville ne doit pas être vide")
      * @Assert\Length(
      *     min="2",
      *     minMessage="Votre ville doit comporter 2 caractères minimum"
@@ -105,7 +106,7 @@ abstract class Structure
     private Collection $members;
 
     /**
-     * @Assert\Regex(pattern="/^((\+)33|0)[1-9](\d{2}){4}$/")
+     * @Assert\Regex(pattern="/^((\+)33|0)[1-9](\d{2}){4}$/", message="Le téléphone doit être un numéro français valide")
      *
      * @ORM\Column(type="string", length=12, nullable=true)
      *

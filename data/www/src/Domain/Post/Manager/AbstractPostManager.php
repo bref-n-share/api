@@ -46,6 +46,6 @@ abstract class AbstractPostManager implements PostManagerInterface
             return;
         }
 
-        throw new ConflictException('This post can\'t be archive at this moment');
+        throw new ConflictException('Le post ne peut pas être archivé');
     }
 }

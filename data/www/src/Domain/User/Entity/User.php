@@ -28,9 +28,9 @@ abstract class User implements UserInterface
     private ?UuidInterface $id;
 
     /**
-     * @Assert\Email
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Assert\Email(message="L'email n'est pas valide")
+     * @Assert\NotNull(message="L'email ne doit pas être vide")
+     * @Assert\NotBlank(message="L'email ne doit pas être vide")
      *
      * @ORM\Column(type="string", length=180, unique=true)
      *
@@ -54,9 +54,12 @@ abstract class User implements UserInterface
      *
      * @var string The hashed password
      *
-     * @Assert\Regex(pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/")
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Assert\Regex(
+     *     pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/",
+     *     message="Le mot de passe doit être composé de 8 caractères minimum, 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial"
+     * )
+     * @Assert\NotNull(message="Le mot de passe ne doit pas être vide")
+     * @Assert\NotBlank(message="Le mot de passe ne doit pas être vide")
      *
      * @ORM\Column(type="string")
      *
@@ -72,8 +75,8 @@ abstract class User implements UserInterface
     private string $status;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="Le prénom ne doit pas être vide")
+     * @Assert\NotNull(message="Le prénom ne doit pas être vide")
      * @Assert\Length(
      *     min="2",
      *     minMessage="Votre prénom doit comporter 2 caractères minimum"
@@ -86,8 +89,8 @@ abstract class User implements UserInterface
     private string $firstName;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="Le nom ne doit pas être vide")
+     * @Assert\NotNull(message="Le nom ne doit pas être vide")
      * @Assert\Length(
      *     min="2",
      *     minMessage="Votre nom doit comporter 2 caractères minimum"

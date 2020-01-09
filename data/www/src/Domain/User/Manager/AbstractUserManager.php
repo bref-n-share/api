@@ -53,6 +53,6 @@ abstract class AbstractUserManager implements UserManagerInterface
             return;
         }
 
-        throw new ConflictException('This user can\'t be archive at this moment');
+        throw new ConflictException('L\'utilisateur ne peut pas être archivé');
     }
 }

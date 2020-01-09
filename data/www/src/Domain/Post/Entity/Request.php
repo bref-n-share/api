@@ -12,10 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Request extends Post
 {
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
-     * @Assert\Positive
-     * @Assert\Type(type="int")
+     * @Assert\NotBlank(message="La quantité demandée ne doit pas être vide")
+     * @Assert\NotNull(message="La quantité demandée ne doit pas être vide")
+     * @Assert\Positive(message="La quantité doit être positive")
+     * @Assert\Type(type="int", message="La quantité doit être un entier")
      *
      * @ORM\Column(type="integer", nullable=true)
      *

@@ -25,8 +25,8 @@ class FlashNews
     private UuidInterface $id;
 
     /**
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Assert\NotNull(message="Le titre ne doit pas être vide")
+     * @Assert\NotBlank(message="Le titre ne doit pas être vide")
      * @Assert\Length(
      *     min="2",
      *     minMessage="Votre titre doit comporter 2 caractères minimum"
@@ -39,8 +39,8 @@ class FlashNews
     private string $title;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\NotNull(message="La description ne doit pas être vide")
      * @Assert\Length(
      *     min="5",
      *     minMessage="Votre description doit comporter 5 caractères minimum"
