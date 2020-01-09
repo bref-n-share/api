@@ -35,7 +35,7 @@ class PostController extends RestAPIController
      *     description="Created Request",
      *     @Model(type="App\Domain\Post\Entity\Request", groups={"full"})
      * )
-     * @SWG\Tag(name="requests")
+     * @SWG\Tag(name="Request")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -80,7 +80,7 @@ class PostController extends RestAPIController
      *         @SWG\Items(ref=@Model(type="App\Domain\Post\Entity\Post", groups={"full"}))
      *     )
      * )
-     * @SWG\Tag(name="posts")
+     * @SWG\Tag(name="Post")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -119,7 +119,7 @@ class PostController extends RestAPIController
      *         @SWG\Items(ref=@Model(type="App\Domain\Post\Entity\Post", groups={"full"}))
      *     )
      * )
-     * @SWG\Tag(name="posts")
+     * @SWG\Tag(name="Post")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer

@@ -31,7 +31,7 @@ class StructureController extends RestAPIController
      *         @SWG\Items(ref=@Model(type="App\Domain\Structure\Entity\Structure", groups={"full"}))
      *     )
      * )
-     * @SWG\Tag(name="structures")
+     * @SWG\Tag(name="Structure")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -75,7 +75,7 @@ class StructureController extends RestAPIController
      *     description="Updated Site",
      *     @Model(type=Site::class, groups={"full"})
      * )
-     * @SWG\Tag(name="sites")
+     * @SWG\Tag(name="Site")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer

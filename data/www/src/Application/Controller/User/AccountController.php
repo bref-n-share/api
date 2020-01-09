@@ -37,7 +37,7 @@ class AccountController extends RestAPIController
      *     description="Created Member",
      *     @Model(type=Member::class, groups={"full"})
      * )
-     * @SWG\Tag(name="members")
+     * @SWG\Tag(name="Member")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -89,7 +89,7 @@ class AccountController extends RestAPIController
      *     description="Created Donor",
      *     @Model(type=Donor::class, groups={"full"})
      * )
-     * @SWG\Tag(name="donors")
+     * @SWG\Tag(name="Donor")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -140,7 +140,7 @@ class AccountController extends RestAPIController
      *     description="Requested donor",
      *     @Model(type=Donor::class, groups={"full"})
      * )
-     * @SWG\Tag(name="donors")
+     * @SWG\Tag(name="Donor")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -179,7 +179,7 @@ class AccountController extends RestAPIController
      *     description="Requested Member",
      *     @Model(type=Member::class, groups={"full"})
      * )
-     * @SWG\Tag(name="members")
+     * @SWG\Tag(name="Member")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
@@ -217,7 +217,7 @@ class AccountController extends RestAPIController
      *     response=204,
      *     description="No content",
      * )
-     * @SWG\Tag(name="donors")
+     * @SWG\Tag(name="Donor")
      *
      * @param string $id
      * @param DonorManager $donorManager
@@ -249,7 +249,7 @@ class AccountController extends RestAPIController
      *     response=204,
      *     description="No content",
      * )
-     * @SWG\Tag(name="members")
+     * @SWG\Tag(name="Member")
      *
      * @param string $id
      * @param MemberManager $memberManager
