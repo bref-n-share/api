@@ -8,6 +8,8 @@ use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Structure\DTO\SiteEdit;
 use App\Domain\Structure\Entity\Site;
+use App\Domain\Structure\Entity\Organization;
+use App\Domain\Structure\Manager\OrganizationManager;
 use App\Domain\Structure\Manager\SiteManager;
 use App\Domain\Structure\Repository\StructureRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -120,5 +122,83 @@ class StructureController extends RestAPIController
         }
 
         return $this->apiJsonResponse($savedEntity, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/site/{id}", name="structure_site_get", methods="GET")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Site",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested site",
+     *     @Model(type=Site::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Site")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param SiteManager $siteManager
+     *
+     * @return Response
+     */
+    public function getOneSite(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        SiteManager $siteManager
+    ): Response {
+        try {
+            $site = $siteManager->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return $this->apiJsonResponse($site, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/organization/{id}", name="structure_organization_get", methods="GET")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Organization",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested oragnization",
+     *     @Model(type=Organization::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Organization")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param OrganizationManager $organizationManager
+     *
+     * @return Response
+     */
+    public function getOneOrganization(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        OrganizationManager $organizationManager
+    ): Response {
+        try {
+            $organization = $organizationManager->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return $this->apiJsonResponse($organization, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 }
