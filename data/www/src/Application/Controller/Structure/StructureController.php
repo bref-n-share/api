@@ -18,10 +18,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * @Route("/api/v1/structure")
+ */
 class StructureController extends RestAPIController
 {
     /**
-     * @Route("/api/v1/structure", name="structure_get_all", methods="GET")
+     * @Route(name="structure_get_all", methods="GET")
      *
      * @SWG\Response(
      *     response=200,
@@ -53,7 +56,7 @@ class StructureController extends RestAPIController
     }
 
     /**
-     * @Route("/api/v1/structure/site/{id}", name="structure_site_update", methods="PATCH")
+     * @Route("/site/{id}", name="structure_site_update", methods="PATCH")
      *
      * @SWG\Parameter(
      *     description="Id of the Site",
