@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecurityController extends RestAPIController
 {
     /**
-     * @Route("/authenticate", name="security_request_authenticate", methods="GET")
+     * @Route("/authenticate", name="security_request_authenticate", methods="POST")
      *
      * @SWG\Parameter(
      *     name="body",
