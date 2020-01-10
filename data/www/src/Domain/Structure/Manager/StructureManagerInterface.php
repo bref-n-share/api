@@ -15,4 +15,6 @@ interface StructureManagerInterface
     public function getInitialStatus(): string;
 
     public function supports(Structure $structure): bool;
+
+    public function getFormattedStructureFromMemberCreation(Structure $getStructure): Structure;
 }

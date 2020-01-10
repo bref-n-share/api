@@ -31,7 +31,7 @@ abstract class Structure
      *
      * @Groups({"extra-light", "essential", "full"})
      */
-    private UuidInterface $id;
+    private ?UuidInterface $id = null;
 
     /**
      * @Assert\NotBlank(message="Le nom ne doit pas être vide")
