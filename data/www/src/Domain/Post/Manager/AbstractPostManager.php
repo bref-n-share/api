@@ -5,7 +5,7 @@ namespace App\Domain\Post\Manager;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Repository\PostRepositoryInterface;
-use App\Domain\Post\Workflow\WorkflowProcessorInterface;
+use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 
 abstract class AbstractPostManager implements PostManagerInterface
 {

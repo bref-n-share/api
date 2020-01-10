@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Workflow;
 
-use App\Domain\Post\Workflow\WorkflowProcessorInterface;
+use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use Symfony\Component\Workflow\Exception\LogicException;
 use Symfony\Component\Workflow\StateMachine;
 

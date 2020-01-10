@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Post\Workflow;
+namespace App\Domain\Core\Workflow;
 
 interface WorkflowProcessorInterface
 {
