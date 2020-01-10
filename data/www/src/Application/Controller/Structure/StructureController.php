@@ -14,6 +14,7 @@ use App\Domain\Structure\Manager\SiteManager;
 use App\Domain\Structure\Repository\OrganizationRepositoryInterface;
 use App\Domain\Structure\Repository\SiteRepositoryInterface;
 use App\Domain\Structure\Repository\StructureRepository;
+use App\Domain\User\Entity\Donor;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +53,7 @@ class StructureController extends RestAPIController
         SiteRepositoryInterface $repository
     ): Response {
         return $this->apiJsonResponse(
-            $repository->retrieveAll(),
+            $this->getUser() instanceof Donor ? $this->getUser()->getSites() : $repository->retrieveAll(),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer
