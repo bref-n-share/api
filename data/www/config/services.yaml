@@ -26,7 +26,7 @@ services:
 
     App\Infrastructure\:
         resource: '../src/Infrastructure/*'
-        exclude: '../src/Infrastructure/{Entity,Migrations}'
+        exclude: '../src/Infrastructure/{Entity,Migrations,DataFixtures}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
