@@ -27,4 +27,10 @@ class DonorManager extends AbstractUserManager
         $donor->addSite($site);
         $this->userRepository->save($donor);
     }
+
+    public function removeFavorite(Donor $donor, Site $site): void
+    {
+        $donor->removeSite($site);
+        $this->userRepository->save($donor);
+    }
 }

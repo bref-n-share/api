@@ -365,4 +365,72 @@ class AccountController extends RestAPIController
 
         return $this->apiJsonResponse($site, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
+
+    /**
+     * @Route("/donor/favorite/remove", name="user_donor_favorite_remove", methods="POST")
+     *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Site id",
+     *     type="json",
+     *     required=true,
+     *     @SWG\Schema(
+     *         type="object",
+     *         @SWG\Property(
+     *              property="id",
+     *              type="string",
+     *              example="b38e4898-597a-4783-822c-c97573199124"
+     *         )
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=204,
+     *     description="No content",
+     * )
+     * @SWG\Tag(name="Donor")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     *
+     * @param DonorManager $donorManager
+     * @return Response
+     */
+    public function removeFavorite(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        ValidatorInterface $validator,
+        DonorManager $donorManager
+    ): Response {
+        try {
+            $user = $this->getUser();
+
+            if (!($user instanceof Donor)) {
+                return $this->apiJsonResponse(
+                    $this->formatErrorMessage('L\'utilisateur n\'est pas un donneur'),
+                    Response::HTTP_UNAUTHORIZED
+                );
+            }
+
+            /** @var EntityId $entityId */
+            $entityId = $serializer->deserialize($request->getContent(), EntityId::class, 'json');
+            $validation = $validator->validate($entityId);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            $donorManager->removeFavorite($user, $serializer->denormalize($entityId->getId(), Site::class));
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
+        }
+
+        return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
+    }
 }
