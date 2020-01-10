@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Encoder;
 
-use App\Domain\User\Entity\PasswordEncoderInterface;
+use App\Domain\User\Encoder\PasswordEncoderInterface;
 use App\Domain\User\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 

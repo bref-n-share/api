@@ -34,9 +34,9 @@ services:
         resource: '../src/Application/Controller'
         tags: ['controller.service_arguments']
 
-    App\Domain\User\Manager\SecurityManager:
+    App\Domain\User\Manager\Security\SecurityManager:
         arguments:
-            $passwordEncoder: '@App\Domain\User\Entity\PasswordEncoderInterface'
+            $passwordEncoder: '@App\Domain\User\Encoder\PasswordEncoderInterface'
 
     App\Domain\User\Manager\MemberManager:
         arguments:

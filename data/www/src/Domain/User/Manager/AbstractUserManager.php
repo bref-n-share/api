@@ -5,7 +5,7 @@ namespace App\Domain\User\Manager;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use App\Domain\Structure\Manager\StructureManagerChain;
-use App\Domain\User\Entity\PasswordEncoderInterface;
+use App\Domain\User\Encoder\PasswordEncoderInterface;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepositoryInterface;
 
