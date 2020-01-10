@@ -49,3 +49,5 @@ parameters:
               method: post
             - pattern: ^\/api\/v(\d)+\/user\/donor$
               method: post
+            - pattern: ^\/api\/v(\d)+\/structure$
+              method: get
