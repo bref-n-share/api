@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\User\Manager;
+namespace App\Domain\User\Manager\Security;
 
 use App\Domain\User\DTO\AuthenticateUserDTO;
 use App\Domain\User\Repository\UserRepositoryInterface;

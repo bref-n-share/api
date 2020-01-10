@@ -5,7 +5,7 @@ namespace App\Application\Controller\Security;
 use App\Application\Controller\RestAPIController;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\User\DTO\AuthenticateUserDTO;
-use App\Domain\User\Manager\SecurityManager;
+use App\Domain\User\Manager\Security\SecurityManager;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
