@@ -87,7 +87,7 @@ abstract class User implements UserInterface
 
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $firstName;
 
@@ -101,7 +101,7 @@ abstract class User implements UserInterface
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $lastName;
 
@@ -151,6 +151,24 @@ abstract class User implements UserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        if (!in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeRole(string $role): self
+    {
+        if (in_array($role, $this->roles)) {
+            unset($this->roles[array_search($role, $this->roles)]);
+        }
 
         return $this;
     }

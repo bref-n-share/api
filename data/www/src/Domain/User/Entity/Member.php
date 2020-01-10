@@ -17,6 +17,7 @@ class Member extends User
 {
     /**
      * @Assert\Valid
+     * @Assert\NotNull(message="La structure doit être définie")
      *
      * @ORM\ManyToOne(
      *     targetEntity="App\Domain\Structure\Entity\Structure",
