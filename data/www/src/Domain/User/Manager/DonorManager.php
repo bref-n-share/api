@@ -3,6 +3,7 @@
 namespace App\Domain\User\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Structure\Entity\Site;
 use App\Domain\User\Entity\Donor;
 use App\Domain\User\Entity\User;
 
@@ -19,5 +20,11 @@ class DonorManager extends AbstractUserManager
         $donor->setPassword($this->encodePassword($donor, $donor->getPassword()));
 
         return $this->userRepository->save($donor);
+    }
+
+    public function addFavorite(Donor $donor, Site $site): void
+    {
+        $donor->addSite($site);
+        $this->userRepository->save($donor);
     }
 }
