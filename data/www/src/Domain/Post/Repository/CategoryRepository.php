@@ -18,4 +18,9 @@ class CategoryRepository extends ServiceEntityRepository implements CategoryRepo
     {
         parent::__construct($registry, Category::class);
     }
+
+    public function retrieveAll(): array
+    {
+        return $this->findAll();
+    }
 }
