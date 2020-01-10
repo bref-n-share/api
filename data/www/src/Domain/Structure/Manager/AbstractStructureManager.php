@@ -3,7 +3,7 @@
 namespace App\Domain\Structure\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
-use App\Domain\Post\Workflow\WorkflowProcessorInterface;
+use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use App\Domain\Structure\Entity\Structure;
 use App\Domain\Structure\Repository\StructureRepositoryInterface;
 
