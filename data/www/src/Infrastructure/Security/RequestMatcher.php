@@ -10,6 +10,8 @@ class RequestMatcher implements RequestMatcherInterface
 {
     private array $patterns;
 
+    private const PARAMETERS_REGEX = '(((\?)([A-Za-z0-9-_=&]*)?)?)';
+
     public function __construct(array $patterns)
     {
         $patternsOptionResolver = new OptionsResolver();
@@ -46,6 +48,19 @@ class RequestMatcher implements RequestMatcherInterface
 
     private function formatPattern($pattern): string
     {
+        // Remove '$' from the current pattern (if existing)
+        if ($isStrictPattern = substr($pattern, -1) === '$') {
+            $pattern = substr($pattern, 0, -1);
+        }
+
+        // Added regex to match '?param1=XX&param2=XX'
+        $pattern .= self::PARAMETERS_REGEX;
+
+        // Add '$' to the current pattern
+        if ($isStrictPattern) {
+            $pattern .= '$';
+        }
+
         return rtrim($pattern, '^') . '^';
     }
 }
