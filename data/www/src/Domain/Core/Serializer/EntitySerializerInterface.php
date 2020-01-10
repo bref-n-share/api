@@ -4,7 +4,6 @@ namespace App\Domain\Core\Serializer;
 
 interface EntitySerializerInterface
 {
-
     /**
      * Serializes data in the appropriate format.
      *
@@ -27,4 +26,9 @@ interface EntitySerializerInterface
      * @return object|array
      */
     public function deserialize($data, string $type, string $format, array $context = []);
+
+    /**
+     * Denormalizes data back into an object of the given class.
+     */
+    public function denormalize($data, $type, $format = null, array $context = []);
 }

@@ -1,5 +1,6 @@
 imports:
     - { resource: 'services_repository.yml' }
+    - { resource: 'services_infrastructure.yml' }
 
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
@@ -32,3 +33,36 @@ services:
     App\Application\Controller\:
         resource: '../src/Application/Controller'
         tags: ['controller.service_arguments']
+
+    App\Domain\User\Manager\SecurityManager:
+        arguments:
+            $passwordEncoder: '@App\Domain\User\Entity\PasswordEncoderInterface'
+
+    App\Domain\User\Manager\MemberManager:
+        arguments:
+            $workflowProcessor: '@user.workflow.member'
+
+    App\Domain\User\Manager\DonorManager:
+        arguments:
+            $workflowProcessor: '@user.workflow.donor'
+
+    App\Domain\Structure\Manager\SiteManager:
+        arguments:
+            $repository: '@App\Domain\Structure\Repository\SiteRepositoryInterface'
+            $workflowProcessor: '@structure.workflow.site'
+        tags: ['structure.manager']
+
+    App\Domain\Structure\Manager\OrganizationManager:
+        arguments:
+            $repository: '@App\Domain\Structure\Repository\OrganizationRepositoryInterface'
+            $workflowProcessor: '@structure.workflow.organization'
+        tags: ['structure.manager']
+
+    App\Domain\Post\Manager\RequestManager:
+            arguments:
+                $repository: '@App\Domain\Post\Repository\RequestRepository'
+                $workflowProcessor: '@post.workflow.request'
+
+    App\Domain\Structure\Manager\StructureManagerChain:
+        arguments:
+            $managers: !tagged structure.manager

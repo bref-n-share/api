@@ -75,8 +75,36 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "exsyst/swagger": {
+        "version": "v0.4.1"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "nelmio/api-doc-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
+        },
+        "files": [
+            "config/packages/nelmio_api_doc.yaml",
+            "config/routes/nelmio_api_doc.yaml"
+        ]
+    },
+    "nelmio/cors-bundle": {
+        "version": "1.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.5",
+            "ref": "6388de23860284db9acce0a7a5d9d13153bcb571"
+        },
+        "files": [
+            "config/packages/nelmio_cors.yaml"
+        ]
     },
     "nikic/php-parser": {
         "version": "v4.3.0"
@@ -89,6 +117,15 @@
     },
     "php": {
         "version": "7.4"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "2.0.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "4.3.4"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.0.1"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -113,6 +150,9 @@
         "files": [
             "config/packages/ramsey_uuid_doctrine.yaml"
         ]
+    },
+    "symfony/asset": {
+        "version": "v4.4.2"
     },
     "symfony/cache": {
         "version": "v4.4.2"
@@ -216,6 +256,9 @@
     "symfony/mime": {
         "version": "v4.4.2"
     },
+    "symfony/options-resolver": {
+        "version": "v4.4.2"
+    },
     "symfony/orm-pack": {
         "version": "v1.0.7"
     },
@@ -303,6 +346,26 @@
     "symfony/translation-contracts": {
         "version": "v2.0.1"
     },
+    "symfony/twig-bridge": {
+        "version": "v4.4.2"
+    },
+    "symfony/twig-bundle": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "15a41bbd66a1323d09824a189b485c126bbefa51"
+        },
+        "files": [
+            "config/packages/test/twig.yaml",
+            "config/packages/twig.yaml",
+            "templates/base.html.twig"
+        ]
+    },
+    "symfony/twig-pack": {
+        "version": "v1.0.0"
+    },
     "symfony/validator": {
         "version": "4.3",
         "recipe": {
@@ -322,13 +385,37 @@
     "symfony/var-exporter": {
         "version": "v4.4.2"
     },
+    "symfony/workflow": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "3b2f8ca32a07fcb00f899649053943fa3d8bbfb6"
+        },
+        "files": [
+            "config/packages/workflow.yaml"
+        ]
+    },
     "symfony/yaml": {
         "version": "v4.4.2"
+    },
+    "twig/extra-bundle": {
+        "version": "v3.0.1"
+    },
+    "twig/twig": {
+        "version": "v3.0.1"
+    },
+    "webmozart/assert": {
+        "version": "1.6.0"
     },
     "zendframework/zend-code": {
         "version": "3.4.1"
     },
     "zendframework/zend-eventmanager": {
         "version": "3.2.1"
+    },
+    "zircote/swagger-php": {
+        "version": "2.0.14"
     }
 }

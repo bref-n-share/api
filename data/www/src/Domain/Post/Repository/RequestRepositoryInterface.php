@@ -2,7 +2,7 @@
 
 namespace App\Domain\Post\Repository;
 
-interface RequestRepositoryInterface
+interface RequestRepositoryInterface extends PostRepositoryInterface
 {
 
 }

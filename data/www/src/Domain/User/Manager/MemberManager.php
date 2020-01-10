@@ -2,24 +2,25 @@
 
 namespace App\Domain\User\Manager;
 
+use App\Domain\Core\Exception\ConflictException;
 use App\Domain\User\Entity\Member;
 use App\Domain\User\Entity\User;
-use App\Domain\User\Repository\MemberRepositoryInterface;
 
-class MemberManager implements UserManagerInterface
+class MemberManager extends AbstractUserManager
 {
-    private MemberRepositoryInterface $memberRepository;
-
-    public function __construct(
-        MemberRepositoryInterface $memberRepository
-    ) {
-        $this->memberRepository = $memberRepository;
-    }
-
-    public function create(User $memberDTO): User
+    public function create(User $member): User
     {
-        $entity = $this->memberRepository->save($this->userAdapterInterface->adaptToMember($memberDTO));
+        if (!($member instanceof Member)) {
+            throw new ConflictException('Must be an instance of ' . Member::class);
+        }
 
-        return $this->userAdapterInterface->adaptToMemberDTO($entity);
+        $member->setStatus($this->workflowProcessor->getInitialStatus());
+        $member->getStructure()->setStatus(
+            $this->structureManagerChain->getManager($member->getStructure())->getInitialStatus()
+        );
+
+        $member->setPassword($this->encodePassword($member, $member->getPassword()));
+
+        return $this->userRepository->save($member);
     }
 }

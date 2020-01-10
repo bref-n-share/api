@@ -3,6 +3,8 @@
 namespace App\Domain\Post\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Domain\Post\Repository\RequestRepository")
@@ -10,18 +12,31 @@ use Doctrine\ORM\Mapping as ORM;
 class Request extends Post
 {
     /**
+     * @Assert\NotBlank(message="La quantité demandée ne doit pas être vide")
+     * @Assert\NotNull(message="La quantité demandée ne doit pas être vide")
+     * @Assert\Positive(message="La quantité doit être positive")
+     * @Assert\Type(type="int", message="La quantité doit être un entier")
+     *
      * @ORM\Column(type="integer", nullable=true)
+     *
+     * @Groups({"essential", "full", "creation"})
      */
     private int $requestedQuantity;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     *
+     * @Groups({"essential", "full"})
      */
-    private int $currentQuantity;
+    private int $currentQuantity = 0;
 
     /**
+     * @Assert\Valid
+     *
      * @ORM\ManyToOne(targetEntity="App\Domain\Post\Entity\Category")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"essential", "full", "creation"})
      */
     private Category $category;
 

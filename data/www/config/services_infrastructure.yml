@@ -1,0 +1,53 @@
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    app.firewall.secured_area.request_matcher:
+        class: 'App\Infrastructure\Security\RequestMatcher'
+        arguments:
+            $patterns: '%secured_area%'
+
+    App\Domain\User\Entity\PasswordEncoderInterface: '@App\Infrastructure\Encoder\PasswordEncoder'
+
+    App\Infrastructure\Serializer\Normalizer\EntityNormalizer:
+        public: false
+        tags:
+            - { name: serializer.normalizer }
+
+    user.workflow.member:
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.member_workflow'
+            $type: 'App\Domain\User\Entity\Member'
+
+    user.workflow.donor:
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.donor_workflow'
+            $type: 'App\Domain\User\Entity\Donor'
+
+    structure.workflow.site:
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.site_workflow'
+            $type: 'App\Domain\Structure\Entity\Site'
+
+    structure.workflow.organization:
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.organization_workflow'
+            $type: 'App\Domain\Structure\Entity\Organization'
+
+    post.workflow.request:
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.request_workflow'
+            $type: 'App\Domain\Post\Entity\Request'
+
+    nelmio.describer.uuid:
+        class: 'App\Infrastructure\Describer\UuidDescriber'
+        arguments:
+            $propertyInfo: '@property_info'
+            $reader: '@annotation_reader'
+        tags: ['nelmio_api_doc.model_describer']

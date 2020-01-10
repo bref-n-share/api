@@ -6,14 +6,17 @@ use App\Domain\Structure\Entity\Site;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Domain\User\Repository\DonorRepository")
+ * @ORM\Entity
  */
 class Donor extends User
 {
     /**
      * @ORM\ManyToMany(targetEntity="App\Domain\Structure\Entity\Site", inversedBy="donors")
+     *
+     * @Groups({"essential", "full"})
      */
     private Collection $sites;
 

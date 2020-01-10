@@ -4,4 +4,3 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     App\Domain\User\Repository\MemberRepositoryInterface: '@App\Domain\User\Repository\MemberRepository'
-    App\Domain\Structure\Repository\StructureRepositoryInterface: '@App\Domain\Structure\Repository\StructureRepository'

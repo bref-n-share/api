@@ -1,6 +1,6 @@
 security:
     encoders:
-        App\Infrastructure\Entity\User:
+        App\Domain\User\Entity\User:
             algorithm: auto
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
@@ -14,6 +14,14 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        secured_area:
+            request_matcher: app.firewall.secured_area.request_matcher
+            stateless: true
+            guard:
+                authenticators:
+                    - App\Infrastructure\Security\TokenAuthenticator
+
         main:
             anonymous: lazy
 
@@ -28,3 +36,16 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+
+parameters:
+    secured_area:
+        pattern: ^\/api\/*
+        excluded_patterns:
+            - pattern: ^\/api\/v(\d)+\/security\/authenticate$
+              method: get
+            - pattern: ^\/api\/v(\d)+\/doc$
+              method: get
+            - pattern: ^\/api\/v(\d)+\/user\/member$
+              method: post
+            - pattern: ^\/api\/v(\d)+\/user\/donor$
+              method: post
