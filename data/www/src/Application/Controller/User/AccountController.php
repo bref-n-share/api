@@ -529,6 +529,8 @@ class AccountController extends RestAPIController
             /** @var User $entityToSave */
             $entityToSave = $repository->retrieve($id);
 
+            $this->denyAccessUnlessGranted('update', $entityToSave);
+
             /** @var User $user */
             $user = $managerChain->getManager($entityToSave)->getUpdatedEntity($userDto, $id);
             $validation = $validator->validate($user);
