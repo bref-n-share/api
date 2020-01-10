@@ -42,7 +42,7 @@ parameters:
         pattern: ^\/api\/*
         excluded_patterns:
             - pattern: ^\/api\/v(\d)+\/security\/authenticate$
-              method: get
+              method: post
             - pattern: ^\/api\/v(\d)+\/doc$
               method: get
             - pattern: ^\/api\/v(\d)+\/user\/member$
