@@ -10,10 +10,13 @@ use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Structure\Entity\Site;
 use App\Domain\User\Entity\Donor;
 use App\Domain\User\Entity\Member;
+use App\Domain\User\Entity\User;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
+use App\Domain\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Ramsey\Uuid\Uuid;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -215,7 +218,7 @@ class AccountController extends RestAPIController
         MemberManager $memberManager
     ): Response {
         try {
-            $donor = $memberManager->retrieve($id);
+            $member = $memberManager->retrieve($id);
         } catch (NotFoundHttpException $exception) {
             return $this->apiJsonResponse(
                 $this->formatErrorMessage($exception->getMessage()),
@@ -223,7 +226,7 @@ class AccountController extends RestAPIController
             );
         }
 
-        return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
+        return $this->apiJsonResponse($member, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 
     /**
@@ -432,5 +435,41 @@ class AccountController extends RestAPIController
         }
 
         return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/account", name="user_get_account", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested User",
+     *     @Model(type=User::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="User")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param UserRepository $repository
+     *
+     * @return Response
+     */
+    public function getMyAccount(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        UserRepository $repository
+    ): Response {
+        try {
+            /** @var User $user */
+            $user = $this->getUser();
+
+            $entity = $repository->retrieve(Uuid::fromString($user->getId()));
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse($entity, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 }
