@@ -8,6 +8,7 @@ use App\Infrastructure\Serializer\Normalizer\UuidDenormalizer;
 use App\Infrastructure\Serializer\Normalizer\UuidNormalizer;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
@@ -69,5 +70,16 @@ class EntitySerializer implements EntitySerializerInterface
     public function deserialize($data, string $type, string $format, array $context = [])
     {
         return $this->serializer->deserialize($data, $type, $format, $context);
+    }
+
+    public function denormalize($data, $type, $format = null, array $context = [])
+    {
+        $entity = $this->serializer->denormalize($data, $type, $format, $context);
+
+        if (!$entity) {
+            throw new NotFoundHttpException($type . ' not found with id ' . $data);
+        }
+
+        return $entity;
     }
 }

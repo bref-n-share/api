@@ -41,11 +41,11 @@ parameters:
     secured_area:
         pattern: ^\/api\/*
         excluded_patterns:
-            - pattern: ^\/api\/v(\d)+\/security\/authenticate
+            - pattern: ^\/api\/v(\d)+\/security\/authenticate$
               method: get
-            - pattern: ^\/api\/v(\d)+\/doc
+            - pattern: ^\/api\/v(\d)+\/doc$
               method: get
-            - pattern: ^\/api\/v(\d)+\/user\/member
+            - pattern: ^\/api\/v(\d)+\/user\/member$
               method: post
-            - pattern: ^\/api\/v(\d)+\/user\/donnor
+            - pattern: ^\/api\/v(\d)+\/user\/donor$
               method: post

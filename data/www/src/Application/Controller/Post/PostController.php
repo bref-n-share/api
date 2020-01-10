@@ -64,9 +64,12 @@ class PostController extends RestAPIController
 
             $entity = $requestManager->create($requestPost);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         } catch (ValidationException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
         }
 
         return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);

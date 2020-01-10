@@ -4,8 +4,10 @@ namespace App\Application\Controller\User;
 
 use App\Application\Controller\RestAPIController;
 use App\Application\Exception\ValidationException;
+use App\Domain\Core\DTO\EntityId;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
+use App\Domain\Structure\Entity\Site;
 use App\Domain\User\Entity\Donor;
 use App\Domain\User\Entity\Member;
 use App\Domain\User\Manager\DonorManager;
@@ -66,11 +68,17 @@ class AccountController extends RestAPIController
 
             $entity = $memberManager->create($member);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         } catch (UniqueConstraintViolationException $exception) {
-            return $this->apiJsonResponse('L\'adresse email existe déjà', Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage('L\'adresse email existe déjà'),
+                Response::HTTP_CONFLICT
+            );
         } catch (ValidationException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
         }
 
         return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
@@ -118,11 +126,17 @@ class AccountController extends RestAPIController
 
             $entity = $donorManager->create($donor);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         } catch (UniqueConstraintViolationException $exception) {
-            return $this->apiJsonResponse('L\'adresse email existe déjà', Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage('L\'adresse email existe déjà'),
+                Response::HTTP_CONFLICT
+            );
         } catch (ValidationException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
         }
 
         return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
@@ -161,7 +175,10 @@ class AccountController extends RestAPIController
         try {
             $donor = $donorManager->retrieve($id);
         } catch (NotFoundHttpException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
@@ -200,7 +217,10 @@ class AccountController extends RestAPIController
         try {
             $donor = $memberManager->retrieve($id);
         } catch (NotFoundHttpException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
@@ -232,7 +252,10 @@ class AccountController extends RestAPIController
         try {
             $donorManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
@@ -264,7 +287,148 @@ class AccountController extends RestAPIController
         try {
             $memberManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/donor/favorite/add", name="user_donor_favorite_add", methods="POST")
+     *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Site id",
+     *     type="json",
+     *     required=true,
+     *     @SWG\Schema(
+     *         type="object",
+     *         @SWG\Property(
+     *              property="id",
+     *              type="string",
+     *              example="b38e4898-597a-4783-822c-c97573199124"
+     *         )
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Added site",
+     *     @Model(type=Site::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Donor")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     *
+     * @param DonorManager $donorManager
+     * @return Response
+     */
+    public function addFavorite(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        ValidatorInterface $validator,
+        DonorManager $donorManager
+    ): Response {
+        try {
+            $user = $this->getUser();
+
+            if (!($user instanceof Donor)) {
+                return $this->apiJsonResponse(
+                    $this->formatErrorMessage('L\'utilisateur n\'est pas un donneur'),
+                    Response::HTTP_UNAUTHORIZED
+                );
+            }
+
+            /** @var EntityId $entityId */
+            $entityId = $serializer->deserialize($request->getContent(), EntityId::class, 'json');
+            $validation = $validator->validate($entityId);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            $site = $serializer->denormalize($entityId->getId(), Site::class);
+            $donorManager->addFavorite($user, $site);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
+        }
+
+        return $this->apiJsonResponse($site, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/donor/favorite/remove", name="user_donor_favorite_remove", methods="POST")
+     *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Site id",
+     *     type="json",
+     *     required=true,
+     *     @SWG\Schema(
+     *         type="object",
+     *         @SWG\Property(
+     *              property="id",
+     *              type="string",
+     *              example="b38e4898-597a-4783-822c-c97573199124"
+     *         )
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=204,
+     *     description="No content",
+     * )
+     * @SWG\Tag(name="Donor")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     *
+     * @param DonorManager $donorManager
+     * @return Response
+     */
+    public function removeFavorite(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        ValidatorInterface $validator,
+        DonorManager $donorManager
+    ): Response {
+        try {
+            $user = $this->getUser();
+
+            if (!($user instanceof Donor)) {
+                return $this->apiJsonResponse(
+                    $this->formatErrorMessage('L\'utilisateur n\'est pas un donneur'),
+                    Response::HTTP_UNAUTHORIZED
+                );
+            }
+
+            /** @var EntityId $entityId */
+            $entityId = $serializer->deserialize($request->getContent(), EntityId::class, 'json');
+            $validation = $validator->validate($entityId);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            $donorManager->removeFavorite($user, $serializer->denormalize($entityId->getId(), Site::class));
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
         }
 
         return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
