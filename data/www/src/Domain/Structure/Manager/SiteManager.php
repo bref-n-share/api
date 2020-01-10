@@ -18,7 +18,7 @@ class SiteManager extends AbstractStructureManager
         /** @var Site $entity */
         $entity = $this->retrieve($id);
 
-        $entity
+        return $entity
             ->setAddress($siteDto->getAddress() === null ? $entity->getAddress() : $siteDto->getAddress())
             ->setPostalCode($siteDto->getPostalCode() === null ? $entity->getPostalCode() : $siteDto->getPostalCode())
             ->setCity($siteDto->getCity() === null ? $entity->getCity() : $siteDto->getCity())
@@ -26,7 +26,5 @@ class SiteManager extends AbstractStructureManager
             ->setLongitude($siteDto->getLongitude() === null ? $entity->getLongitude() : $siteDto->getLongitude())
             ->setLatitude($siteDto->getLatitude() === null ? $entity->getLatitude() : $siteDto->getLatitude())
         ;
-
-        return $entity;
     }
 }

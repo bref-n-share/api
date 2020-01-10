@@ -33,4 +33,9 @@ class DonorManager extends AbstractUserManager
         $donor->removeSite($site);
         $this->userRepository->save($donor);
     }
+
+    public function supports(User $user): bool
+    {
+        return $user instanceof Donor;
+    }
 }

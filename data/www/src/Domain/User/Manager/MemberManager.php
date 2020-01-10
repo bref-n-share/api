@@ -23,4 +23,9 @@ class MemberManager extends AbstractUserManager
 
         return $this->userRepository->save($member);
     }
+
+    public function supports(User $user): bool
+    {
+        return $user instanceof Member;
+    }
 }

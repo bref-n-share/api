@@ -87,7 +87,7 @@ abstract class User implements UserInterface
 
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $firstName;
 
@@ -101,7 +101,7 @@ abstract class User implements UserInterface
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $lastName;
 
