@@ -60,4 +60,9 @@ abstract class RestAPIController extends AbstractController
             true
         );
     }
+
+    protected function formatErrorMessage(string $errorMessage): array
+    {
+        return ['message' => $errorMessage];
+    }
 }

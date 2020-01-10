@@ -182,9 +182,12 @@ class StructureController extends RestAPIController
 
             $savedEntity = $siteManager->save($site);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         } catch (ValidationException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
         }
 
         return $this->apiJsonResponse($savedEntity, Response::HTTP_OK, $this->getLevel($request), $serializer);
@@ -223,7 +226,10 @@ class StructureController extends RestAPIController
         try {
             $site = $siteManager->retrieve($id);
         } catch (NotFoundHttpException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse($site, Response::HTTP_OK, $this->getLevel($request), $serializer);
@@ -262,7 +268,10 @@ class StructureController extends RestAPIController
         try {
             $organization = $organizationManager->retrieve($id);
         } catch (NotFoundHttpException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse($organization, Response::HTTP_OK, $this->getLevel($request), $serializer);

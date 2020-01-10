@@ -59,7 +59,10 @@ class SecurityController extends RestAPIController
 
             $token = $securityManager->getUserToken($authenticateUserDTO);
         } catch (NotFoundHttpException | AccessDeniedHttpException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         $data = [
@@ -88,7 +91,8 @@ class SecurityController extends RestAPIController
      *
      * @return Response
      */
-    public function testToken(): Response {
+    public function testToken(): Response
+    {
         return new Response();
     }
 }

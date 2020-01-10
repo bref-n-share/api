@@ -66,11 +66,17 @@ class AccountController extends RestAPIController
 
             $entity = $memberManager->create($member);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         } catch (UniqueConstraintViolationException $exception) {
-            return $this->apiJsonResponse('L\'adresse email existe déjà', Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage('L\'adresse email existe déjà'),
+                Response::HTTP_CONFLICT
+            );
         } catch (ValidationException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
         }
 
         return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
@@ -118,11 +124,17 @@ class AccountController extends RestAPIController
 
             $entity = $donorManager->create($donor);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         } catch (UniqueConstraintViolationException $exception) {
-            return $this->apiJsonResponse('L\'adresse email existe déjà', Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage('L\'adresse email existe déjà'),
+                Response::HTTP_CONFLICT
+            );
         } catch (ValidationException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), Response::HTTP_CONFLICT);
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
         }
 
         return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
@@ -161,7 +173,10 @@ class AccountController extends RestAPIController
         try {
             $donor = $donorManager->retrieve($id);
         } catch (NotFoundHttpException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
@@ -200,7 +215,10 @@ class AccountController extends RestAPIController
         try {
             $donor = $memberManager->retrieve($id);
         } catch (NotFoundHttpException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
@@ -232,7 +250,10 @@ class AccountController extends RestAPIController
         try {
             $donorManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
@@ -264,7 +285,10 @@ class AccountController extends RestAPIController
         try {
             $memberManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
-            return $this->apiJsonResponse($exception->getMessage(), $exception->getStatusCode());
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
         }
 
         return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
