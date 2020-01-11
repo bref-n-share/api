@@ -509,7 +509,7 @@ class AccountController extends RestAPIController
      *
      * @return Response
      */
-    public function updateSite(
+    public function updateUser(
         Request $request,
         EntitySerializerInterface $serializer,
         ValidatorInterface $validator,
