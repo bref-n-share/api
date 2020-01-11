@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Security;
 class PostVoter extends Voter
 {
     public const CREATE = 'create';
+    public const UPDATE = 'update';
 
     private Security $security;
 
@@ -22,7 +23,7 @@ class PostVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::CREATE]) && $subject instanceof Post;
+        return in_array($attribute, [self::CREATE, self::UPDATE]) && $subject instanceof Post;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -41,12 +42,19 @@ class PostVoter extends Voter
         switch ($attribute) {
             case self::CREATE:
                 return $this->canCreate($subject, $user);
+            case self::UPDATE:
+                return $this->canUpdate($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
     }
 
     private function canCreate(Post $subject, User $user)
+    {
+        return $user instanceof Member && $user->getStructure()->getId() === $subject->getSite()->getId();
+    }
+
+    private function canUpdate(Post $subject, User $user)
     {
         return $user instanceof Member && $user->getStructure()->getId() === $subject->getSite()->getId();
     }
