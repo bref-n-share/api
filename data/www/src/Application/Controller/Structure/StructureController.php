@@ -173,8 +173,13 @@ class StructureController extends RestAPIController
                 throw new ValidationException($validation);
             }
 
+            /** @var Site $entityToSave */
+            $entityToSave = $siteManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('update', $entityToSave);
+
             /** @var Site $site */
-            $site = $siteManager->getUpdatedEntity($siteDto, $id);
+            $site = $siteManager->getUpdatedEntity($siteDto, $entityToSave);
             $validation = $validator->validate($site);
 
             if ($validation->count() > 0) {
