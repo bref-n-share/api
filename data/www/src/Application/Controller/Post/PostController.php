@@ -9,6 +9,7 @@ use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Post\Manager\RequestManager;
 use App\Domain\Post\Entity\Request as RequestPost;
 use App\Domain\Post\Repository\PostRepository;
+use App\Domain\User\Entity\Donor;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,6 +62,8 @@ class PostController extends RestAPIController
             if ($validation->count() > 0) {
                 throw new ValidationException($validation);
             }
+
+            $this->denyAccessUnlessGranted('create', $requestPost);
 
             $entity = $requestManager->create($requestPost);
         } catch (NotFoundHttpException | ConflictException $exception) {
