@@ -9,6 +9,7 @@ use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Post\Manager\RequestManager;
 use App\Domain\Post\Entity\Request as RequestPost;
 use App\Domain\Post\Repository\PostRepository;
+use App\Domain\User\Entity\Donor;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,6 +62,8 @@ class PostController extends RestAPIController
             if ($validation->count() > 0) {
                 throw new ValidationException($validation);
             }
+
+            $this->denyAccessUnlessGranted('create', $requestPost);
 
             $entity = $requestManager->create($requestPost);
         } catch (NotFoundHttpException | ConflictException $exception) {
@@ -142,6 +145,41 @@ class PostController extends RestAPIController
     ): Response {
         return $this->apiJsonResponse(
             $postRepository->retrieveAllBySite($id),
+            Response::HTTP_OK,
+            $this->getLevel($request),
+            $serializer
+        );
+    }
+
+    /**
+     * @Route("/request", name="post_request_get_all", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="All Requests",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Post\Entity\Request", groups={"full"}))
+     *     )
+     * )
+     * @SWG\Tag(name="Request")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param RequestManager $requestManager
+     *
+     * @return Response
+     */
+    public function getAllRequest(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        RequestManager $requestManager
+    ): Response {
+        $user = $this->getUser();
+
+        return $this->apiJsonResponse(
+            $user instanceof Donor ?
+                $requestManager->retrieveAllBySites($user->getSites()->getValues()) : $requestManager->retrieveAll(),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer

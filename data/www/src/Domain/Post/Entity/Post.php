@@ -101,13 +101,14 @@ abstract class Post
 
     /**
      * @Assert\Valid
+     * @Assert\NotNull(message="Le site doit être définie")
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Site", inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      *
      * @Groups({"essential", "full", "creation"})
      */
-    private Site $site;
+    private ?Site $site = null;
 
     public function __construct()
     {
