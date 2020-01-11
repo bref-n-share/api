@@ -63,8 +63,8 @@ abstract class AbstractUserManager implements UserManagerInterface
         $entity = $this->retrieve($id);
 
         return $entity
-            ->setFirstName($userEdit->getFirstName() === null ? $entity->getFirstName() : $userEdit->getFirstName())
-            ->setLastName($userEdit->getLastName() === null ? $entity->getLastName() : $userEdit->getLastName())
+            ->setFirstName($userEdit->getFirstName() ?? $entity->getFirstName())
+            ->setLastName($userEdit->getLastName() ?? $entity->getLastName())
         ;
     }
 }
