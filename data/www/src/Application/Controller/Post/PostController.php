@@ -150,4 +150,39 @@ class PostController extends RestAPIController
             $serializer
         );
     }
+
+    /**
+     * @Route("/request", name="post_request_get_all", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="All Requests",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Post\Entity\Request", groups={"full"}))
+     *     )
+     * )
+     * @SWG\Tag(name="Request")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param RequestManager $requestManager
+     *
+     * @return Response
+     */
+    public function getAllRequest(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        RequestManager $requestManager
+    ): Response {
+        $user = $this->getUser();
+
+        return $this->apiJsonResponse(
+            $user instanceof Donor ?
+                $requestManager->retrieveAllBySites($user->getSites()->getValues()) : $requestManager->retrieveAll(),
+            Response::HTTP_OK,
+            $this->getLevel($request),
+            $serializer
+        );
+    }
 }
