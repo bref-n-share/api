@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Infrastructure\Voter\Post;
+namespace App\Infrastructure\Voter\Structure;
 
-use App\Domain\Post\Entity\Post;
+use App\Domain\Structure\Entity\Site;
 use App\Domain\User\Entity\Member;
 use App\Domain\User\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
-class PostVoter extends Voter
+class SiteVoter extends Voter
 {
-    public const CREATE = 'create';
     public const UPDATE = 'update';
 
     private Security $security;
@@ -23,7 +22,7 @@ class PostVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::CREATE, self::UPDATE]) && $subject instanceof Post;
+        return in_array($attribute, [self::UPDATE]) && $subject instanceof Site;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -40,8 +39,6 @@ class PostVoter extends Voter
         }
 
         switch ($attribute) {
-            case self::CREATE:
-                return $this->canCreate($subject, $user);
             case self::UPDATE:
                 return $this->canUpdate($subject, $user);
         }
@@ -49,13 +46,12 @@ class PostVoter extends Voter
         throw new \LogicException('This code should not be reached!');
     }
 
-    private function canCreate(Post $subject, User $user)
+    private function canUpdate(Site $subject, User $user)
     {
-        return $user instanceof Member && $user->getStructure()->getId() === $subject->getSite()->getId();
-    }
-
-    private function canUpdate(Post $subject, User $user)
-    {
-        return $user instanceof Member && $user->getStructure()->getId() === $subject->getSite()->getId();
+        return
+            $user instanceof Member
+            && $user->getStructure()->getId() === $subject->getId()
+            && $this->security->isGranted('ROLE_ADMIN')
+        ;
     }
 }

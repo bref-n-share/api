@@ -46,7 +46,7 @@ abstract class Post
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"extra-light", "essential", "full", "creation"})
+     * @Groups({"extra-light", "essential", "full", "creation", "updatable"})
      */
     private string $title;
 
@@ -60,7 +60,7 @@ abstract class Post
      *
      * @ORM\Column(type="text")
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $description;
 

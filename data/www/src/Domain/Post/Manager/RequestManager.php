@@ -3,6 +3,7 @@
 namespace App\Domain\Post\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Post\DTO\RequestEdit;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Entity\Request;
 use App\Domain\Structure\Entity\Site;
@@ -34,5 +35,16 @@ class RequestManager extends AbstractPostManager
         }
 
         return $requests;
+    }
+
+    public function getUpdatedEntity(RequestEdit $requestDto, Request $entityToSave): Request
+    {
+        return $entityToSave
+            ->setCategory($requestDto->getCategory() ?? $entityToSave->getCategory())
+            ->setTitle($requestDto->getTitle() ?? $entityToSave->getTitle())
+            ->setDescription($requestDto->getTitle() ?? $entityToSave->getDescription())
+            ->setUpdatedAt(new \DateTime())
+            ->setRequestedQuantity($requestDto->getRequestedQuantity() ?? $entityToSave->getRequestedQuantity())
+        ;
     }
 }
