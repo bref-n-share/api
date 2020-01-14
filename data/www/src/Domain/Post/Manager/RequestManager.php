@@ -3,6 +3,7 @@
 namespace App\Domain\Post\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Post\DTO\PostEdit;
 use App\Domain\Post\DTO\RequestEdit;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Entity\Request;
@@ -20,14 +21,18 @@ class RequestManager extends AbstractPostManager
         return $this->repository->save($post);
     }
 
-    public function getUpdatedEntity(RequestEdit $requestDto, Request $entityToSave): Request
+    public function getUpdatedEntity(PostEdit $postEdit, Post $entityToSave): Post
     {
+        if (!(($postEdit instanceof RequestEdit) && ($entityToSave instanceof Request))) {
+            throw new ConflictException('Must be an instance of ' . RequestEdit::class);
+        }
+
+        /** @var Request $entityToSave */
+        $entityToSave = parent::getUpdatedEntity($postEdit, $entityToSave);
+
         return $entityToSave
-            ->setCategory($requestDto->getCategory() ?? $entityToSave->getCategory())
-            ->setTitle($requestDto->getTitle() ?? $entityToSave->getTitle())
-            ->setDescription($requestDto->getTitle() ?? $entityToSave->getDescription())
-            ->setUpdatedAt(new \DateTime())
-            ->setRequestedQuantity($requestDto->getRequestedQuantity() ?? $entityToSave->getRequestedQuantity())
+            ->setCategory($postEdit->getCategory() ?? $entityToSave->getCategory())
+            ->setRequestedQuantity($postEdit->getRequestedQuantity() ?? $entityToSave->getRequestedQuantity())
         ;
     }
 }
