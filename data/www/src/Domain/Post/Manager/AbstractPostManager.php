@@ -3,6 +3,7 @@
 namespace App\Domain\Post\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Post\DTO\PostEdit;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Repository\PostRepositoryInterface;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
@@ -69,5 +70,14 @@ abstract class AbstractPostManager implements PostManagerInterface
         }
 
         return $posts;
+    }
+
+    public function getUpdatedEntity(PostEdit $postDto, Post $entityToSave): Post
+    {
+        return $entityToSave
+            ->setTitle($postDto->getTitle() ?? $entityToSave->getTitle())
+            ->setDescription($postDto->getDescription() ?? $entityToSave->getDescription())
+            ->setUpdatedAt(new \DateTime())
+        ;
     }
 }

@@ -6,6 +6,7 @@ use App\Application\Controller\RestAPIController;
 use App\Application\Exception\ValidationException;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
+use App\Domain\Post\DTO\PostEdit;
 use App\Domain\Post\DTO\RequestEdit;
 use App\Domain\Post\Entity\Information;
 use App\Domain\Post\Manager\InformationManager;
@@ -352,5 +353,80 @@ class PostController extends RestAPIController
             $this->getLevel($request),
             $serializer
         );
+    }
+
+    /**
+     * @Route("/information/{id}", name="post_information_update", methods="PATCH")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Information",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Information fields",
+     *     type="json",
+     *     required=true,
+     *    @Model(type=Information::class, groups={"updatable"})
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Updated Information",
+     *     @Model(type=Information::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Information")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param InformationManager $informationManager
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function updateInformation(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        ValidatorInterface $validator,
+        InformationManager $informationManager,
+        string $id
+    ): Response {
+        try {
+            /** @var PostEdit $postDto */
+            $postDto = $serializer->deserialize($request->getContent(), PostEdit::class, 'json');
+            $validation = $validator->validate($postDto);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            /** @var Information $entityToSave */
+            $entityToSave = $informationManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('update', $entityToSave);
+
+            /** @var Information $information */
+            $information = $informationManager->getUpdatedEntity($postDto, $entityToSave);
+            $validation = $validator->validate($information);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            $savedEntity = $informationManager->save($information);
+        } catch (NotFoundHttpException | ConflictException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
+        }
+
+        return $this->apiJsonResponse($savedEntity, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 }
