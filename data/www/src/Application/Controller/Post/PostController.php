@@ -318,4 +318,39 @@ class PostController extends RestAPIController
 
         return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
     }
+
+    /**
+     * @Route("/information", name="post_information_get_all", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="All Informations",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Post\Entity\Information", groups={"full"}))
+     *     )
+     * )
+     * @SWG\Tag(name="Information")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param InformationManager $informationManager
+     *
+     * @return Response
+     */
+    public function getAllInformation(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        InformationManager $informationManager
+    ): Response {
+        $user = $this->getUser();
+
+        return $this->apiJsonResponse(
+            $user instanceof Donor ?
+                $informationManager->retrieveAllBySites($user->getSites()->getValues()) : $informationManager->retrieveAll(),
+            Response::HTTP_OK,
+            $this->getLevel($request),
+            $serializer
+        );
+    }
 }

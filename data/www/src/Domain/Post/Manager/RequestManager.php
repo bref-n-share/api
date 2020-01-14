@@ -6,7 +6,6 @@ use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Post\DTO\RequestEdit;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Entity\Request;
-use App\Domain\Structure\Entity\Site;
 
 class RequestManager extends AbstractPostManager
 {
@@ -19,22 +18,6 @@ class RequestManager extends AbstractPostManager
         $post->setStatus($this->workflowProcessor->getInitialStatus());
 
         return $this->repository->save($post);
-    }
-
-    /**
-     * @param Site[] $sites
-     *
-     * @return Request[]
-     */
-    public function retrieveAllBySites(array $sites): array
-    {
-        $requests = [];
-
-        foreach ($sites as $site) {
-            $requests = array_merge($requests, $this->repository->retrieveAllBySite($site->getId()->toString()));
-        }
-
-        return $requests;
     }
 
     public function getUpdatedEntity(RequestEdit $requestDto, Request $entityToSave): Request
