@@ -6,6 +6,7 @@ use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Repository\PostRepositoryInterface;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
+use App\Domain\Structure\Entity\Site;
 
 abstract class AbstractPostManager implements PostManagerInterface
 {
@@ -52,5 +53,21 @@ abstract class AbstractPostManager implements PostManagerInterface
         }
 
         throw new ConflictException('Le post ne peut pas être archivé');
+    }
+
+    /**
+     * @param Site[] $sites
+     *
+     * @return Post[]
+     */
+    public function retrieveAllBySites(array $sites): array
+    {
+        $posts = [];
+
+        foreach ($sites as $site) {
+            $posts = array_merge($posts, $this->repository->retrieveAllBySite($site->getId()->toString()));
+        }
+
+        return $posts;
     }
 }
