@@ -63,7 +63,12 @@ services:
     App\Domain\Post\Manager\RequestManager:
             arguments:
                 $repository: '@App\Domain\Post\Repository\RequestRepository'
-                $workflowProcessor: '@post.workflow.request'
+                $workflowProcessor: '@post.workflow'
+
+    App\Domain\Post\Manager\InformationManager:
+            arguments:
+                $repository: '@App\Domain\Post\Repository\InformationRepository'
+                $workflowProcessor: '@post.workflow'
 
     App\Domain\Structure\Manager\StructureManagerChain:
         arguments:

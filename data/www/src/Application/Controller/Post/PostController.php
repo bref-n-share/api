@@ -7,6 +7,8 @@ use App\Application\Exception\ValidationException;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Post\DTO\RequestEdit;
+use App\Domain\Post\Entity\Information;
+use App\Domain\Post\Manager\InformationManager;
 use App\Domain\Post\Manager\RequestManager;
 use App\Domain\Post\Entity\Request as RequestPost;
 use App\Domain\Post\Repository\PostRepository;
@@ -260,5 +262,60 @@ class PostController extends RestAPIController
         }
 
         return $this->apiJsonResponse($savedEntity, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/information", name="post_information_create", methods="POST")
+     *
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Information fields",
+     *     type="json",
+     *     required=true,
+     *    @Model(type="App\Domain\Post\Entity\Information", groups={"creation"})
+     * )
+     * @SWG\Response(
+     *     response=201,
+     *     description="Created Information",
+     *     @Model(type="App\Domain\Post\Entity\Information", groups={"full"})
+     * )
+     * @SWG\Tag(name="Information")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param InformationManager $informationManager
+     *
+     * @return Response
+     */
+    public function createInformation(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        ValidatorInterface $validator,
+        InformationManager $informationManager
+    ): Response {
+        try {
+            /** @var RequestPost $requestPost */
+            $requestPost = $serializer->deserialize($request->getContent(), Information::class, 'json');
+            $validation = $validator->validate($requestPost);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            $this->denyAccessUnlessGranted('create', $requestPost);
+
+            $entity = $informationManager->create($requestPost);
+        } catch (NotFoundHttpException | ConflictException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
+        }
+
+        return $this->apiJsonResponse($entity, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
     }
 }
