@@ -43,11 +43,11 @@ services:
             $stateMachine: '@state_machine.organization_workflow'
             $type: 'App\Domain\Structure\Entity\Organization'
 
-    post.workflow.request:
+    post.workflow:
         class: 'App\Infrastructure\Workflow\WorkflowProcessor'
         arguments:
-            $stateMachine: '@state_machine.request_workflow'
-            $type: 'App\Domain\Post\Entity\Request'
+            $stateMachine: '@state_machine.post_workflow'
+            $type: 'App\Domain\Post\Entity\Post'
 
     nelmio.describer.uuid:
         class: 'App\Infrastructure\Describer\UuidDescriber'

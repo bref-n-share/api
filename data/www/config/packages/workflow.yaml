@@ -76,13 +76,13 @@ framework:
                     from: CREATED
                     to: ARCHIVED
 
-        request_workflow:
+        post_workflow:
             type: 'state_machine'
             marking_store:
                 type: 'method'
                 property: 'status'
             supports:
-                - App\Domain\Post\Entity\Request
+                - App\Domain\Post\Entity\Post
             initial_marking: CREATED
             places:
                 - CREATED
