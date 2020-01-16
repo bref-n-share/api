@@ -8,6 +8,7 @@ use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Repository\PostRepositoryInterface;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use App\Domain\Structure\Entity\Site;
+use Ramsey\Uuid\Uuid;
 
 abstract class AbstractPostManager implements PostManagerInterface
 {
@@ -57,19 +58,12 @@ abstract class AbstractPostManager implements PostManagerInterface
     }
 
     /**
-     * @param Site[] $sites
-     *
+     * @param array $options
      * @return Post[]
      */
-    public function retrieveAllBySites(array $sites): array
+    public function retrieveBy(array $options): array
     {
-        $posts = [];
-
-        foreach ($sites as $site) {
-            $posts = array_merge($posts, $this->repository->retrieveAllBySite($site->getId()->toString()));
-        }
-
-        return $posts;
+        return $this->repository->retrieveBy($options);
     }
 
     public function getUpdatedEntity(PostEdit $postDto, Post $entityToSave): Post

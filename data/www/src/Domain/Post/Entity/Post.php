@@ -189,7 +189,18 @@ abstract class Post
 
     public function addChannel(string $channel): self
     {
-        $this->channels[] = $channel;
+        if (!in_array($channel, $this->channels)) {
+            $this->channels[] = $channel;
+        }
+
+        return $this;
+    }
+
+    public function removeChannel(string $channel): self
+    {
+        if (in_array($channel, $this->channels)) {
+            unset($this->channels[array_search($channel, $this->channels)]);
+        }
 
         return $this;
     }

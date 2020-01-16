@@ -16,6 +16,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class PostRepository extends ServiceEntityRepository implements PostRepositoryInterface
 {
+    private const KEYS = [
+        'title',
+        'site',
+        'channels'
+    ];
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Post::class);
@@ -44,8 +50,29 @@ class PostRepository extends ServiceEntityRepository implements PostRepositoryIn
         return $this->findAll();
     }
 
-    public function retrieveAllBySite(string $id): array
+    /**
+     * @param array $options
+     * @return Post[]
+     */
+    public function retrieveBy(array $options): array
     {
-        return $this->findBy(['site' => Uuid::fromString($id)]);
+        $qb = $this->createQueryBuilder('r');
+        foreach ($options as $key => $value) {
+            // Ignore unauthorized key
+            if (!in_array($key, self::KEYS)) {
+                continue;
+            }
+
+            if ('channels' === $key || 'title' === $key) {
+                $qb->andWhere($qb->expr()->like('r.' . $key, ':' . $key));
+                $qb->setParameter($key, '%' . (is_array($value) ? $value[0] : $value) . '%');
+                continue;
+            }
+
+            $qb->andWhere($qb->expr()->in('r.' . $key, ':' . $key));
+            $qb->setParameter($key, $value);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }
