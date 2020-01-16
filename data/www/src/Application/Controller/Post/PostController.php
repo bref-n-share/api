@@ -13,6 +13,7 @@ use App\Domain\Post\Manager\InformationManager;
 use App\Domain\Post\Manager\RequestManager;
 use App\Domain\Post\Entity\Request as RequestPost;
 use App\Domain\Post\Repository\PostRepository;
+use App\Domain\Structure\Entity\Site;
 use App\Domain\User\Entity\Donor;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
@@ -148,7 +149,7 @@ class PostController extends RestAPIController
         PostRepository $postRepository
     ): Response {
         return $this->apiJsonResponse(
-            $postRepository->retrieveAllBySite($id),
+            $postRepository->retrieveBy(['site' => $id]),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer
@@ -181,9 +182,21 @@ class PostController extends RestAPIController
     ): Response {
         $user = $this->getUser();
 
+        $options = $this->formatQueryParameters($request->query->all());
+
+        if ($user instanceof Donor) {
+            $sites = $user->getSites()->getValues();
+            $siteIds = [];
+            /** @var Site $site */
+            foreach ($sites as $site) {
+                $siteIds[] = $site->getId()->toString();
+            }
+
+            $options['site'] = $siteIds;
+        }
+
         return $this->apiJsonResponse(
-            $user instanceof Donor ?
-                $requestManager->retrieveAllBySites($user->getSites()->getValues()) : $requestManager->retrieveAll(),
+            $requestManager->retrieveBy($options),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer

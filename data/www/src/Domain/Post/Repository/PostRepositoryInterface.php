@@ -11,14 +11,13 @@ interface PostRepositoryInterface
     public function retrieve(string $id): Post;
 
     /**
+     * @param array $options
+     * @return Post[]
+     */
+    public function retrieveBy(array $options): array;
+
+    /**
      * @return Post[]
      */
     public function retrieveAll(): array;
-
-    /**
-     * @param string $id
-     *
-     * @return Post[]
-     */
-    public function retrieveAllBySite(string $id): array;
 }
