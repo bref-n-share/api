@@ -9,6 +9,7 @@ use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Post\DTO\PostEdit;
 use App\Domain\Post\DTO\RequestEdit;
 use App\Domain\Post\Entity\Information;
+use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Manager\InformationManager;
 use App\Domain\Post\Manager\RequestManager;
 use App\Domain\Post\Entity\Request as RequestPost;
@@ -441,5 +442,131 @@ class PostController extends RestAPIController
         }
 
         return $this->apiJsonResponse($savedEntity, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/request/{id}", name="post_request_get", methods="GET")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Request",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested Request",
+     *     @Model(type=RequestPost::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Request")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param RequestManager $requestManager
+     *
+     * @return Response
+     */
+    public function getOneRequest(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        RequestManager $requestManager
+    ): Response {
+        try {
+            $requestPost = $requestManager->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse($requestPost, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/information/{id}", name="post_information_get", methods="GET")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Information",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested Information",
+     *     @Model(type=Information::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Information")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param InformationManager $informationManager
+     *
+     * @return Response
+     */
+    public function getOneInformation(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        InformationManager $informationManager
+    ): Response {
+        try {
+            $information = $informationManager->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse($information, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/{id}", name="post_post_get", methods="GET")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Post",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested Post",
+     *     @Model(type=Post::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Post")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param PostRepository $postRepository
+     *
+     * @return Response
+     */
+    public function getOnePost(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        PostRepository $postRepository
+    ): Response {
+        try {
+            $post = $postRepository->retrieve($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse($post, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 }
