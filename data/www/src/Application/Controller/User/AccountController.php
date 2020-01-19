@@ -261,6 +261,10 @@ class AccountController extends RestAPIController
     public function archiveDonor(string $id, DonorManager $donorManager): Response
     {
         try {
+            $entityToArchive = $donorManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('archive', $entityToArchive);
+
             $donorManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse(
@@ -296,6 +300,10 @@ class AccountController extends RestAPIController
     public function archiveMember(string $id, MemberManager $memberManager): Response
     {
         try {
+            $entityToArchive = $memberManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('archive', $entityToArchive);
+
             $memberManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse(
