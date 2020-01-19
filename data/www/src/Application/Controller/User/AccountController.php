@@ -179,6 +179,9 @@ class AccountController extends RestAPIController
     ): Response {
         try {
             $donor = $donorManager->retrieve($id);
+            if (!($donor instanceof Donor)) {
+                throw new NotFoundHttpException(Donor::class . ' not found with id (' . $id . ')');
+            }
         } catch (NotFoundHttpException $exception) {
             return $this->apiJsonResponse(
                 $this->formatErrorMessage($exception->getMessage()),
@@ -221,6 +224,9 @@ class AccountController extends RestAPIController
     ): Response {
         try {
             $member = $memberManager->retrieve($id);
+            if (!($member instanceof Member)) {
+                throw new NotFoundHttpException(Member::class . ' not found with id (' . $id . ')');
+            }
         } catch (NotFoundHttpException $exception) {
             return $this->apiJsonResponse(
                 $this->formatErrorMessage($exception->getMessage()),
@@ -255,6 +261,10 @@ class AccountController extends RestAPIController
     public function archiveDonor(string $id, DonorManager $donorManager): Response
     {
         try {
+            $entityToArchive = $donorManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('archive', $entityToArchive);
+
             $donorManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse(
@@ -290,6 +300,10 @@ class AccountController extends RestAPIController
     public function archiveMember(string $id, MemberManager $memberManager): Response
     {
         try {
+            $entityToArchive = $memberManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('archive', $entityToArchive);
+
             $memberManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse(

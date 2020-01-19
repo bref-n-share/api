@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Security;
 class UserVoter extends Voter
 {
     public const UPDATE = 'update';
+    public const ARCHIVE = 'archive';
 
     private Security $security;
 
@@ -21,7 +22,7 @@ class UserVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::UPDATE]) && $subject instanceof User;
+        return in_array($attribute, [self::UPDATE, self::ARCHIVE]) && $subject instanceof User;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -39,6 +40,7 @@ class UserVoter extends Voter
 
         switch ($attribute) {
             case self::UPDATE:
+            case self::ARCHIVE:
                 return $this->canUpdate($subject, $user);
         }
 
