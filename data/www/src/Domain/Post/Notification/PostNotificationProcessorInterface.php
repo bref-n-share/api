@@ -4,7 +4,7 @@ namespace App\Domain\Post\Notification;
 
 use App\Domain\Post\Entity\Post;
 
-interface NotificationProcessorInterface
+interface PostNotificationProcessorInterface
 {
     public function supports(string $channel): bool;
 

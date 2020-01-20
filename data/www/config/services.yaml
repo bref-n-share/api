@@ -83,6 +83,10 @@ services:
         arguments:
             $managers: !tagged user.manager
 
-    App\Domain\Post\Notification\NotificationProcessorChain:
+    App\Domain\Post\Notification\PostNotificationProcessorChain:
         arguments:
-            $processors: !tagged notification.processor
+            $processors: !tagged notification_post.processor
+
+    App\Domain\Core\Notification\CustomNotificationProcessorChain:
+        arguments:
+            $processors: !tagged notification_custom.processor

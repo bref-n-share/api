@@ -3,9 +3,9 @@
 namespace App\Infrastructure\Notification;
 
 use App\Domain\Post\Entity\Post;
-use App\Domain\Post\Notification\NotificationProcessorInterface;
+use App\Domain\Post\Notification\PostNotificationProcessorInterface;
 
-class GosProcessor implements NotificationProcessorInterface
+class GosProcessor implements PostNotificationProcessorInterface
 {
     private const TYPE = 'gos';
 

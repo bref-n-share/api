@@ -3,11 +3,11 @@
 namespace App\Infrastructure\Notification;
 
 use App\Domain\Post\Entity\Post;
-use App\Domain\Post\Notification\NotificationProcessorInterface;
+use App\Domain\Post\Notification\PostNotificationProcessorInterface;
 use MartinGeorgiev\SocialPost\Message;
 use MartinGeorgiev\SocialPost\Publisher;
 
-class SocialNetworkNotificationProcessor implements NotificationProcessorInterface
+class SocialNetworkPostNotificationProcessor implements PostNotificationProcessorInterface
 {
     private string $type;
 
