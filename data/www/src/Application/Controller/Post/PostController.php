@@ -101,17 +101,17 @@ class PostController extends RestAPIController
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
-     * @param PostRepository $postRepository
+     * @param PostManager $postManager
      *
      * @return Response
      */
     public function getAll(
         Request $request,
         EntitySerializerInterface $serializer,
-        PostRepository $postRepository
+        PostManager $postManager
     ): Response {
         return $this->apiJsonResponse(
-            $postRepository->retrieveAll(),
+            $postManager->retrieveBy($this->formatQueryParameters($request->query->all())),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer

@@ -56,6 +56,10 @@ services:
             $reader: '@annotation_reader'
         tags: ['nelmio_api_doc.model_describer']
 
+    social_network.gos:
+        class: 'App\Infrastructure\Notification\GosProcessor'
+        tags: ['notification.processor']
+
     social_network.facebook:
         class: App\Infrastructure\Notification\SocialNetworkNotificationProcessor
         arguments:
