@@ -240,4 +240,9 @@ abstract class User implements UserInterface
 
         return $this;
     }
+
+    public function isArchived(): bool
+    {
+        return $this->getStatus() === 'ARCHIVED';
+    }
 }

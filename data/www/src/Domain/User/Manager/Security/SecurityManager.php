@@ -44,6 +44,10 @@ class SecurityManager
             throw new AccessDeniedHttpException('Email or Password invalid');
         }
 
+        if ($user->isArchived()) {
+            throw new AccessDeniedHttpException('This account is archived');
+        }
+
         // FIXME: Should return a token
         return $user->getId()->toString();
     }
