@@ -35,4 +35,15 @@ class RequestManager extends AbstractPostManager
             ->setRequestedQuantity($postEdit->getRequestedQuantity() ?? $entityToSave->getRequestedQuantity())
         ;
     }
+
+    public function participate(string $id): Request
+    {
+        /** @var Request $request */
+        $request = $this->retrieve($id);
+        $request->participate();
+
+        $this->save($request);
+
+        return $request;
+    }
 }
