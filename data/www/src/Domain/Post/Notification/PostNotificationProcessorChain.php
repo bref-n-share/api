@@ -4,10 +4,10 @@ namespace App\Domain\Post\Notification;
 
 use App\Domain\Post\Entity\Post;
 
-class NotificationProcessorChain
+class PostNotificationProcessorChain
 {
     /**
-     * @var NotificationProcessorInterface[]
+     * @var PostNotificationProcessorInterface[]
      */
     private iterable $processors;
 
