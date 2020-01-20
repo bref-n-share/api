@@ -32,7 +32,7 @@ class PostVoter extends Voter
         $user = $token->getUser();
 
         // the user must be logged in; if not, deny access
-        if (!$user instanceof User || $user->isArchived()) {
+        if (!($user instanceof User) || $user->isArchived()) {
             return false;
         }
 

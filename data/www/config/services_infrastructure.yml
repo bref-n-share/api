@@ -58,18 +58,32 @@ services:
 
     social_network_post.gos:
         class: 'App\Infrastructure\Notification\GosProcessor'
-        tags: ['notification.processor']
+        tags: ['notification_post.processor']
 
     social_network_post.facebook:
         class: App\Infrastructure\Notification\SocialNetworkPostNotificationProcessor
         arguments:
             $type: 'facebook'
             $publisher: '@social_post.facebook'
-        tags: ['notification.processor']
+        tags: ['notification_post.processor']
 
     social_network_post.twitter:
         class: App\Infrastructure\Notification\SocialNetworkPostNotificationProcessor
         arguments:
             $type: 'twitter'
             $publisher: '@social_post.twitter'
-        tags: ['notification.processor']
+        tags: ['notification_post.processor']
+
+    social_network_custom.facebook:
+        class: App\Infrastructure\Notification\SocialNetworkCustomNotificationProcessor
+        arguments:
+            $type: 'facebook'
+            $publisher: '@social_post.facebook'
+        tags: ['notification_custom.processor']
+
+    social_network_custom.twitter:
+        class: App\Infrastructure\Notification\SocialNetworkCustomNotificationProcessor
+        arguments:
+            $type: 'twitter'
+            $publisher: '@social_post.twitter'
+        tags: ['notification_custom.processor']
