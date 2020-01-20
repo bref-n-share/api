@@ -7,8 +7,6 @@ use App\Domain\Post\DTO\PostEdit;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Repository\PostRepositoryInterface;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
-use App\Domain\Structure\Entity\Site;
-use Ramsey\Uuid\Uuid;
 
 abstract class AbstractPostManager implements PostManagerInterface
 {
