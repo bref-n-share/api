@@ -13,20 +13,15 @@ class SiteManager extends AbstractStructureManager
         return $structure instanceof Site;
     }
 
-    public function getUpdatedEntity(SiteEdit $siteDto, string $id): Site
+    public function getUpdatedEntity(SiteEdit $siteDto, Site $site): Site
     {
-        /** @var Site $entity */
-        $entity = $this->retrieve($id);
-
-        $entity
-            ->setAddress($siteDto->getAddress() === null ? $entity->getAddress() : $siteDto->getAddress())
-            ->setPostalCode($siteDto->getPostalCode() === null ? $entity->getPostalCode() : $siteDto->getPostalCode())
-            ->setCity($siteDto->getCity() === null ? $entity->getCity() : $siteDto->getCity())
-            ->setPhone($siteDto->getPhone() === null ? $entity->getPhone() : $siteDto->getPhone())
-            ->setLongitude($siteDto->getLongitude() === null ? $entity->getLongitude() : $siteDto->getLongitude())
-            ->setLatitude($siteDto->getLatitude() === null ? $entity->getLatitude() : $siteDto->getLatitude())
+        return $site
+            ->setAddress($siteDto->getAddress() ?? $site->getAddress())
+            ->setPostalCode($siteDto->getPostalCode() ?? $site->getPostalCode())
+            ->setCity($siteDto->getCity() ?? $site->getCity())
+            ->setPhone($siteDto->getPhone() ?? $site->getPhone())
+            ->setLongitude($siteDto->getLongitude() ?? $site->getLongitude())
+            ->setLatitude($siteDto->getLatitude() ?? $site->getLatitude())
         ;
-
-        return $entity;
     }
 }

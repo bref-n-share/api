@@ -3,9 +3,12 @@
 namespace App\Domain\Post\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Post\DTO\PostEdit;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Repository\PostRepositoryInterface;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
+use App\Domain\Structure\Entity\Site;
+use Ramsey\Uuid\Uuid;
 
 abstract class AbstractPostManager implements PostManagerInterface
 {
@@ -36,6 +39,11 @@ abstract class AbstractPostManager implements PostManagerInterface
         return $this->repository->retrieveAll();
     }
 
+    public function save(Post $post): Post
+    {
+        return $this->repository->save($post);
+    }
+
     public function archive(string $id): void
     {
         $entity = $this->retrieve($id);
@@ -47,5 +55,23 @@ abstract class AbstractPostManager implements PostManagerInterface
         }
 
         throw new ConflictException('Le post ne peut pas être archivé');
+    }
+
+    /**
+     * @param array $options
+     * @return Post[]
+     */
+    public function retrieveBy(array $options): array
+    {
+        return $this->repository->retrieveBy($options);
+    }
+
+    public function getUpdatedEntity(PostEdit $postDto, Post $entityToSave): Post
+    {
+        return $entityToSave
+            ->setTitle($postDto->getTitle() ?? $entityToSave->getTitle())
+            ->setDescription($postDto->getDescription() ?? $entityToSave->getDescription())
+            ->setUpdatedAt(new \DateTime())
+        ;
     }
 }

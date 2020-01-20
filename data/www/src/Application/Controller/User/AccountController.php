@@ -8,12 +8,17 @@ use App\Domain\Core\DTO\EntityId;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Structure\Entity\Site;
+use App\Domain\User\DTO\UserEdit;
 use App\Domain\User\Entity\Donor;
 use App\Domain\User\Entity\Member;
+use App\Domain\User\Entity\User;
 use App\Domain\User\Manager\DonorManager;
 use App\Domain\User\Manager\MemberManager;
+use App\Domain\User\Manager\UserManagerChain;
+use App\Domain\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Ramsey\Uuid\Uuid;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -174,6 +179,9 @@ class AccountController extends RestAPIController
     ): Response {
         try {
             $donor = $donorManager->retrieve($id);
+            if (!($donor instanceof Donor)) {
+                throw new NotFoundHttpException(Donor::class . ' not found with id (' . $id . ')');
+            }
         } catch (NotFoundHttpException $exception) {
             return $this->apiJsonResponse(
                 $this->formatErrorMessage($exception->getMessage()),
@@ -215,7 +223,10 @@ class AccountController extends RestAPIController
         MemberManager $memberManager
     ): Response {
         try {
-            $donor = $memberManager->retrieve($id);
+            $member = $memberManager->retrieve($id);
+            if (!($member instanceof Member)) {
+                throw new NotFoundHttpException(Member::class . ' not found with id (' . $id . ')');
+            }
         } catch (NotFoundHttpException $exception) {
             return $this->apiJsonResponse(
                 $this->formatErrorMessage($exception->getMessage()),
@@ -223,7 +234,7 @@ class AccountController extends RestAPIController
             );
         }
 
-        return $this->apiJsonResponse($donor, Response::HTTP_OK, $this->getLevel($request), $serializer);
+        return $this->apiJsonResponse($member, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 
     /**
@@ -250,6 +261,10 @@ class AccountController extends RestAPIController
     public function archiveDonor(string $id, DonorManager $donorManager): Response
     {
         try {
+            $entityToArchive = $donorManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('archive', $entityToArchive);
+
             $donorManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse(
@@ -285,6 +300,10 @@ class AccountController extends RestAPIController
     public function archiveMember(string $id, MemberManager $memberManager): Response
     {
         try {
+            $entityToArchive = $memberManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('archive', $entityToArchive);
+
             $memberManager->archive($id);
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse(
@@ -432,5 +451,118 @@ class AccountController extends RestAPIController
         }
 
         return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/account", name="user_get_account", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Requested User",
+     *     @Model(type=User::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="User")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param UserRepository $repository
+     *
+     * @return Response
+     */
+    public function getMyAccount(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        UserRepository $repository
+    ): Response {
+        try {
+            /** @var User $user */
+            $user = $this->getUser();
+
+            $entity = $repository->retrieve(Uuid::fromString($user->getId()));
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse($entity, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/{id}", name="user_update", methods="PATCH")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the User",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="User fields",
+     *     type="json",
+     *     required=true,
+     *    @Model(type=User::class, groups={"updatable"})
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Updated User",
+     *     @Model(type=User::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="User")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param UserManagerChain $managerChain
+     * @param UserRepository $repository
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function updateUser(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        ValidatorInterface $validator,
+        UserManagerChain $managerChain,
+        UserRepository $repository,
+        string $id
+    ): Response {
+        try {
+            /** @var UserEdit $userDto */
+            $userDto = $serializer->deserialize($request->getContent(), UserEdit::class, 'json');
+            $validation = $validator->validate($userDto);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            /** @var User $entityToSave */
+            $entityToSave = $repository->retrieve($id);
+
+            $this->denyAccessUnlessGranted('update', $entityToSave);
+
+            /** @var User $user */
+            $user = $managerChain->getManager($entityToSave)->getUpdatedEntity($userDto, $id);
+            $validation = $validator->validate($user);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            $savedEntity = $repository->save($user);
+        } catch (NotFoundHttpException | ConflictException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
+        }
+
+        return $this->apiJsonResponse($savedEntity, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 }

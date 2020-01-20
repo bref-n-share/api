@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
  * @ORM\DiscriminatorMap({"request" = "Request", "information" = "Information"})
  * @DiscriminatorMap(typeProperty="type", mapping={
@@ -46,7 +46,7 @@ abstract class Post
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"extra-light", "essential", "full", "creation"})
+     * @Groups({"extra-light", "essential", "full", "creation", "updatable"})
      */
     private string $title;
 
@@ -60,7 +60,7 @@ abstract class Post
      *
      * @ORM\Column(type="text")
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $description;
 
@@ -101,13 +101,14 @@ abstract class Post
 
     /**
      * @Assert\Valid
+     * @Assert\NotNull(message="Le site doit être définie")
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Site", inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      *
      * @Groups({"essential", "full", "creation"})
      */
-    private Site $site;
+    private ?Site $site = null;
 
     public function __construct()
     {
@@ -188,7 +189,18 @@ abstract class Post
 
     public function addChannel(string $channel): self
     {
-        $this->channels[] = $channel;
+        if (!in_array($channel, $this->channels)) {
+            $this->channels[] = $channel;
+        }
+
+        return $this;
+    }
+
+    public function removeChannel(string $channel): self
+    {
+        if (in_array($channel, $this->channels)) {
+            unset($this->channels[array_search($channel, $this->channels)]);
+        }
 
         return $this;
     }

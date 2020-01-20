@@ -5,6 +5,7 @@ namespace App\Domain\User\Manager;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use App\Domain\Structure\Manager\StructureManagerChain;
+use App\Domain\User\DTO\UserEdit;
 use App\Domain\User\Encoder\PasswordEncoderInterface;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepositoryInterface;
@@ -54,5 +55,16 @@ abstract class AbstractUserManager implements UserManagerInterface
         }
 
         throw new ConflictException('L\'utilisateur ne peut pas être archivé');
+    }
+
+    public function getUpdatedEntity(UserEdit $userEdit, string $id): User
+    {
+        /** @var User $entity */
+        $entity = $this->retrieve($id);
+
+        return $entity
+            ->setFirstName($userEdit->getFirstName() ?? $entity->getFirstName())
+            ->setLastName($userEdit->getLastName() ?? $entity->getLastName())
+        ;
     }
 }

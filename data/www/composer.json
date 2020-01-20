@@ -5,6 +5,8 @@
         "php": "^7.4.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "martin-georgiev/social-post-bundle": "^3.0",
         "nelmio/api-doc-bundle": "^3.5",
         "nelmio/cors-bundle": "^2.0",
         "ramsey/uuid-doctrine": "^1.5",

@@ -19,7 +19,7 @@ class Request extends Post
      *
      * @ORM\Column(type="integer", nullable=true)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private int $requestedQuantity;
 
@@ -36,7 +36,7 @@ class Request extends Post
      * @ORM\ManyToOne(targetEntity="App\Domain\Post\Entity\Category")
      * @ORM\JoinColumn(nullable=false)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private Category $category;
 
@@ -72,6 +72,13 @@ class Request extends Post
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function participate(): self
+    {
+        $this->currentQuantity++;
 
         return $this;
     }

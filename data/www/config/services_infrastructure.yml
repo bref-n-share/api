@@ -10,6 +10,10 @@ services:
 
     App\Domain\User\Encoder\PasswordEncoderInterface: '@App\Infrastructure\Encoder\PasswordEncoder'
 
+    App\Infrastructure\DataFixtures\:
+        resource: '../src/Infrastructure/DataFixtures/*'
+        tags: ['doctrine.fixture.orm']
+
     App\Infrastructure\Serializer\Normalizer\EntityNormalizer:
         public: false
         tags:
@@ -39,11 +43,11 @@ services:
             $stateMachine: '@state_machine.organization_workflow'
             $type: 'App\Domain\Structure\Entity\Organization'
 
-    post.workflow.request:
+    post.workflow:
         class: 'App\Infrastructure\Workflow\WorkflowProcessor'
         arguments:
-            $stateMachine: '@state_machine.request_workflow'
-            $type: 'App\Domain\Post\Entity\Request'
+            $stateMachine: '@state_machine.post_workflow'
+            $type: 'App\Domain\Post\Entity\Post'
 
     nelmio.describer.uuid:
         class: 'App\Infrastructure\Describer\UuidDescriber'
@@ -51,3 +55,35 @@ services:
             $propertyInfo: '@property_info'
             $reader: '@annotation_reader'
         tags: ['nelmio_api_doc.model_describer']
+
+    social_network_post.gos:
+        class: 'App\Infrastructure\Notification\GosProcessor'
+        tags: ['notification_post.processor']
+
+    social_network_post.facebook:
+        class: App\Infrastructure\Notification\SocialNetworkPostNotificationProcessor
+        arguments:
+            $type: 'facebook'
+            $publisher: '@social_post.facebook'
+        tags: ['notification_post.processor']
+
+    social_network_post.twitter:
+        class: App\Infrastructure\Notification\SocialNetworkPostNotificationProcessor
+        arguments:
+            $type: 'twitter'
+            $publisher: '@social_post.twitter'
+        tags: ['notification_post.processor']
+
+    social_network_custom.facebook:
+        class: App\Infrastructure\Notification\SocialNetworkCustomNotificationProcessor
+        arguments:
+            $type: 'facebook'
+            $publisher: '@social_post.facebook'
+        tags: ['notification_custom.processor']
+
+    social_network_custom.twitter:
+        class: App\Infrastructure\Notification\SocialNetworkCustomNotificationProcessor
+        arguments:
+            $type: 'twitter'
+            $publisher: '@social_post.twitter'
+        tags: ['notification_custom.processor']

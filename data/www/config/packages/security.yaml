@@ -1,4 +1,8 @@
 security:
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     encoders:
         App\Domain\User\Entity\User:
             algorithm: auto
@@ -49,3 +53,5 @@ parameters:
               method: post
             - pattern: ^\/api\/v(\d)+\/user\/donor$
               method: post
+            - pattern: ^\/api\/v(\d)+\/structure$
+              method: get

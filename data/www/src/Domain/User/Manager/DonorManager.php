@@ -15,9 +15,11 @@ class DonorManager extends AbstractUserManager
             throw new ConflictException('Must be an instance of ' . Donor::class);
         }
 
-        $donor->setStatus($this->workflowProcessor->getInitialStatus());
-
-        $donor->setPassword($this->encodePassword($donor, $donor->getPassword()));
+        $donor
+            ->addRole('ROLE_USER')
+            ->setStatus($this->workflowProcessor->getInitialStatus())
+            ->setPassword($this->encodePassword($donor, $donor->getPassword()))
+        ;
 
         return $this->userRepository->save($donor);
     }
@@ -32,5 +34,10 @@ class DonorManager extends AbstractUserManager
     {
         $donor->removeSite($site);
         $this->userRepository->save($donor);
+    }
+
+    public function supports(User $user): bool
+    {
+        return $user instanceof Donor;
     }
 }

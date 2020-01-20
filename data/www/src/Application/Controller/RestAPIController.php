@@ -12,7 +12,7 @@ abstract class RestAPIController extends AbstractController
 {
     private const REQUEST_LEVEL_KEY = 'level';
     private const DEFAULT_LEVEL     = 'essential';
-    private const LEVEL_DELIMITER   = '_';
+    private const DEFAULT_DELIMITER   = '_';
 
     /**
      * Get the requested data levels from the current request.
@@ -24,7 +24,7 @@ abstract class RestAPIController extends AbstractController
     protected function getLevel(Request $request): array
     {
         return $request->get(self::REQUEST_LEVEL_KEY) ?
-            explode(self::LEVEL_DELIMITER, $request->get(self::REQUEST_LEVEL_KEY)) : [self::DEFAULT_LEVEL];
+            explode(self::DEFAULT_DELIMITER, $request->get(self::REQUEST_LEVEL_KEY)) : [self::DEFAULT_LEVEL];
     }
 
     /**
@@ -64,5 +64,15 @@ abstract class RestAPIController extends AbstractController
     protected function formatErrorMessage(string $errorMessage): array
     {
         return ['message' => $errorMessage];
+    }
+
+    protected function formatQueryParameters(array $parameters): array
+    {
+        $options = [];
+        foreach ($parameters as $key => $value) {
+            $options[$key] = explode(self::DEFAULT_DELIMITER, $value);
+        }
+
+        return $options;
     }
 }

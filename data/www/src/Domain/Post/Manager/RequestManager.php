@@ -3,6 +3,8 @@
 namespace App\Domain\Post\Manager;
 
 use App\Domain\Core\Exception\ConflictException;
+use App\Domain\Post\DTO\PostEdit;
+use App\Domain\Post\DTO\RequestEdit;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Entity\Request;
 
@@ -17,5 +19,31 @@ class RequestManager extends AbstractPostManager
         $post->setStatus($this->workflowProcessor->getInitialStatus());
 
         return $this->repository->save($post);
+    }
+
+    public function getUpdatedEntity(PostEdit $postEdit, Post $entityToSave): Post
+    {
+        if (!(($postEdit instanceof RequestEdit) && ($entityToSave instanceof Request))) {
+            throw new ConflictException('Must be an instance of ' . RequestEdit::class);
+        }
+
+        /** @var Request $entityToSave */
+        $entityToSave = parent::getUpdatedEntity($postEdit, $entityToSave);
+
+        return $entityToSave
+            ->setCategory($postEdit->getCategory() ?? $entityToSave->getCategory())
+            ->setRequestedQuantity($postEdit->getRequestedQuantity() ?? $entityToSave->getRequestedQuantity())
+        ;
+    }
+
+    public function participate(string $id): Request
+    {
+        /** @var Request $request */
+        $request = $this->retrieve($id);
+        $request->participate();
+
+        $this->save($request);
+
+        return $request;
     }
 }

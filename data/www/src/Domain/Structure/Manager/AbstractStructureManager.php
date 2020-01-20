@@ -58,4 +58,14 @@ abstract class AbstractStructureManager implements StructureManagerInterface
     {
         return $this->workflowProcessor->getInitialStatus();
     }
+
+    public function getFormattedStructureFromMemberCreation(Structure $structure): Structure
+    {
+        // If the structure already exists
+        if ($structure->getId()) {
+            return $structure;
+        }
+
+        return $structure->setStatus($this->workflowProcessor->getInitialStatus());
+    }
 }

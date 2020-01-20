@@ -26,7 +26,7 @@ services:
 
     App\Infrastructure\:
         resource: '../src/Infrastructure/*'
-        exclude: '../src/Infrastructure/{Entity,Migrations}'
+        exclude: '../src/Infrastructure/{Entity,Migrations,DataFixtures}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -41,10 +41,12 @@ services:
     App\Domain\User\Manager\MemberManager:
         arguments:
             $workflowProcessor: '@user.workflow.member'
+        tags: ['user.manager']
 
     App\Domain\User\Manager\DonorManager:
         arguments:
             $workflowProcessor: '@user.workflow.donor'
+        tags: ['user.manager']
 
     App\Domain\Structure\Manager\SiteManager:
         arguments:
@@ -61,8 +63,30 @@ services:
     App\Domain\Post\Manager\RequestManager:
             arguments:
                 $repository: '@App\Domain\Post\Repository\RequestRepository'
-                $workflowProcessor: '@post.workflow.request'
+                $workflowProcessor: '@post.workflow'
+
+    App\Domain\Post\Manager\InformationManager:
+            arguments:
+                $repository: '@App\Domain\Post\Repository\InformationRepository'
+                $workflowProcessor: '@post.workflow'
+
+    App\Domain\Post\Manager\PostManager:
+            arguments:
+                $repository: '@App\Domain\Post\Repository\PostRepository'
+                $workflowProcessor: '@post.workflow'
 
     App\Domain\Structure\Manager\StructureManagerChain:
         arguments:
             $managers: !tagged structure.manager
+
+    App\Domain\User\Manager\UserManagerChain:
+        arguments:
+            $managers: !tagged user.manager
+
+    App\Domain\Post\Notification\PostNotificationProcessorChain:
+        arguments:
+            $processors: !tagged notification_post.processor
+
+    App\Domain\Core\Notification\CustomNotificationProcessorChain:
+        arguments:
+            $processors: !tagged notification_custom.processor

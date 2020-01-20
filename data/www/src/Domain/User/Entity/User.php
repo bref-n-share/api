@@ -4,6 +4,7 @@ namespace App\Domain\User\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -39,6 +40,8 @@ abstract class User implements UserInterface
     private string $email;
 
     /**
+     * @SWG\Property(type="array", @SWG\Items(type="string"))
+     *
      * @ORM\Column(type="json")
      *
      * @Groups({"essential", "full"})
@@ -84,7 +87,7 @@ abstract class User implements UserInterface
 
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $firstName;
 
@@ -98,7 +101,7 @@ abstract class User implements UserInterface
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $lastName;
 
@@ -148,6 +151,24 @@ abstract class User implements UserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        if (!in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeRole(string $role): self
+    {
+        if (in_array($role, $this->roles)) {
+            unset($this->roles[array_search($role, $this->roles)]);
+        }
 
         return $this;
     }
@@ -218,5 +239,10 @@ abstract class User implements UserInterface
         $this->lastName = $lastName;
 
         return $this;
+    }
+
+    public function isArchived(): bool
+    {
+        return $this->getStatus() === 'ARCHIVED';
     }
 }
