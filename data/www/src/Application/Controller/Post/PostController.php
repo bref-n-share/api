@@ -569,4 +569,46 @@ class PostController extends RestAPIController
 
         return $this->apiJsonResponse($post, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
+
+    /**
+     * @Route("/request/{id}", name="post_request_participate", methods="POST")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Request",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Participated Request",
+     *     @Model(type=RequestPost::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Request")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param string $id
+     * @param RequestManager $requestManager
+     *
+     * @return Response
+     */
+    public function participate(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        string $id,
+        RequestManager $requestManager
+    ): Response {
+        try {
+            $requestPost = $requestManager->participate($id);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse($requestPost, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
 }

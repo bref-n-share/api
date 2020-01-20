@@ -75,4 +75,11 @@ class Request extends Post
 
         return $this;
     }
+
+    public function participate(): self
+    {
+        $this->currentQuantity++;
+
+        return $this;
+    }
 }
