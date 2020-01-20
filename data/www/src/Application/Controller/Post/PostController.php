@@ -7,10 +7,12 @@ use App\Application\Exception\ValidationException;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Post\DTO\PostEdit;
+use App\Domain\Post\DTO\Publish;
 use App\Domain\Post\DTO\RequestEdit;
 use App\Domain\Post\Entity\Information;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Manager\InformationManager;
+use App\Domain\Post\Manager\PostManager;
 use App\Domain\Post\Manager\RequestManager;
 use App\Domain\Post\Entity\Request as RequestPost;
 use App\Domain\Post\Repository\PostRepository;
@@ -99,17 +101,17 @@ class PostController extends RestAPIController
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
-     * @param PostRepository $postRepository
+     * @param PostManager $postManager
      *
      * @return Response
      */
     public function getAll(
         Request $request,
         EntitySerializerInterface $serializer,
-        PostRepository $postRepository
+        PostManager $postManager
     ): Response {
         return $this->apiJsonResponse(
-            $postRepository->retrieveAll(),
+            $postManager->retrieveBy($this->formatQueryParameters($request->query->all())),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer
@@ -442,6 +444,79 @@ class PostController extends RestAPIController
         }
 
         return $this->apiJsonResponse($savedEntity, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/publish/{id}", name="post_publish", methods="POST")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Post",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Channels where the post will be published",
+     *     type="json",
+     *     required=true,
+     *     @SWG\Schema(
+     *         type="object",
+     *         @SWG\Property(
+     *             property="channels",
+     *             type="array",
+     *             @SWG\Items(type="string", example="facebook")
+     *         )
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="No content"
+     * )
+     * @SWG\Tag(name="Post")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param PostManager $postManager
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function publish(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        ValidatorInterface $validator,
+        PostManager $postManager,
+        string $id
+    ): Response {
+        try {
+            /** @var Publish $publishDto */
+            $publishDto = $serializer->deserialize($request->getContent(), Publish::class, 'json');
+            $validation = $validator->validate($publishDto);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            /** @var Post $post */
+            $post = $postManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('publish', $post);
+
+            $postManager->publish($post, $publishDto->getChannels());
+        } catch (NotFoundHttpException | ConflictException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        } catch (ValidationException $exception) {
+            return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
+        }
+
+        return $this->apiJsonResponse($post, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 
     /**

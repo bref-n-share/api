@@ -70,6 +70,11 @@ services:
                 $repository: '@App\Domain\Post\Repository\InformationRepository'
                 $workflowProcessor: '@post.workflow'
 
+    App\Domain\Post\Manager\PostManager:
+            arguments:
+                $repository: '@App\Domain\Post\Repository\PostRepository'
+                $workflowProcessor: '@post.workflow'
+
     App\Domain\Structure\Manager\StructureManagerChain:
         arguments:
             $managers: !tagged structure.manager
@@ -77,3 +82,7 @@ services:
     App\Domain\User\Manager\UserManagerChain:
         arguments:
             $managers: !tagged user.manager
+
+    App\Domain\Post\Notification\NotificationProcessorChain:
+        arguments:
+            $processors: !tagged notification.processor
