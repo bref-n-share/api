@@ -364,9 +364,21 @@ class PostController extends RestAPIController
     ): Response {
         $user = $this->getUser();
 
+        $options = $this->formatQueryParameters($request->query->all());
+
+        if ($user instanceof Donor) {
+            $sites = $user->getSites()->getValues();
+            $siteIds = [];
+            /** @var Site $site */
+            foreach ($sites as $site) {
+                $siteIds[] = $site->getId()->toString();
+            }
+
+            $options['site'] = $siteIds;
+        }
+
         return $this->apiJsonResponse(
-            $user instanceof Donor ?
-                $informationManager->retrieveAllBySites($user->getSites()->getValues()) : $informationManager->retrieveAll(),
+            $informationManager->retrieveBy($options),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer
