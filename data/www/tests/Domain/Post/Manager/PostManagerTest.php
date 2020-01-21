@@ -5,7 +5,7 @@ namespace App\Tests\Domain\Post\Manager;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Manager\PostManager;
-use App\Domain\Post\Notification\PostNotificationProcessorChain;
+use App\Domain\Post\Publication\PostPublicationProcessorChain;
 use App\Domain\Post\Repository\PostRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +27,7 @@ class PostManagerTest extends TestCase
     {
         $this->workflowProcessor = $this->createMock(WorkflowProcessorInterface::class);
         $this->repository = $this->createMock(PostRepositoryInterface::class);
-        $this->processorChain = $this->createMock(PostNotificationProcessorChain::class);
+        $this->processorChain = $this->createMock(PostPublicationProcessorChain::class);
 
         $this->postManager = new PostManager($this->workflowProcessor, $this->repository, $this->processorChain);
     }

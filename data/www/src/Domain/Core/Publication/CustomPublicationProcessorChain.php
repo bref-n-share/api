@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Domain\Core\Notification;
+namespace App\Domain\Core\Publication;
 
-use App\Domain\Core\DTO\CustomSocialNetworkNotificationDto;
+use App\Domain\Core\DTO\CustomSocialNetworkPublicationDto;
 
-class CustomNotificationProcessorChain
+class CustomPublicationProcessorChain
 {
     /**
-     * @var CustomNotificationProcessorInterface[]
+     * @var CustomPublicationProcessorInterface[]
      */
     private iterable $processors;
 
@@ -21,11 +21,11 @@ class CustomNotificationProcessorChain
         $this->processors = $processors;
     }
 
-    public function handle(CustomSocialNetworkNotificationDto $notification, string $channel): bool
+    public function handle(CustomSocialNetworkPublicationDto $publicationDto, string $channel): bool
     {
         foreach ($this->processors as $processor) {
             if ($processor->supports($channel)) {
-                return $processor->handle($notification);
+                return $processor->handle($publicationDto);
             }
         }
 

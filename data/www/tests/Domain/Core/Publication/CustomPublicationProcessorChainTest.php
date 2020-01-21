@@ -2,12 +2,12 @@
 
 namespace App\Tests\Domain\Core\Notification;
 
-use App\Domain\Core\DTO\CustomSocialNetworkNotificationDto;
-use App\Domain\Core\Notification\CustomNotificationProcessorChain;
-use App\Domain\Core\Notification\CustomNotificationProcessorInterface;
+use App\Domain\Core\DTO\CustomSocialNetworkPublicationDto;
+use App\Domain\Core\Publication\CustomPublicationProcessorChain;
+use App\Domain\Core\Publication\CustomPublicationProcessorInterface;
 use PHPUnit\Framework\TestCase;
 
-class CustomNotificationProcessorChainTest extends TestCase
+class CustomPublicationProcessorChainTest extends TestCase
 {
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $firstProcessor;
@@ -15,20 +15,20 @@ class CustomNotificationProcessorChainTest extends TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $secondProcessor;
 
-    /** @var CustomNotificationProcessorChain */
+    /** @var CustomPublicationProcessorChain */
     private $processorChain;
 
     protected function setUp()
     {
-        $this->firstProcessor = $this->createMock(CustomNotificationProcessorInterface::class);
-        $this->secondProcessor = $this->createMock(CustomNotificationProcessorInterface::class);
+        $this->firstProcessor = $this->createMock(CustomPublicationProcessorInterface::class);
+        $this->secondProcessor = $this->createMock(CustomPublicationProcessorInterface::class);
 
-        $this->processorChain = new CustomNotificationProcessorChain([$this->firstProcessor, $this->secondProcessor]);
+        $this->processorChain = new CustomPublicationProcessorChain([$this->firstProcessor, $this->secondProcessor]);
     }
 
     public function testHandleNoProcessorCanHandle(): void
     {
-        $notification = $this->createMock(CustomSocialNetworkNotificationDto::class);
+        $notification = $this->createMock(CustomSocialNetworkPublicationDto::class);
         $channel = 'channel';
 
         $this->firstProcessor
@@ -52,7 +52,7 @@ class CustomNotificationProcessorChainTest extends TestCase
 
     public function testHandle(): void
     {
-        $notification = $this->createMock(CustomSocialNetworkNotificationDto::class);
+        $notification = $this->createMock(CustomSocialNetworkPublicationDto::class);
         $channel = 'channel';
 
         $this->firstProcessor

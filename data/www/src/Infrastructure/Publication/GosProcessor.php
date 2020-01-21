@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Infrastructure\Notification;
+namespace App\Infrastructure\Publication;
 
 use App\Domain\Post\Entity\Post;
-use App\Domain\Post\Notification\PostNotificationProcessorInterface;
+use App\Domain\Post\Publication\PostPublicationProcessorInterface;
 
-class GosProcessor implements PostNotificationProcessorInterface
+class GosProcessor implements PostPublicationProcessorInterface
 {
     private const TYPE = 'gos';
 

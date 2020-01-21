@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Infrastructure\Voter\Core\Notification;
+namespace App\Infrastructure\Voter\Core\Publication;
 
-use App\Domain\Core\DTO\CustomSocialNetworkNotificationDto;
+use App\Domain\Core\DTO\CustomSocialNetworkPublicationDto;
 use App\Domain\User\Entity\Member;
 use App\Domain\User\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class CustomNotificationVoter extends Voter
+class CustomPublicationVoter extends Voter
 {
     public const PUBLISH = 'publish';
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::PUBLISH]) && $subject instanceof CustomSocialNetworkNotificationDto;
+        return in_array($attribute, [self::PUBLISH]) && $subject instanceof CustomSocialNetworkPublicationDto;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)

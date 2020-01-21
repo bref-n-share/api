@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Domain\Post\Notification;
+namespace App\Domain\Post\Publication;
 
 use App\Domain\Post\Entity\Post;
 
-class PostNotificationProcessorChain
+class PostPublicationProcessorChain
 {
     /**
-     * @var PostNotificationProcessorInterface[]
+     * @var PostPublicationProcessorInterface[]
      */
     private iterable $processors;
 

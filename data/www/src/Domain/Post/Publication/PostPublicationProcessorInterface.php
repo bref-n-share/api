@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\Post\Notification;
+namespace App\Domain\Post\Publication;
 
 use App\Domain\Post\Entity\Post;
 
-interface PostNotificationProcessorInterface
+interface PostPublicationProcessorInterface
 {
     public function supports(string $channel): bool;
 

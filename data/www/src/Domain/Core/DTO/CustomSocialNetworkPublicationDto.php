@@ -4,7 +4,7 @@ namespace App\Domain\Core\DTO;
 
 use App\Domain\Structure\Entity\Structure;
 
-class CustomSocialNetworkNotificationDto
+class CustomSocialNetworkPublicationDto
 {
     private string $message;
 

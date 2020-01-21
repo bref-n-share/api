@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Infrastructure\Notification;
+namespace App\Infrastructure\Publication;
 
 use App\Domain\Post\Entity\Post;
-use App\Domain\Post\Notification\PostNotificationProcessorInterface;
+use App\Domain\Post\Publication\PostPublicationProcessorInterface;
 use MartinGeorgiev\SocialPost\Message;
 use MartinGeorgiev\SocialPost\Publisher;
 
-class SocialNetworkPostNotificationProcessor implements PostNotificationProcessorInterface
+class SocialNetworkPostPublicationProcessor implements PostPublicationProcessorInterface
 {
     private string $type;
 

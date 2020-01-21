@@ -4,11 +4,10 @@ namespace App\Application\Controller\Core;
 
 use App\Application\Controller\RestAPIController;
 use App\Application\Exception\ValidationException;
-use App\Domain\Core\DTO\CustomSocialNetworkNotificationDto;
+use App\Domain\Core\DTO\CustomSocialNetworkPublicationDto;
 use App\Domain\Core\Exception\ConflictException;
-use App\Domain\Core\Manager\NotificationManager;
+use App\Domain\Core\Manager\PublicationManager;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,17 +16,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Swagger\Annotations as SWG;
 
 /**
- * @Route("/api/v1/notification")
+ * @Route("/api/v1/publication")
  */
-class NotificationController extends RestAPIController
+class PublicationController extends RestAPIController
 {
     /**
-     * @Route("/publish", name="notification_custom_publish", methods="POST")
+     * @Route("/publish", name="publication_custom_publish", methods="POST")
      *
      * @SWG\Parameter(
      *     name="body",
      *     in="body",
-     *     description="Notification fields",
+     *     description="Publication fields",
      *     type="json",
      *     required=true,
      *     @SWG\Schema(
@@ -46,7 +45,7 @@ class NotificationController extends RestAPIController
      * )
      * @SWG\Response(
      *     response=201,
-     *     description="Created Notification",
+     *     description="Created Publication",
      *     @SWG\Schema(
      *         type="object",
      *         @SWG\Property(
@@ -61,42 +60,42 @@ class NotificationController extends RestAPIController
      *         )
      *     )
      * )
-     * @SWG\Tag(name="Notification")
+     * @SWG\Tag(name="Publication")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer
      * @param ValidatorInterface $validator
-     * @param NotificationManager $notificationManager
+     * @param PublicationManager $publicationManager
      *
      * @return Response
      */
-    public function createNotification(
+    public function createPublication(
         Request $request,
         EntitySerializerInterface $serializer,
         ValidatorInterface $validator,
-        NotificationManager $notificationManager
+        PublicationManager $publicationManager
     ): Response {
         try {
             $user = $this->getUser();
 
-            /** @var CustomSocialNetworkNotificationDto $notification */
-            $notification = $serializer->deserialize(
+            /** @var CustomSocialNetworkPublicationDto $publication */
+            $publication = $serializer->deserialize(
                 $request->getContent(),
-                CustomSocialNetworkNotificationDto::class,
+                CustomSocialNetworkPublicationDto::class,
                 'json'
             );
 
-            $this->denyAccessUnlessGranted('publish', $notification);
+            $this->denyAccessUnlessGranted('publish', $publication);
 
-            $notification->setStructure($user->getStructure());
+            $publication->setStructure($user->getStructure());
 
-            $validation = $validator->validate($notification);
+            $validation = $validator->validate($publication);
 
             if ($validation->count() > 0) {
                 throw new ValidationException($validation);
             }
 
-            $notificationManager->publish($notification, $notification->getChannels());
+            $publicationManager->publish($publication, $publication->getChannels());
         } catch (NotFoundHttpException | ConflictException $exception) {
             return $this->apiJsonResponse(
                 $this->formatErrorMessage($exception->getMessage()),
@@ -106,6 +105,6 @@ class NotificationController extends RestAPIController
             return $this->apiJsonResponse($this->formatErrorMessage($exception->getMessage()), Response::HTTP_CONFLICT);
         }
 
-        return $this->apiJsonResponse('', Response::HTTP_OK, $this->getLevel($request), $serializer);
+        return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT, $this->getLevel($request), $serializer);
     }
 }

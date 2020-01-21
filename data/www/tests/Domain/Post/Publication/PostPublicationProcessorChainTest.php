@@ -3,11 +3,11 @@
 namespace App\Tests\Domain\Post\Notification;
 
 use App\Domain\Post\Entity\Post;
-use App\Domain\Post\Notification\PostNotificationProcessorChain;
-use App\Domain\Post\Notification\PostNotificationProcessorInterface;
+use App\Domain\Post\Publication\PostPublicationProcessorChain;
+use App\Domain\Post\Publication\PostPublicationProcessorInterface;
 use PHPUnit\Framework\TestCase;
 
-class PostNotificationProcessorChainTest extends TestCase
+class PostPublicationProcessorChainTest extends TestCase
 {
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $firstProcessor;
@@ -15,15 +15,15 @@ class PostNotificationProcessorChainTest extends TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $secondProcessor;
 
-    /** @var PostNotificationProcessorChain */
+    /** @var PostPublicationProcessorChain */
     private $processorChain;
 
     protected function setUp()
     {
-        $this->firstProcessor = $this->createMock(PostNotificationProcessorInterface::class);
-        $this->secondProcessor = $this->createMock(PostNotificationProcessorInterface::class);
+        $this->firstProcessor = $this->createMock(PostPublicationProcessorInterface::class);
+        $this->secondProcessor = $this->createMock(PostPublicationProcessorInterface::class);
 
-        $this->processorChain = new PostNotificationProcessorChain([$this->firstProcessor, $this->secondProcessor]);
+        $this->processorChain = new PostPublicationProcessorChain([$this->firstProcessor, $this->secondProcessor]);
     }
 
     public function testHandleNoProcessorCanHandle(): void

@@ -4,17 +4,17 @@ namespace App\Domain\Post\Manager;
 
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use App\Domain\Post\Entity\Post;
-use App\Domain\Post\Notification\PostNotificationProcessorChain;
+use App\Domain\Post\Publication\PostPublicationProcessorChain;
 use App\Domain\Post\Repository\PostRepositoryInterface;
 
 class PostManager extends AbstractPostManager
 {
-    private PostNotificationProcessorChain $processorChain;
+    private PostPublicationProcessorChain $processorChain;
 
     public function __construct(
         WorkflowProcessorInterface $workflowProcessor,
         PostRepositoryInterface $repository,
-        PostNotificationProcessorChain $processorChain
+        PostPublicationProcessorChain $processorChain
     ) {
         parent::__construct($workflowProcessor, $repository);
         $this->processorChain = $processorChain;

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Infrastructure\Notification;
+namespace App\Infrastructure\Publication;
 
-use App\Domain\Core\DTO\CustomSocialNetworkNotificationDto;
-use App\Domain\Core\Notification\CustomNotificationProcessorInterface;
+use App\Domain\Core\DTO\CustomSocialNetworkPublicationDto;
+use App\Domain\Core\Publication\CustomPublicationProcessorInterface;
 use MartinGeorgiev\SocialPost\Message;
 use MartinGeorgiev\SocialPost\Publisher;
 
-class SocialNetworkCustomNotificationProcessor implements CustomNotificationProcessorInterface
+class SocialNetworkCustomPublicationProcessor implements CustomPublicationProcessorInterface
 {
     private string $type;
 
@@ -24,9 +24,9 @@ class SocialNetworkCustomNotificationProcessor implements CustomNotificationProc
         return strtolower($channel) === strtolower($this->type);
     }
 
-    public function handle(CustomSocialNetworkNotificationDto $notification): bool
+    public function handle(CustomSocialNetworkPublicationDto $publicationDto): bool
     {
-        $message = new Message($notification->getMessage() . " - " . $notification->getStructure()->getName());
+        $message = new Message($publicationDto->getMessage() . " - " . $publicationDto->getStructure()->getName());
         $message->setNetworksToPublishOn([$this->type]);
 
         return $this->publisher->publish($message);

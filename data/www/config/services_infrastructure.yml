@@ -57,33 +57,33 @@ services:
         tags: ['nelmio_api_doc.model_describer']
 
     social_network_post.gos:
-        class: 'App\Infrastructure\Notification\GosProcessor'
-        tags: ['notification_post.processor']
+        class: 'App\Infrastructure\Publication\GosProcessor'
+        tags: ['publication_post.processor']
 
     social_network_post.facebook:
-        class: App\Infrastructure\Notification\SocialNetworkPostNotificationProcessor
+        class: App\Infrastructure\Publication\SocialNetworkPostPublicationProcessor
         arguments:
             $type: 'facebook'
             $publisher: '@social_post.facebook'
-        tags: ['notification_post.processor']
+        tags: ['publication_post.processor']
 
     social_network_post.twitter:
-        class: App\Infrastructure\Notification\SocialNetworkPostNotificationProcessor
+        class: App\Infrastructure\Publication\SocialNetworkPostPublicationProcessor
         arguments:
             $type: 'twitter'
             $publisher: '@social_post.twitter'
-        tags: ['notification_post.processor']
+        tags: ['publication_post.processor']
 
     social_network_custom.facebook:
-        class: App\Infrastructure\Notification\SocialNetworkCustomNotificationProcessor
+        class: App\Infrastructure\Publication\SocialNetworkCustomPublicationProcessor
         arguments:
             $type: 'facebook'
             $publisher: '@social_post.facebook'
-        tags: ['notification_custom.processor']
+        tags: ['publication_custom.processor']
 
     social_network_custom.twitter:
-        class: App\Infrastructure\Notification\SocialNetworkCustomNotificationProcessor
+        class: App\Infrastructure\Publication\SocialNetworkCustomPublicationProcessor
         arguments:
             $type: 'twitter'
             $publisher: '@social_post.twitter'
-        tags: ['notification_custom.processor']
+        tags: ['publication_custom.processor']
