@@ -6,11 +6,19 @@ use App\Domain\Structure\Entity\Site;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Domain\Notification\Repository\NotificationRepository")
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="discriminator", type="string")
+ * @ORM\DiscriminatorMap({"postNotification" = "PostNotification", "simpleNotification" = "SimpleNotification"})
+ * @DiscriminatorMap(typeProperty="type", mapping={
+ *    "postNotification"="App\Domain\Notification\Entity\PostNotification",
+ *    "simpleNotification"="App\Domain\Notification\Entity\SimpleNotification"
+ * })
  */
 abstract class Notification
 {
