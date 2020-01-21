@@ -27,7 +27,7 @@ class PostNotificationManager extends NotificationManager
     public function create(Post $post, PostNotificationCreate $postNotificationDto): Notification
     {
         if (in_array(self::APP_MOB, $post->getChannels())) {
-            throw new ConflictException('Ce post a déjà été publié');
+            throw new ConflictException('Une notification existe déjà pour ce post');
         }
 
         $notification = $this->notificationFactory->createPostNotification(

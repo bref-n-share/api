@@ -11,6 +11,7 @@ use App\Domain\Structure\Entity\Site;
 class NotificationManager
 {
     protected const APP_MOB = 'app_mob';
+    protected const EXPIRED_STATUS = 'EXPIRED';
 
     protected WorkflowProcessorInterface $workflowProcessor;
 
@@ -39,7 +40,7 @@ class NotificationManager
      */
     public function hasExpired(Notification $notification): bool
     {
-        if ($notification->getStatus() === $this->workflowProcessor->getInitialStatus()) {
+        if ($notification->getStatus() === self::EXPIRED_STATUS) {
             return true;
         }
 
