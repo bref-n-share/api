@@ -5,7 +5,7 @@ namespace App\Domain\Notification\Manager;
 use App\Domain\Notification\DTO\SimpleNotificationCreate;
 use App\Domain\Notification\Entity\Notification;
 
-class SimpleNotificationManager extends AbstractNotificationManager
+class SimpleNotificationManager extends NotificationManager
 {
     public function create(SimpleNotificationCreate $simpleNotificationCreate): Notification
     {

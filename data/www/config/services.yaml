@@ -101,3 +101,8 @@ services:
         arguments:
             $repository: '@App\Domain\Notification\Repository\PostNotificationRepository'
             $workflowProcessor: '@notification.workflow'
+
+    App\Domain\Notification\Manager\NotificationManager:
+        arguments:
+            $repository: '@App\Domain\Notification\Repository\NotificationRepository'
+            $workflowProcessor: '@notification.workflow'

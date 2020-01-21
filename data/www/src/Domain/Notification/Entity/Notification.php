@@ -22,6 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class Notification
 {
+    private const VALID_STATUS = 'VALID';
+
     /**
      * @ORM\Id()
      * @ORM\Column(type="uuid", unique=true)
@@ -169,5 +171,10 @@ abstract class Notification
         $this->status = $status;
 
         return $this;
+    }
+
+    public function isValid(): bool
+    {
+        return $this->status === self::VALID_STATUS;
     }
 }

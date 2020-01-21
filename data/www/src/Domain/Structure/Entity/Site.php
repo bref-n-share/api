@@ -121,6 +121,23 @@ class Site extends Structure
         return $this->notifications;
     }
 
+    /**
+     * @return Notification[]
+     */
+    public function getValidNotifications(): array
+    {
+        $notifications = [];
+
+        /** @var Notification $notification */
+        foreach ($this->notifications as $notification) {
+            if ($notification->isValid()) {
+                $notifications[] = $notification;
+            }
+        }
+
+        return $notifications;
+    }
+
     public function addNotification(Notification $notification): self
     {
         if (!$this->notifications->contains($notification)) {

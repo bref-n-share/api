@@ -7,9 +7,11 @@ use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Notification\DTO\PostNotificationCreate;
 use App\Domain\Notification\DTO\SimpleNotificationCreate;
+use App\Domain\Notification\Manager\NotificationManager;
 use App\Domain\Notification\Manager\PostNotificationManager;
 use App\Domain\Notification\Manager\SimpleNotificationManager;
 use App\Domain\Post\Manager\PostManager;
+use App\Domain\User\Entity\Donor;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -160,5 +162,51 @@ class NotificationController extends RestAPIController
         }
 
         return $this->apiJsonResponse($notification, Response::HTTP_CREATED, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route(name="/notification", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="All Favorite Notifications",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Notification\Entity\Notification", groups={"full"}))
+     *     )
+     * )
+     * @SWG\Tag(name="Notification")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param NotificationManager $notificationManager
+     *
+     * @return Response
+     */
+    public function getAll(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        NotificationManager $notificationManager
+    ): Response {
+
+        $user = $this->getUser();
+
+        try {
+            if (!($user instanceof Donor)) {
+                throw new ConflictException('Must be a Donor');
+            }
+        } catch (ConflictException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse(
+            $notificationManager->getValidNotifications($user->getSites()->getValues()),
+            Response::HTTP_OK,
+            $this->getLevel($request),
+            $serializer
+        );
     }
 }

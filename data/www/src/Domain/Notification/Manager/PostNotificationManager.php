@@ -10,7 +10,7 @@ use App\Domain\Notification\Repository\NotificationRepositoryInterface;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Repository\PostRepositoryInterface;
 
-class PostNotificationManager extends AbstractNotificationManager
+class PostNotificationManager extends NotificationManager
 {
     private PostRepositoryInterface $postRepository;
 

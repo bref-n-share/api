@@ -6,8 +6,9 @@ use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use App\Domain\Notification\Entity\Notification;
 use App\Domain\Notification\Repository\NotificationRepositoryInterface;
+use App\Domain\Structure\Entity\Site;
 
-abstract class AbstractNotificationManager
+class NotificationManager
 {
     protected const APP_MOB = 'app_mob';
 
@@ -27,6 +28,15 @@ abstract class AbstractNotificationManager
         $this->notificationFactory = $notificationFactory;
     }
 
+    /**
+     * Check if the notification has expired and update the status of the notification
+     *
+     * @param Notification $notification
+     *
+     * @return bool
+     *
+     * @throws ConflictException
+     */
     public function hasExpired(Notification $notification): bool
     {
         if ($notification->getStatus() === $this->workflowProcessor->getInitialStatus()) {
@@ -47,5 +57,17 @@ abstract class AbstractNotificationManager
         }
 
         return false;
+    }
+
+    public function getValidNotifications(array $sites): array
+    {
+        $notifications = [];
+
+        /** @var Site $site */
+        foreach ($sites as $site) {
+            $notifications = array_merge($notifications, $site->getValidNotifications());
+        }
+
+        return $notifications;
     }
 }
