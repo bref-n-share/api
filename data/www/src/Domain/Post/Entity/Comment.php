@@ -36,7 +36,7 @@ class Comment
      *
      * @ORM\Column(type="text")
      *
-     * @Groups({"essential", "full"})
+     * @Groups({"essential", "full", "creation"})
      */
     private string $description;
 
