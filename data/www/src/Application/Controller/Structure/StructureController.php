@@ -53,7 +53,51 @@ class StructureController extends RestAPIController
         SiteRepositoryInterface $repository
     ): Response {
         return $this->apiJsonResponse(
-            $this->getUser() instanceof Donor ? $this->getUser()->getSites() : $repository->retrieveAll(),
+            $repository->retrieveAll(),
+            Response::HTTP_OK,
+            $this->getLevel($request),
+            $serializer
+        );
+    }
+
+    /**
+     * @Route("/site/favorite", name="structure_site_get_all_favorite", methods="GET")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="All Favorite Sites",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type="App\Domain\Structure\Entity\Site", groups={"full"}))
+     *     )
+     * )
+     * @SWG\Tag(name="Site")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     *
+     * @return Response
+     */
+    public function getAllFavorite(
+        Request $request,
+        EntitySerializerInterface $serializer
+    ): Response {
+
+        $user = $this->getUser();
+
+        try {
+            if (!($user instanceof Donor)) {
+                throw new ConflictException('Must be a Donor');
+            }
+        } catch (ConflictException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse(
+            $user->getSites(),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer
