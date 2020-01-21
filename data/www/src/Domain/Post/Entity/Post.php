@@ -93,7 +93,9 @@ abstract class Post
     private array $channels = [];
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Domain\Post\Entity\Comment", mappedBy="post", orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="App\Domain\Post\Entity\Comment", mappedBy="post", orphanRemoval=true, cascade={"persist"}
+     * )
      *
      * @Groups({"full"})
      */

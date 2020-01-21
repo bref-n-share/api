@@ -5,6 +5,7 @@ namespace App\Tests\Domain\Post\Manager;
 use App\Domain\Core\Exception\ConflictException;
 use App\Domain\Core\Workflow\WorkflowProcessorInterface;
 use App\Domain\Post\DTO\PostEdit;
+use App\Domain\Post\Entity\Comment;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Manager\AbstractPostManager;
 use App\Domain\Post\Repository\PostRepositoryInterface;
@@ -248,5 +249,25 @@ class AbstractPostManagerTest extends TestCase
         ;
 
         $this->abstractPostManager->getUpdatedEntity($dto, $entity);
+    }
+
+    public function testAddComment(): void
+    {
+        $post = $this->createMock(Post::class);
+        $comment = $this->createMock(Comment::class);
+
+        $post
+            ->expects($this->once())
+            ->method('addComment')
+            ->with($comment)
+        ;
+
+        $this->repository
+            ->expects($this->once())
+            ->method('save')
+            ->with($post)
+        ;
+
+        $this->assertEquals($comment, $this->abstractPostManager->addComment($post, $comment));
     }
 }

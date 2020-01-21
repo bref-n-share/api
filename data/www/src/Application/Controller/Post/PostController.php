@@ -9,6 +9,7 @@ use App\Domain\Core\Serializer\EntitySerializerInterface;
 use App\Domain\Post\DTO\PostEdit;
 use App\Domain\Post\DTO\Publish;
 use App\Domain\Post\DTO\RequestEdit;
+use App\Domain\Post\Entity\Comment;
 use App\Domain\Post\Entity\Information;
 use App\Domain\Post\Entity\Post;
 use App\Domain\Post\Manager\InformationManager;
@@ -18,6 +19,7 @@ use App\Domain\Post\Entity\Request as RequestPost;
 use App\Domain\Post\Repository\PostRepository;
 use App\Domain\Structure\Entity\Site;
 use App\Domain\User\Entity\Donor;
+use App\Domain\User\Entity\Member;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
@@ -685,5 +687,76 @@ class PostController extends RestAPIController
         }
 
         return $this->apiJsonResponse($requestPost, Response::HTTP_OK, $this->getLevel($request), $serializer);
+    }
+
+    /**
+     * @Route("/{id}/comment", name="post_post_comment", methods="POST")
+     *
+     * @SWG\Parameter(
+     *     description="Id of the Request",
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     @Model(type=Ramsey\Uuid\UuidInterface::class)
+     * )
+     * @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Information fields",
+     *     type="json",
+     *     required=true,
+     *    @Model(type=Comment::class, groups={"creation"})
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Created Comment",
+     *     @Model(type=Comment::class, groups={"full"})
+     * )
+     * @SWG\Tag(name="Request")
+     *
+     * @param Request $request
+     * @param EntitySerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param string $id
+     * @param PostManager $postManager
+     *
+     * @return Response
+     * @throws ValidationException
+     */
+    public function comment(
+        Request $request,
+        EntitySerializerInterface $serializer,
+        ValidatorInterface $validator,
+        string $id,
+        PostManager $postManager
+    ): Response {
+        try {
+            $user = $this->getUser();
+
+            /** @var Comment $comment */
+            $comment = $serializer->deserialize($request->getContent(), Comment::class, 'json');
+            $validation = $validator->validate($comment);
+
+            if ($validation->count() > 0) {
+                throw new ValidationException($validation);
+            }
+
+            /** @var Post $post */
+            $post = $postManager->retrieve($id);
+
+            $this->denyAccessUnlessGranted('comment', $post);
+
+            /** @var Member $user */
+            $comment->setMember($user);
+
+            $savedComment = $postManager->addComment($post, $comment);
+        } catch (NotFoundHttpException $exception) {
+            return $this->apiJsonResponse(
+                $this->formatErrorMessage($exception->getMessage()),
+                $exception->getStatusCode()
+            );
+        }
+
+        return $this->apiJsonResponse($savedComment, Response::HTTP_OK, $this->getLevel($request), $serializer);
     }
 }
