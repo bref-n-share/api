@@ -114,6 +114,20 @@ abstract class Structure
      */
     private ?string $phone = null;
 
+    /**
+     * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\NotNull(message="Le description ne doit pas être vide")
+     * @Assert\Length(
+     *     min="5",
+     *     minMessage="La description doit comporter 5 caractères minimum"
+     * )
+     *
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"essential", "full", "creation"})
+     */
+    private string $description;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
@@ -223,6 +237,18 @@ abstract class Structure
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
