@@ -2,7 +2,9 @@
 
 namespace App\Domain\Notification\Manager;
 
+use App\Domain\Notification\DTO\SimpleNotificationCreate;
 use App\Domain\Notification\Entity\PostNotification;
+use App\Domain\Notification\Entity\SimpleNotification;
 use App\Domain\Post\Entity\Post;
 
 class NotificationFactory
@@ -17,6 +19,18 @@ class NotificationFactory
             ->setDescription($post->getDescription())
             ->setSite($post->getSite())
             ->setExpirationDate($expirationDate ?? (new \DateTime())->add(new \DateInterval(self::EXPIRATION_INTERVAL)))
+        ;
+    }
+
+    public function createSimpleNotification(SimpleNotificationCreate $simpleNotificationCreate): SimpleNotification
+    {
+        return (new SimpleNotification())
+            ->setTitle($simpleNotificationCreate->getTitle())
+            ->setDescription($simpleNotificationCreate->getDescription())
+            ->setSite($simpleNotificationCreate->getSite())
+            ->setExpirationDate(
+                $simpleNotificationCreate->getExpirationDate() ?? (new \DateTime())->add(new \DateInterval(self::EXPIRATION_INTERVAL))
+            )
         ;
     }
 }
