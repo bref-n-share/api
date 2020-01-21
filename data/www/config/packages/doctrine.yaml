@@ -30,9 +30,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain/Post/Entity'
                 prefix: 'App\Domain\Post\Entity'
                 alias: Post
-            Flash:
+            Notification:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Domain/Flash/Entity'
-                prefix: 'App\Domain\Flash\Entity'
-                alias: Flash
+                dir: '%kernel.project_dir%/src/Domain/Notification/Entity'
+                prefix: 'App\Domain\Notification\Entity'
+                alias: Notification

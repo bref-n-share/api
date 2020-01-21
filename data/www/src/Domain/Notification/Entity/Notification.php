@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Flash\Entity;
+namespace App\Domain\Notification\Entity;
 
 use App\Domain\Structure\Entity\Site;
 use DateTimeInterface;
@@ -10,9 +10,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Domain\Flash\Repository\FlashNewsRepository")
+ * @ORM\Entity(repositoryClass="App\Domain\Notification\Repository\NotificationRepository")
  */
-class FlashNews
+abstract class Notification
 {
     /**
      * @ORM\Id()
@@ -67,7 +67,7 @@ class FlashNews
     private DateTimeInterface $expirationDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Site", inversedBy="flashNews")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Structure\Entity\Site", inversedBy="notifications")
      * @ORM\JoinColumn(nullable=false)
      *
      * @Groups({"essential", "full"})
