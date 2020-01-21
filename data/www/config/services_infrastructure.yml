@@ -49,6 +49,12 @@ services:
             $stateMachine: '@state_machine.post_workflow'
             $type: 'App\Domain\Post\Entity\Post'
 
+    notification.workflow:
+        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
+        arguments:
+            $stateMachine: '@state_machine.notification_workflow'
+            $type: 'App\Domain\Notification\Entity\Notification'
+
     nelmio.describer.uuid:
         class: 'App\Infrastructure\Describer\UuidDescriber'
         arguments:

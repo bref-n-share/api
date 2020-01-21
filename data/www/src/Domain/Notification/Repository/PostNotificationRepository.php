@@ -2,6 +2,7 @@
 
 namespace App\Domain\Notification\Repository;
 
+use App\Domain\Notification\Entity\Notification;
 use App\Domain\Notification\Entity\PostNotification;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,5 +18,13 @@ class PostNotificationRepository extends ServiceEntityRepository implements Noti
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, PostNotification::class);
+    }
+
+    public function save(Notification $notification): Notification
+    {
+        $this->_em->persist($notification);
+        $this->_em->flush();
+
+        return $notification;
     }
 }

@@ -15,6 +15,7 @@ class PostVoter extends Voter
     public const UPDATE = 'update';
     public const PUBLISH = 'publish';
     public const COMMENT = 'comment';
+    public const NOTIFY = 'notify';
 
     private Security $security;
 
@@ -25,7 +26,7 @@ class PostVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::CREATE, self::UPDATE, self::PUBLISH, self::COMMENT])
+        return in_array($attribute, [self::CREATE, self::UPDATE, self::PUBLISH, self::COMMENT, self::NOTIFY])
             && $subject instanceof Post
         ;
     }
@@ -55,6 +56,8 @@ class PostVoter extends Voter
                 return $this->canPublish($subject, $user);
             case self::COMMENT:
                 return $this->canComment($user);
+            case self::NOTIFY:
+                return $this->canNotify($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -82,5 +85,11 @@ class PostVoter extends Voter
     {
         // If the user is a member of the Post's one
         return $user instanceof Member;
+    }
+
+    private function canNotify(Post $subject, User $user)
+    {
+        // If the user is a member of the Post's one
+        return $user instanceof Member && $user->getStructure()->getId() === $subject->getSite()->getId();
     }
 }

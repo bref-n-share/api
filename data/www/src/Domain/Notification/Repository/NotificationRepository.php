@@ -18,4 +18,12 @@ class NotificationRepository extends ServiceEntityRepository implements Notifica
     {
         parent::__construct($registry, Notification::class);
     }
+
+    public function save(Notification $notification): Notification
+    {
+        $this->_em->persist($notification);
+        $this->_em->flush();
+
+        return $notification;
+    }
 }

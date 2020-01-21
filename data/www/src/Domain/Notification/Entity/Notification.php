@@ -89,6 +89,11 @@ abstract class Notification
      */
     private string $status;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?UuidInterface
     {
         return $this->id;
