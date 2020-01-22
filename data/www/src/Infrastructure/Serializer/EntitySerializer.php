@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -37,6 +38,7 @@ class EntitySerializer implements EntitySerializerInterface
 
         $this->serializer = new Serializer(
             [
+                new DateTimeNormalizer(),
                 new UuidNormalizer(),
                 new UuidDenormalizer(),
                 new EntityNormalizer(
