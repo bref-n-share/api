@@ -10,7 +10,7 @@ class WorkflowProcessor implements WorkflowProcessorInterface
 {
     private StateMachine $stateMachine;
 
-    private string $type;
+    protected string $type;
 
     public function __construct(StateMachine $stateMachine, string $type)
     {
@@ -40,7 +40,7 @@ class WorkflowProcessor implements WorkflowProcessorInterface
         return $this->stateMachine->getDefinition()->getInitialPlaces()[0];
     }
 
-    private function verifyType($entity): void
+    protected function verifyType($entity): void
     {
         if (get_class($entity) === $this->type) {
             return;

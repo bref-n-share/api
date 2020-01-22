@@ -71,4 +71,13 @@ class NotificationManager
 
         return $notifications;
     }
+
+    public function clean(): void
+    {
+        $notifications = $this->repository->retrieveAll();
+
+        foreach ($notifications as $notification) {
+            $this->hasExpired($notification);
+        }
+    }
 }

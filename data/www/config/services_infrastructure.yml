@@ -50,7 +50,7 @@ services:
             $type: 'App\Domain\Post\Entity\Post'
 
     notification.workflow:
-        class: 'App\Infrastructure\Workflow\WorkflowProcessor'
+        class: 'App\Infrastructure\Workflow\NotificationProcessor'
         arguments:
             $stateMachine: '@state_machine.notification_workflow'
             $type: 'App\Domain\Notification\Entity\Notification'

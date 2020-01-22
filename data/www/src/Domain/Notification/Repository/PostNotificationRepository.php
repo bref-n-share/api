@@ -27,4 +27,9 @@ class PostNotificationRepository extends ServiceEntityRepository implements Noti
 
         return $notification;
     }
+
+    public function retrieveAll(): array
+    {
+        return $this->findAll();
+    }
 }

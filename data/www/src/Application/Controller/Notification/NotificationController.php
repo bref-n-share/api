@@ -165,7 +165,7 @@ class NotificationController extends RestAPIController
     }
 
     /**
-     * @Route(name="/notification", methods="GET")
+     * @Route(name="notification_get_all", methods="GET")
      *
      * @SWG\Response(
      *     response=200,
@@ -208,5 +208,25 @@ class NotificationController extends RestAPIController
             $this->getLevel($request),
             $serializer
         );
+    }
+
+    /**
+     * @Route("/clean", name="notification_clean", methods="POST")
+     *
+     * @SWG\Response(
+     *     response=204,
+     *     description="No content"
+     * )
+     * @SWG\Tag(name="Notification")
+     *
+     * @param NotificationManager $notificationManager
+     *
+     * @return Response
+     */
+    public function clean(NotificationManager $notificationManager): Response
+    {
+        $notificationManager->clean();
+
+        return $this->apiJsonResponse('', Response::HTTP_NO_CONTENT);
     }
 }

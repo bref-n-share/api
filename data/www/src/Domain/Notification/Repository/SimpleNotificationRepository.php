@@ -27,4 +27,9 @@ class SimpleNotificationRepository extends ServiceEntityRepository implements No
 
         return $notification;
     }
+
+    public function retrieveAll(): array
+    {
+        return $this->findAll();
+    }
 }

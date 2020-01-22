@@ -26,4 +26,9 @@ class NotificationRepository extends ServiceEntityRepository implements Notifica
 
         return $notification;
     }
+
+    public function retrieveAll(): array
+    {
+        return $this->findAll();
+    }
 }
