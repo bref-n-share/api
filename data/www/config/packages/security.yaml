@@ -45,6 +45,8 @@ parameters:
     secured_area:
         pattern: ^\/api\/*
         excluded_patterns:
+            - pattern: ^\/api\/v(\d)+\/notification\/clean$
+              method: post
             - pattern: ^\/api\/v(\d)+\/security\/authenticate$
               method: post
             - pattern: ^\/api\/v(\d)+\/doc$
