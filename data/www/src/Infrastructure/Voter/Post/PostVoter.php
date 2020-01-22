@@ -14,6 +14,8 @@ class PostVoter extends Voter
     public const CREATE = 'create';
     public const UPDATE = 'update';
     public const PUBLISH = 'publish';
+    public const COMMENT = 'comment';
+    public const NOTIFY = 'notify';
 
     private Security $security;
 
@@ -24,7 +26,9 @@ class PostVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::CREATE, self::UPDATE, self::PUBLISH]) && $subject instanceof Post;
+        return in_array($attribute, [self::CREATE, self::UPDATE, self::PUBLISH, self::COMMENT, self::NOTIFY])
+            && $subject instanceof Post
+        ;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -41,7 +45,7 @@ class PostVoter extends Voter
         }
 
         switch ($attribute) {
-            // Today the code is the same in these 3 methods,
+            // Today the code is the same in these 4 methods,
             // however the right to do some action can evolve independently
             // so we prefer to separate the code.
             case self::CREATE:
@@ -50,6 +54,10 @@ class PostVoter extends Voter
                 return $this->canUpdate($subject, $user);
             case self::PUBLISH:
                 return $this->canPublish($subject, $user);
+            case self::COMMENT:
+                return $this->canComment($user);
+            case self::NOTIFY:
+                return $this->canNotify($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -68,6 +76,18 @@ class PostVoter extends Voter
     }
 
     private function canPublish(Post $subject, User $user)
+    {
+        // If the user is a member of the Post's one
+        return $user instanceof Member && $user->getStructure()->getId() === $subject->getSite()->getId();
+    }
+
+    private function canComment(User $user)
+    {
+        // If the user is a member of the Post's one
+        return $user instanceof Member;
+    }
+
+    private function canNotify(Post $subject, User $user)
     {
         // If the user is a member of the Post's one
         return $user instanceof Member && $user->getStructure()->getId() === $subject->getSite()->getId();

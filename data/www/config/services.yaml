@@ -83,10 +83,26 @@ services:
         arguments:
             $managers: !tagged user.manager
 
-    App\Domain\Post\Notification\PostNotificationProcessorChain:
+    App\Domain\Post\Publication\PostPublicationProcessorChain:
         arguments:
-            $processors: !tagged notification_post.processor
+            $processors: !tagged publication_post.processor
 
-    App\Domain\Core\Notification\CustomNotificationProcessorChain:
+    App\Domain\Core\Publication\CustomPublicationProcessorChain:
         arguments:
-            $processors: !tagged notification_custom.processor
+            $processors: !tagged publication_custom.processor
+
+    App\Domain\Notification\Manager\PostNotificationManager:
+        arguments:
+            $repository: '@App\Domain\Notification\Repository\PostNotificationRepository'
+            $workflowProcessor: '@notification.workflow'
+            $postRepository: '@App\Domain\Post\Repository\PostRepository'
+
+    App\Domain\Notification\Manager\SimpleNotificationManager:
+        arguments:
+            $repository: '@App\Domain\Notification\Repository\PostNotificationRepository'
+            $workflowProcessor: '@notification.workflow'
+
+    App\Domain\Notification\Manager\NotificationManager:
+        arguments:
+            $repository: '@App\Domain\Notification\Repository\NotificationRepository'
+            $workflowProcessor: '@notification.workflow'

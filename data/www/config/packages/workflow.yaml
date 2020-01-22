@@ -91,3 +91,19 @@ framework:
                 archive:
                     from: CREATED
                     to: ARCHIVED
+
+        notification_workflow:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'status'
+            supports:
+                - App\Domain\Notification\Entity\Notification
+            initial_marking: VALID
+            places:
+                - VALID
+                - EXPIRED
+            transitions:
+                expire:
+                    from: VALID
+                    to: EXPIRED
