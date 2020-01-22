@@ -124,7 +124,7 @@ abstract class Structure
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"essential", "full", "creation"})
+     * @Groups({"essential", "full", "creation", "updatable"})
      */
     private string $description;
 

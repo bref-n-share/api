@@ -67,6 +67,12 @@ class SiteManagerTest extends TestCase
 
         $dto
             ->expects($this->once())
+            ->method('getDescription')
+            ->willReturn('description')
+        ;
+
+        $dto
+            ->expects($this->once())
             ->method('getLongitude')
             ->willReturn('longitude')
         ;
@@ -102,6 +108,13 @@ class SiteManagerTest extends TestCase
             ->expects($this->once())
             ->method('setPhone')
             ->with('phone')
+            ->willReturn($entity)
+        ;
+
+        $entity
+            ->expects($this->once())
+            ->method('setDescription')
+            ->with('description')
             ->willReturn($entity)
         ;
 
@@ -153,6 +166,12 @@ class SiteManagerTest extends TestCase
 
         $dto
             ->expects($this->once())
+            ->method('getDescription')
+            ->willReturn('description')
+        ;
+
+        $dto
+            ->expects($this->once())
             ->method('getLongitude')
             ->willReturn(null)
         ;
@@ -200,6 +219,13 @@ class SiteManagerTest extends TestCase
             ->expects($this->once())
             ->method('setPhone')
             ->with('phone')
+            ->willReturn($entity)
+        ;
+
+        $entity
+            ->expects($this->once())
+            ->method('setDescription')
+            ->with('description')
             ->willReturn($entity)
         ;
 

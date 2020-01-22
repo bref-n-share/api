@@ -20,6 +20,7 @@ class SiteManager extends AbstractStructureManager
             ->setPostalCode($siteDto->getPostalCode() ?? $site->getPostalCode())
             ->setCity($siteDto->getCity() ?? $site->getCity())
             ->setPhone($siteDto->getPhone() ?? $site->getPhone())
+            ->setDescription($siteDto->getDescription() ?? $site->getDescription())
             ->setLongitude($siteDto->getLongitude() ?? $site->getLongitude())
             ->setLatitude($siteDto->getLatitude() ?? $site->getLatitude())
         ;
