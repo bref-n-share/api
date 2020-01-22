@@ -61,7 +61,7 @@ class StructureController extends RestAPIController
     }
 
     /**
-     * @Route("/site/favorite", name="structure_site_get_all_favorite", methods="GET")
+     * @Route("/favorite", name="structure_site_get_all_favorite", methods="GET")
      *
      * @SWG\Response(
      *     response=200,
