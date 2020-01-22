@@ -364,9 +364,21 @@ class PostController extends RestAPIController
     ): Response {
         $user = $this->getUser();
 
+        $options = $this->formatQueryParameters($request->query->all());
+
+        if ($user instanceof Donor) {
+            $sites = $user->getSites()->getValues();
+            $siteIds = [];
+            /** @var Site $site */
+            foreach ($sites as $site) {
+                $siteIds[] = $site->getId()->toString();
+            }
+
+            $options['site'] = $siteIds;
+        }
+
         return $this->apiJsonResponse(
-            $user instanceof Donor ?
-                $informationManager->retrieveAllBySites($user->getSites()->getValues()) : $informationManager->retrieveAll(),
+            $informationManager->retrieveBy($options),
             Response::HTTP_OK,
             $this->getLevel($request),
             $serializer
@@ -693,7 +705,7 @@ class PostController extends RestAPIController
      * @Route("/{id}/comment", name="post_post_comment", methods="POST")
      *
      * @SWG\Parameter(
-     *     description="Id of the Request",
+     *     description="Id of the Post",
      *     name="id",
      *     in="path",
      *     type="string",
@@ -702,7 +714,7 @@ class PostController extends RestAPIController
      * @SWG\Parameter(
      *     name="body",
      *     in="body",
-     *     description="Information fields",
+     *     description="Comment fields",
      *     type="json",
      *     required=true,
      *    @Model(type=Comment::class, groups={"creation"})
@@ -712,7 +724,7 @@ class PostController extends RestAPIController
      *     description="Created Comment",
      *     @Model(type=Comment::class, groups={"full"})
      * )
-     * @SWG\Tag(name="Request")
+     * @SWG\Tag(name="Post")
      *
      * @param Request $request
      * @param EntitySerializerInterface $serializer

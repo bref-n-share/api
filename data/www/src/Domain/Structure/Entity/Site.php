@@ -2,7 +2,7 @@
 
 namespace App\Domain\Structure\Entity;
 
-use App\Domain\Flash\Entity\FlashNews;
+use App\Domain\Notification\Entity\Notification;
 use App\Domain\Post\Entity\Post;
 use App\Domain\User\Entity\Donor;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -32,11 +32,11 @@ class Site extends Structure
     private Collection $donors;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Domain\Flash\Entity\FlashNews", mappedBy="site", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Domain\Notification\Entity\Notification", mappedBy="site", orphanRemoval=true)
      *
      * @Groups({"full"})
      */
-    private Collection $flashNews;
+    private Collection $notifications;
 
     /**
      * @Assert\NotBlank(message="La longitude ne doit pas être vide")
@@ -69,7 +69,7 @@ class Site extends Structure
     {
         parent::__construct();
         $this->donors = new ArrayCollection();
-        $this->flashNews = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
         $this->posts = new ArrayCollection();
     }
 
@@ -114,30 +114,47 @@ class Site extends Structure
     }
 
     /**
-     * @return Collection|FlashNews[]
+     * @return Collection|Notification[]
      */
-    public function getFlashNews(): Collection
+    public function getNotifications(): Collection
     {
-        return $this->flashNews;
+        return $this->notifications;
     }
 
-    public function addFlashNews(FlashNews $flashNews): self
+    /**
+     * @return Notification[]
+     */
+    public function getValidNotifications(): array
     {
-        if (!$this->flashNews->contains($flashNews)) {
-            $this->flashNews[] = $flashNews;
-            $flashNews->setSite($this);
+        $notifications = [];
+
+        /** @var Notification $notification */
+        foreach ($this->notifications as $notification) {
+            if ($notification->isValid()) {
+                $notifications[] = $notification;
+            }
+        }
+
+        return $notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setSite($this);
         }
 
         return $this;
     }
 
-    public function removeFlashNews(FlashNews $flashNews): self
+    public function removeNotification(Notification $notification): self
     {
-        if ($this->flashNews->contains($flashNews)) {
-            $this->flashNews->removeElement($flashNews);
+        if ($this->notifications->contains($notification)) {
+            $this->notifications->removeElement($notification);
             // set the owning side to null (unless already changed)
-            if ($flashNews->getSite() === $this) {
-                $flashNews->setSite(null);
+            if ($notification->getSite() === $this) {
+                $notification->setSite(null);
             }
         }
 
