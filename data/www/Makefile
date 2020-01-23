@@ -9,6 +9,7 @@ vendor:
 .PHONY: vendor
 
 doctrine:
+	$(SYMFONY_CONSOLE) doctrine:schema:drop --full-database --force
 	$(SYMFONY_CONSOLE) doctrine:migration:migrate --no-interaction
-	$(SYMFONY_CONSOLE) doctrine:fixtures:load --no-interaction --append
+	$(SYMFONY_CONSOLE) doctrine:fixtures:load --no-interaction
 .PHONY: doctrine
