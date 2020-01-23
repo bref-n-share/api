@@ -2,19 +2,19 @@
 
 ## Sommaire
 * [Architecture](#architecture)
-  * [Technologies utilisées](#technologies-utilisees)
+  * [Technologies utilisées](#technologies-utilisées)
 * [Installer le projet](#installer-le-projet)
   * [Récupérer les sources](#récupérer-les-sources)
   * [Fichier d'environnement](#fichier-denvironnement)
   * [Lancer la stack docker](#lancer-la-stack-docker)
-  * [Déscription des services](#déscription-des-services)
+  * [Description des services](#description-des-services)
 
 ## Architecture
 
 ### Technologies utilisées
 
 L'API a été développée en PHP 7.4 et avec le framework Symfony 4.4.  
-Nous avons utilisé certains component 
+Nous avons utilisé certains components de Symfony tels que le `Workflow` et le `Voter`.
 
 ## Installer le projet
 **Attention !**  
@@ -31,8 +31,8 @@ HTTPS : git clone https://github.com/bref-n-share/api.git
 
 ### Fichier d'environnement
 
-Le fichier d'environnement n'est pas versionné sur git pour des raisons de sécurité. Celui-ci vous a sûrement été fourni.  
-Il faut remplacer le fichier existant (`data/www/.env.prod`) par celui qui vous a été fourni.  
+Le fichier d'environnement n'est pas versionné sur git pour des raisons de sécurité. En production ce fichier est récupéré sur Google Cloud Platform.  
+Pour simplifier l'installation, nous vous avons déjà intégré ce fichier au projet dans l'archive que nous vous avons fourni. 
 
 ### Lancer la stack docker
 Nous avons décidé d'utiliser **docker compose** pour gérer les différents services de notre projet.  
